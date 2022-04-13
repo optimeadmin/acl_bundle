@@ -5,12 +5,12 @@ namespace Optime\Acl\Bundle\Entity;
 use App\Entity\Application\Application;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
-use Optime\Acl\Bundle\Repository\OptimeAclResourceRoleRepository;
+use Optime\Acl\Bundle\Repository\ResourceRoleRepository;
 
 #[ORM\Table("optime_acl_resource_role")]
-#[ORM\Entity(repositoryClass: OptimeAclResourceRoleRepository::class)]
+#[ORM\Entity(repositoryClass: ResourceRoleRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-class OptimeAclResourceRole
+class ResourceRole
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -19,7 +19,7 @@ class OptimeAclResourceRole
 
     #[ORM\ManyToOne(inversedBy: 'optimeAclResourceRoles')]
     #[ORM\JoinColumn(nullable: false)]
-    private OptimeAclResource $optimeAclResource;
+    private Resource $optimeAclResource;
 
     #[ORM\Column(length: 255, nullable: false)]
     private string $role;
@@ -48,9 +48,9 @@ class OptimeAclResourceRole
     }
 
     /**
-     * @return OptimeAclResource
+     * @return Resource
      */
-    public function getOptimeAclResource(): OptimeAclResource
+    public function getOptimeAclResource(): Resource
     {
         return $this->optimeAclResource;
     }

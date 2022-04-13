@@ -6,29 +6,31 @@ use App\Entity\Application\ApplicationCatalog;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Optime\Acl\Bundle\Repository\OptimeAclResourceRepository;
+use Optime\Acl\Bundle\Repository\ResourceRepository;
 
 #[ORM\Table("optime_acl_resource")]
-#[ORM\Entity(repositoryClass: OptimeAclResourceRepository::class)]
+#[ORM\Entity(repositoryClass: ResourceRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-class OptimeAclResource
+class Resource
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private int $id;
 
-    #[ORM\Column(length: 255, nullable: false)]
+    #[ORM\Column]
     private string $name;
 
-    #[ORM\Column(
-        name: 'created_at',
-        updatable: false,
-    )]
+    #[ORM\Column]
+    private bool $visible;
+
+    #[ORM\Column]
+    private string $reference;
+
+    #[ORM\Column]
     private DateTimeImmutable $createdAt;
 
     #[ORM\Column(
-        name: 'updated_at',
         nullable: true,
         insertable: false,
         updatable: false,
@@ -36,13 +38,14 @@ class OptimeAclResource
     )]
     private DateTimeImmutable $updatedAt;
 
-    #[ORM\OneToMany(
-        mappedBy: 'optimeAclResource',
-        targetEntity: OptimeAclResourceRole::class,
-        cascade: ["persist"],
-        orphanRemoval: true
-    )]
-    private Collection $optimeAclResourceRoles;
+    public function __construct(string $name, bool $visible, string $reference)
+    {
+        $this->name = $name;
+        $this->visible = $visible;
+        $this->reference = $reference;
+        $this->createdAt = new DateTimeImmutable();
+        $this->updatedAt = new DateTimeImmutable();
+    }
 
     /**
      * @return int
@@ -59,14 +62,5 @@ class OptimeAclResource
     {
         return $this->name;
     }
-
-    /**
-     * @return Collection
-     */
-    public function getOptimeAclResourceRoles(): Collection
-    {
-        return $this->optimeAclResourceRoles;
-    }
-
 
 }

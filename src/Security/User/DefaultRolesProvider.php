@@ -17,7 +17,7 @@ class DefaultRolesProvider implements RolesProviderInterface
 
     public function getRolesByToken(TokenInterface $token): array
     {
-        return ['ROLE_OPTIME_USER___'];
+        return ['ROLE_OPTIME_USER'];
         return $token->getRoleNames();
     }
 }
