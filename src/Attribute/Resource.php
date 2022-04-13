@@ -4,16 +4,15 @@ declare(strict_types=1);
 
 namespace Optime\Acl\Bundle\Attribute;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
 
-#[\Attribute(\Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
-class Resource extends Security
+#[\Attribute(\Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD)]
+class Resource implements ConfigurationInterface
 {
     private string $reference = '';
 
-    public function __construct(private ?string $resource = null)
+    public function __construct(private ?string $resource = null, bool $auto = false)
     {
-        parent::__construct("is_granted('resource','" . $resource . "')", null, null);
     }
 
     public function getResource(): string
@@ -32,4 +31,13 @@ class Resource extends Security
         return $this;
     }
 
+    public function getAliasName(): string
+    {
+        return 'acl_resource';
+    }
+
+    public function allowArray(): bool
+    {
+        return false;
+    }
 }

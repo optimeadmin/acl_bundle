@@ -58,6 +58,10 @@ class ResourceLoader
         foreach ($resources as $resource) {
             $aclResource = $this->repository->findOneByName($resource->getResource()) ?? new AclResource($resource->getResource(),true );
             $this->entityManager->persist($aclResource);
+
+            // no recurso, si referencia.
+            // otro recurso, tienes otras referencias
+
             if (!$this->referenceRepository->verifyIfExistByResourceNameAndStringReference($resource->getResource(), $resource->getReference())) {
 
             }
