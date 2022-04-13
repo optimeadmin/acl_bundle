@@ -9,6 +9,7 @@ use Optime\Acl\Bundle\Repository\ResourceRoleRepository;
 #[ORM\Table("optime_acl_resource_role")]
 #[ORM\Entity(repositoryClass: ResourceRoleRepository::class)]
 #[ORM\HasLifecycleCallbacks]
+#[ORM\ChangeTrackingPolicy("DEFERRED_EXPLICIT")]
 class ResourceRole
 {
     #[ORM\Id]
@@ -18,7 +19,7 @@ class ResourceRole
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn]
-    private Resource $optimeAclResource;
+    private Resource $resource;
 
     #[ORM\Column(length: 255, nullable: false)]
     private string $role;
@@ -39,9 +40,9 @@ class ResourceRole
         return $this->id;
     }
 
-    public function getOptimeAclResource(): Resource
+    public function getResource(): Resource
     {
-        return $this->optimeAclResource;
+        return $this->resource;
     }
 
     public function getRole(): string

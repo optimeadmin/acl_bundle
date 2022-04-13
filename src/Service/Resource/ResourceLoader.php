@@ -35,7 +35,7 @@ class ResourceLoader
             foreach ($reflection->getMethods(ReflectionMethod::IS_PUBLIC) as $reflectionMethod) {
                 $resourcesAttr = [...$resourcesAttr, ...$this->extractResources($reflectionMethod)];
             }
-            $this->processResources($resourcesAttr);
+            $this->saveResources($resourcesAttr);
         }
     }
 
@@ -53,7 +53,7 @@ class ResourceLoader
         return $resources;
     }
 
-    private function processResources(array $resources)
+    private function saveResources(array $resources)
     {
         foreach ($resources as $resource) {
             $aclResource = $this->repository->findOneByName($resource->getResource()) ?? new AclResource($resource->getResource(),true );
