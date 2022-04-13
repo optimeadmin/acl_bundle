@@ -7,10 +7,10 @@ use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Optime\Acl\Bundle\Repository\ResourceRoleRepository;
 
-#[ORM\Table("optime_acl_resource_role")]
-#[ORM\Entity(repositoryClass: ResourceRoleRepository::class)]
+#[ORM\Table("optime_acl_resource_reference")]
+#[ORM\Entity(repositoryClass: ResourceReferenceRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-class ResourceRole
+class ResourceReference
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -21,10 +21,13 @@ class ResourceRole
     #[ORM\JoinColumn]
     private Resource $optimeAclResource;
 
-    #[ORM\Column(length: 255, nullable: false)]
-    private string $role;
-
     #[ORM\Column]
+    private string $reference;
+
+    #[ORM\Column(
+        name: 'created_at',
+        updatable: false,
+    )]
     private DateTimeImmutable $createdAt;
 
     #[ORM\Column(
@@ -56,7 +59,7 @@ class ResourceRole
      */
     public function getRole(): string
     {
-        return $this->role;
+        return $this->reference;
     }
 
 

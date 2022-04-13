@@ -4,7 +4,6 @@ namespace Optime\Acl\Bundle\Entity;
 
 use App\Entity\Application\ApplicationCatalog;
 use DateTimeImmutable;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Optime\Acl\Bundle\Repository\ResourceRepository;
 
@@ -24,8 +23,6 @@ class Resource
     #[ORM\Column]
     private bool $visible;
 
-    #[ORM\Column]
-    private string $reference;
 
     #[ORM\Column]
     private DateTimeImmutable $createdAt;

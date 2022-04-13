@@ -4,6 +4,7 @@ namespace Optime\Acl\Bundle\Service\Resource;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Optime\Acl\Bundle\Attribute\Resource;
+use Optime\Acl\Bundle\Repository\ResourceReferenceRepository;
 use Optime\Acl\Bundle\Repository\ResourceRepository;
 use ReflectionClass;
 use ReflectionMethod;
@@ -17,6 +18,7 @@ class ResourceLoader
     public function __construct(
         private EntityManagerInterface $entityManager,
         private ResourceRepository     $repository,
+        private ResourceReferenceRepository $referenceRepository,
         #[TaggedLocator('optime_acl.resource')] ServiceLocator $resources
     )
     {
@@ -32,7 +34,7 @@ class ResourceLoader
             foreach ($reflection->getMethods(ReflectionMethod::IS_PUBLIC) as $reflectionMethod) {
                 $resourcesAttr = [...$resourcesAttr, ...$this->extractResources($reflectionMethod)];
             }
-            dump($resourcesAttr);
+            $this->processResources($resourcesAttr);
         }
     }
 
@@ -48,5 +50,16 @@ class ResourceLoader
             );
         }
         return $resources;
+    }
+
+    private function processResources(array $resources) {
+        foreach ($resources as $resource) {
+            dump(
+                $this->repository->findOneByName($resource->getResource()),
+                $this->referenceRepository->getReferenceByResourceNameAndStringReference($resource->getResource(),$resource->getReference()),
+                $resource->getResource(),
+                $resource->getReference()
+            );
+        }
     }
 }

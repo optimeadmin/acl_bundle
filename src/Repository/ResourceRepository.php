@@ -14,7 +14,7 @@ class ResourceRepository extends ServiceEntityRepository
         parent::__construct($registry, Resource::class);
     }
 
-    public function findOneByName(string $name)
+    public function findOneByName(string $name): ?Resource
     {
         return $this->findOneBy(['name' => $name]);
     }

@@ -30,10 +30,10 @@ class ResourceVoter extends Voter
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
-        dump($subject);
+//        dump($subject);
         if (isset($this->previousResults[$token->getUserIdentifier()][$subject])) {
             //retornando valor guardado en caché
-            dump('cache');
+//            dump('cache');
             return $this->previousResults[$token->getUserIdentifier()][$subject];
         }
 
@@ -55,7 +55,7 @@ class ResourceVoter extends Voter
 
         $this->processCache($token, $subject, $result);
 
-        dump($this->previousResults);
+//        dump($this->previousResults);
 //        return true;
         return $result;
     }
@@ -90,7 +90,7 @@ class ResourceVoter extends Voter
     {
         if (str_contains($resource, ' ')) {
             $stringCut = substr($resource, 0, strrpos($resource, ' '));
-            dump($resource, strrpos($resource, ' '), $stringCut);
+//            dump($resource, strrpos($resource, ' '), $stringCut);
             return [$resource, ...$this->splitDistinctResourceName($stringCut)];
         } else {
             return [$resource];

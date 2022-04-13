@@ -17,13 +17,13 @@ class ResourceRoleRepository extends ServiceEntityRepository
 
     public function verifyAccessToResourceByNameAndRoles(Resource $aclResource, array $roles): bool
     {
-        $result = $this->createQueryBuilder('oaclrr')
-            ->innerJoin('oaclrr.optimeAclResource', 'oaclr')
-            ->where('oaclrr.role IN (:roles)')
-            ->andWhere('oaclr = :optimeAclResource OR oaclr.name LIKE :optimeAclResourceLike')
+        $result = $this->createQueryBuilder('resourceRole')
+            ->innerJoin('resourceRole.optimeAclResource', 'resource')
+            ->where('resourceRole.role IN (:roles)')
+            ->andWhere('resource = :resource OR resource.name LIKE :resourceLike')
             ->setParameters([
-                'optimeAclResource' => $aclResource,
-                'optimeAclResourceLike' => $aclResource->getName() . ' %',
+                'resource' => $aclResource,
+                'resourceLike' => $aclResource->getName() . ' %',
                 'roles' => $roles
             ])
             ->getQuery()
