@@ -9,6 +9,7 @@ use Optime\Acl\Bundle\Repository\ResourceReferenceRepository;
 #[ORM\Table("optime_acl_resource_reference")]
 #[ORM\Entity(repositoryClass: ResourceReferenceRepository::class)]
 #[ORM\HasLifecycleCallbacks]
+#[ORM\ChangeTrackingPolicy("DEFERRED_EXPLICIT")]
 class ResourceReference
 {
     #[ORM\Id]
@@ -16,9 +17,10 @@ class ResourceReference
     #[ORM\Column(type: 'integer')]
     private int $id;
 
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn]
-    private Resource $optimeAclResource;
+    #[ORM\ManyToOne(
+        inversedBy: 'references'
+    )]
+    private Resource $resource;
 
     #[ORM\Column]
     private string $reference;
@@ -39,7 +41,7 @@ class ResourceReference
 
     public function __construct(Resource $resource, string $reference)
     {
-        $this->optimeAclResource = $resource;
+        $this->resource = $resource;
         $this->reference = $reference;
         $this->createdAt = new DateTimeImmutable();
         $this->updatedAt = new DateTimeImmutable();
@@ -50,15 +52,13 @@ class ResourceReference
         return $this->id;
     }
 
-    public function getOptimeAclResource(): Resource
+    public function getResource(): Resource
     {
-        return $this->optimeAclResource;
+        return $this->resource;
     }
 
-    public function getRole(): string
+    public function getReference(): string
     {
         return $this->reference;
     }
-
-
 }

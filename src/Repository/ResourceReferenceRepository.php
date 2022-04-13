@@ -13,8 +13,10 @@ class ResourceReferenceRepository extends ServiceEntityRepository
         parent::__construct($registry, ResourceReference::class);
     }
 
-    public function getReferenceByResourceNameAndStringReference(string $resourceName, string $reference): ?ResourceReference
-    {
+    public function getReferenceByResourceNameAndStringReference(
+        string $resourceName,
+        string $reference
+    ): ?ResourceReference {
         return $this->createQueryBuilder('resourceReference')
             ->innerJoin('resourceReference.optimeAclResource', 'resource')
             ->where('resourceReference.reference = :reference')
