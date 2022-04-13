@@ -12,6 +12,7 @@ class ResourceReferenceRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, ResourceReference::class);
     }
+
     public function getReferenceByResourceNameAndStringReference(string $resourceName, string $reference): ?ResourceReference
     {
         return $this->createQueryBuilder('resourceReference')
@@ -24,5 +25,10 @@ class ResourceReferenceRepository extends ServiceEntityRepository
             ])
             ->getQuery()
             ->getOneOrNullResult();
+    }
+
+    public function verifyIfExistByResourceNameAndStringReference(string $resourceName, string $reference): bool
+    {
+        return is_null($this->getReferenceByResourceNameAndStringReference($resourceName, $reference));
     }
 }

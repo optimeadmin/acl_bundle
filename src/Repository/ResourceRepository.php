@@ -18,4 +18,9 @@ class ResourceRepository extends ServiceEntityRepository
     {
         return $this->findOneBy(['name' => $name]);
     }
+
+    public function verifyIfExistByName(string $name): bool
+    {
+        return !is_null($this->findOneByName($name));
+    }
 }

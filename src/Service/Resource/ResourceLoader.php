@@ -4,6 +4,7 @@ namespace Optime\Acl\Bundle\Service\Resource;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Optime\Acl\Bundle\Attribute\Resource;
+use Optime\Acl\Bundle\Entity\Resource as AclResource;
 use Optime\Acl\Bundle\Repository\ResourceReferenceRepository;
 use Optime\Acl\Bundle\Repository\ResourceRepository;
 use ReflectionClass;
@@ -16,10 +17,10 @@ class ResourceLoader
     private ServiceLocator $resources;
 
     public function __construct(
-        private EntityManagerInterface $entityManager,
-        private ResourceRepository     $repository,
+        private EntityManagerInterface      $entityManager,
+        private ResourceRepository          $repository,
         private ResourceReferenceRepository $referenceRepository,
-        #[TaggedLocator('optime_acl.resource')] ServiceLocator $resources
+                                            #[TaggedLocator('optime_acl.resource')] ServiceLocator $resources
     )
     {
         $this->resources = $resources;
@@ -52,11 +53,15 @@ class ResourceLoader
         return $resources;
     }
 
-    private function processResources(array $resources) {
+    private function processResources(array $resources)
+    {
         foreach ($resources as $resource) {
+            $aclResource = $this->repository->findOneByName($resource->getResource()) ?? new AclResource($resource->getResource(),true );
+            $this->entityManager->persist($aclResource);
+            if (!$this->referenceRepository->verifyIfExistByResourceNameAndStringReference($resource->getResource(), $resource->getReference())) {
+
+            }
             dump(
-                $this->repository->findOneByName($resource->getResource()),
-                $this->referenceRepository->getReferenceByResourceNameAndStringReference($resource->getResource(),$resource->getReference()),
                 $resource->getResource(),
                 $resource->getReference()
             );

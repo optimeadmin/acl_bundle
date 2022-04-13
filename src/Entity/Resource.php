@@ -2,7 +2,6 @@
 
 namespace Optime\Acl\Bundle\Entity;
 
-use App\Entity\Application\ApplicationCatalog;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Optime\Acl\Bundle\Repository\ResourceRepository;
@@ -23,7 +22,6 @@ class Resource
     #[ORM\Column]
     private bool $visible;
 
-
     #[ORM\Column]
     private DateTimeImmutable $createdAt;
 
@@ -35,26 +33,19 @@ class Resource
     )]
     private DateTimeImmutable $updatedAt;
 
-    public function __construct(string $name, bool $visible, string $reference)
+    public function __construct(string $name, bool $visible)
     {
         $this->name = $name;
         $this->visible = $visible;
-        $this->reference = $reference;
         $this->createdAt = new DateTimeImmutable();
         $this->updatedAt = new DateTimeImmutable();
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;

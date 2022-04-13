@@ -2,7 +2,6 @@
 
 namespace Optime\Acl\Bundle\Entity;
 
-use App\Entity\Application\Application;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Optime\Acl\Bundle\Repository\ResourceRoleRepository;
@@ -35,25 +34,16 @@ class ResourceRole
     )]
     private DateTimeImmutable $updatedAt;
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @return Resource
-     */
     public function getOptimeAclResource(): Resource
     {
         return $this->optimeAclResource;
     }
 
-    /**
-     * @return string
-     */
     public function getRole(): string
     {
         return $this->role;
