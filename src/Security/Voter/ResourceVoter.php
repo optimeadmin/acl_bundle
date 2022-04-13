@@ -9,6 +9,8 @@ use Optime\Acl\Bundle\Repository\ResourceRoleRepository;
 use Optime\Acl\Bundle\Security\User\RolesProviderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+use function dd;
+use function func_get_args;
 
 class ResourceVoter extends Voter
 {
@@ -17,10 +19,10 @@ class ResourceVoter extends Voter
 
     public function __construct(
         private RolesProviderInterface $rolesProvider,
-        private ResourceRepository     $aclResourceRepository,
-        private ResourceRoleRepository $aclResourceRoleRepository
-    )
-    {
+        private ResourceRepository $aclResourceRepository,
+        private ResourceRoleRepository $aclResourceRoleRepository,
+        private bool $enabled
+    ) {
     }
 
     protected function supports(string $attribute, $subject): bool
@@ -30,6 +32,10 @@ class ResourceVoter extends Voter
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
+        if (!$this->enabled) {
+            return true;
+        }
+
 //        dump($subject);
         if (isset($this->previousResults[$token->getUserIdentifier()][$subject])) {
             //retornando valor guardado en caché
