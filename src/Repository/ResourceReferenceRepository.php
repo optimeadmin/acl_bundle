@@ -18,7 +18,7 @@ class ResourceReferenceRepository extends ServiceEntityRepository
         string $reference
     ): ?ResourceReference {
         return $this->createQueryBuilder('resourceReference')
-            ->innerJoin('resourceReference.optimeAclResource', 'resource')
+            ->innerJoin('resourceReference.resource', 'resource')
             ->where('resourceReference.reference = :reference')
             ->andWhere('resource.name = :resource')
             ->setParameters([

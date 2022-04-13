@@ -19,7 +19,7 @@ class ResourceRole
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn]
-    private Resource $optimeAclResource;
+    private Resource $resource;
 
     #[ORM\Column(length: 255, nullable: false)]
     private string $role;
@@ -40,9 +40,9 @@ class ResourceRole
         return $this->id;
     }
 
-    public function getOptimeAclResource(): Resource
+    public function getResource(): Resource
     {
-        return $this->optimeAclResource;
+        return $this->resource;
     }
 
     public function getRole(): string

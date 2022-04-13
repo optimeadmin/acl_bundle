@@ -18,7 +18,7 @@ class ResourceRoleRepository extends ServiceEntityRepository
     public function verifyAccessToResourceByNameAndRoles(Resource $aclResource, array $roles): bool
     {
         $result = $this->createQueryBuilder('resourceRole')
-            ->innerJoin('resourceRole.optimeAclResource', 'resource')
+            ->innerJoin('resourceRole.resource', 'resource')
             ->where('resourceRole.role IN (:roles)')
             ->andWhere('resource = :resource OR resource.name LIKE :resourceLike')
             ->setParameters([
