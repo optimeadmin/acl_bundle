@@ -6,12 +6,12 @@ namespace Optime\Acl\Bundle\Attribute;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
 
-#[\Attribute(\Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
+#[\Attribute(\Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD)]
 class Resource implements ConfigurationInterface
 {
     private string $reference = '';
 
-    public function __construct(private ?string $resource = null)
+    public function __construct(private ?string $resource = null, bool $auto = false)
     {
     }
 
@@ -38,6 +38,6 @@ class Resource implements ConfigurationInterface
 
     public function allowArray(): bool
     {
-        return true;
+        return false;
     }
 }
