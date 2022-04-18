@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Optime\Acl\Bundle\Entity;
 
 use DateTimeImmutable;
@@ -17,7 +19,7 @@ class ResourceRole
     #[ORM\Column(type: 'integer')]
     private int $id;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(inversedBy: 'roles')]
     #[ORM\JoinColumn]
     private Resource $resource;
 
@@ -34,6 +36,15 @@ class ResourceRole
         columnDefinition: 'timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
     )]
     private DateTimeImmutable $updatedAt;
+
+    public function __construct(Resource $resource, string $role)
+    {
+        $this->resource = $resource;
+        $this->role = $role;
+
+        $this->createdAt = new DateTimeImmutable();
+        $this->updatedAt = new DateTimeImmutable();
+    }
 
     public function getId(): int
     {

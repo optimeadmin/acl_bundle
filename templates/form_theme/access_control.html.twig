@@ -3,12 +3,12 @@
         <thead>
         <tr>
             <th class="text-center align-middle" rowspan="2">Resource</th>
-            <th class="text-center align-middle" colspan="200">Profiles</th>
+            <th class="text-center align-middle" colspan="200">Roles</th>
         </tr>
         <tr>
             <th class="text-center align-middle">All</th>
-            {% for profile in profiles %}
-                <th class="text-center align-middle">{{ profile }}</th>
+            {% for role in roles %}
+                <th class="text-center align-middle">{{ role.label }}</th>
             {% endfor %}
         </tr>
         </thead>
@@ -35,9 +35,9 @@
             {%- endfor -%}
             {{- label -}}
         </td>
-        <td class="text-center align-middle js-acl-select-all-profiles">{{ form_row(form.all) }}</td>
-        {% for profile in form.profiles %}
-            <td class="text-center align-middle">{{ form_row(profile) }}</td>
+        <td class="text-center align-middle js-acl-select-all-roles">{{ form_row(form.all) }}</td>
+        {% for role in form.roles %}
+            <td class="text-center align-middle">{{ form_row(role) }}</td>
         {% endfor %}
     </tr>
 {% endblock acl_resource_row %}

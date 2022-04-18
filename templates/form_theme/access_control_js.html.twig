@@ -1,22 +1,25 @@
 <script>
     if (!(typeof window.jQuery == 'undefined')) {
         jQuery(function ($) {
-            $(".js-acl-select-all-profiles :checkbox").each(function () {
-                $(this).addClass('js-select-all-profiles-checkbox');
+            $(".js-acl-select-all-roles :checkbox").each(function () {
+                $(this).addClass('js-select-all-roles-checkbox');
             });
 
-            $(".js-acl-select-all-profiles :checkbox").on('change', function () {
+            $(".js-acl-select-all-roles :checkbox").on('change', function (event, trigger = true) {
                 const $this = $(this);
-                const $profiles = $this.closest('.acl-resource-container').find(':checkbox').not(this);
-                $profiles.prop('checked', $this.is(':checked')).trigger('change');
+                const $roles = $this.closest('.acl-resource-container').find(':checkbox').not(this);
+
+                if (trigger) {
+                    $roles.prop('checked', $this.is(':checked')).trigger('change');
+                }
             });
 
-            $(".acl-resource-container :checkbox").on('change', function () {
+            $(".acl-resource-container :checkbox").on('change', function (event, trigger = true) {
                 const $this = $(this);
                 const $container = $this.closest('.acl-resource-container');
 
-                if (!$this.is('.js-select-all-profiles-checkbox') && !$this.is(':checked')) {
-                    $container.find(':checkbox.js-select-all-profiles-checkbox').prop('checked', false);
+                if (!$this.is('.js-select-all-roles-checkbox') && !$this.is(':checked')) {
+                    $container.find(':checkbox.js-select-all-roles-checkbox').prop('checked', false);
                 }
 
                 if (!$container.is('[data-parent]') || !$container.data('parent')) {
@@ -39,14 +42,23 @@
                 const $childCheckboxes = $(".acl-resource-container[data-parent='" + parentResourceName + "']")
                     .find(':checkbox[value="' + $this.val() + '"]');
 
-                if ($childCheckboxes.is(':checked')) {
-                    $parentCheckbox.prop('checked', true).prop('disabled', true);
-                } else {
-                    $parentCheckbox.prop('checked', false).attr('disabled', false);
+                $parentCheckbox.prop('disabled', $childCheckboxes.is(':checked'));
+
+                if (trigger) {
+                    $parentCheckbox
+                        .prop('checked', $childCheckboxes.is(':checked'))
+                        .trigger('change');
                 }
 
-                $parentCheckbox.trigger('change');
             });
+
+            $(".acl-resource-container:first").each(function () {
+                $(this).closest('form').on('submit', function () {
+                    $(this).find(':checkbox').prop('disabled', false);
+                });
+            });
+
+            $(".acl-resource-container :checkbox").trigger('change', [false]);
         });
     }
 </script>

@@ -8,7 +8,10 @@ declare(strict_types=1);
 namespace Optime\Acl\Bundle\Form\Type;
 
 use Optime\Acl\Bundle\Entity\Resource;
+use Optime\Acl\Bundle\Form\DataMapper\ResourceDataMapper;
 use Optime\Acl\Bundle\Security\User\RolesProviderInterface;
+use Optime\Acl\Bundle\Service\Resource\UseCase\Request\ResourceRequest;
+use Optime\Acl\Bundle\Service\Roles\AppRolesCounter;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\ChoiceList\ChoiceList;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -18,9 +21,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use function array_combine;
-use function array_values;
-use function join;
+use function count;
 use function Symfony\Component\String\s;
 
 /**
@@ -28,41 +29,51 @@ use function Symfony\Component\String\s;
  */
 class ResourceType extends AbstractType
 {
-    public function __construct(private RolesProviderInterface $rolesProvider)
-    {
+    public function __construct(
+        private RolesProviderInterface $rolesProvider,
+        protected AppRolesCounter $rolesCounter,
+    ) {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('profiles', ChoiceType::class, [
+        $builder->add('roles', ChoiceType::class, [
             'label' => $options['resource']->getName(),
             'choice_loader' => ChoiceList::lazy($this, function () {
-                $choices = array_values($this->rolesProvider->getRoles());
-
-                return array_combine($choices, $choices);
+                return $this->rolesProvider->getRoles();
             }),
-            'choice_label' => $options['show_profile_label'] ? null : false,
+            'choice_value' => 'role',
+            'choice_label' => $options['show_role_label'] ? 'label' : false,
             'multiple' => true,
             'expanded' => true,
         ]);
         $builder->add('all', CheckboxType::class, [
-            'label' => $options['show_profile_label'] ? 'All' : false,
+            'label' => $options['show_role_label'] ? 'All' : false,
+            'property_path' => 'selectedAll',
         ]);
+
+        $builder->setDataMapper(new ResourceDataMapper(
+            $options['resource'], $this->rolesCounter
+        ));
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
+        $resolver->setDefault('data_class', ResourceRequest::class);
         $resolver->setRequired('resource');
         $resolver->setAllowedTypes('resource', Resource::class);
 
         $resolver->setDefaults([
-            'show_profile_label' => true,
+            'show_role_label' => true,
         ]);
 
-        $resolver->setAllowedTypes('show_profile_label', 'bool');
+        $resolver->setAllowedTypes('show_role_label', 'bool');
 
         $resolver->setDefault('label', function (Options $options) {
             return $options['resource']->getName();
+        });
+        $resolver->setDefault('empty_data', function (FormInterface $form) {
+            return ResourceDataMapper::createRequest($form->getConfig()->getDataMapper());
         });
     }
 

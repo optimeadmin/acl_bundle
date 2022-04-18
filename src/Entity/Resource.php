@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Optime\Acl\Bundle\Entity;
 
 use DateTimeImmutable;
@@ -47,6 +49,14 @@ class Resource
     )]
     private Collection $references;
 
+    #[ORM\OneToMany(
+        mappedBy: 'resource',
+        targetEntity: ResourceRole::class,
+        cascade: ['all'],
+        orphanRemoval: true
+    )]
+    private Collection $roles;
+
     public function __construct(string $name, string $reference, bool $visible)
     {
         $this->name = $name;
@@ -54,6 +64,8 @@ class Resource
         $this->createdAt = new DateTimeImmutable();
         $this->updatedAt = new DateTimeImmutable();
         $this->references = new ArrayCollection();
+        $this->roles = new ArrayCollection();
+
         $this->addReference($reference);
     }
 
@@ -137,6 +149,25 @@ class Resource
         return new self($resource, $referenceName, $visible);
     }
 
+    public function getRoles(): ArrayCollection|Collection
+    {
+        return $this->roles->map(fn(ResourceRole $role) => $role->getRole());
+    }
+
+    public function addRole(string|int $role): void
+    {
+        if (!$this->getRoleByValue($role)) {
+            $this->roles->add(new ResourceRole($this, (string)$role));
+        }
+    }
+
+    public function removeRole(string|int $role): void
+    {
+        if ($relation = $this->getRoleByValue($role)) {
+            $this->roles->removeElement($relation);
+        }
+    }
+
     public function __toString(): string
     {
         return $this->getName();
@@ -147,6 +178,17 @@ class Resource
         foreach ($this->references as $reference) {
             if ($reference->getReference() === $name) {
                 return $reference;
+            }
+        }
+
+        return null;
+    }
+
+    private function getRoleByValue(string $role): ?ResourceRole
+    {
+        foreach ($this->roles as $resourceRole) {
+            if ($resourceRole->getRole() === $role) {
+                return $resourceRole;
             }
         }
 

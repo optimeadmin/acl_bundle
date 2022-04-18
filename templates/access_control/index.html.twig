@@ -9,7 +9,11 @@
 {% form_theme form '@OptimeAcl/form_theme/access_control.html.twig' %}
 
 {% block content %}
-    {{ form_start(form) }}
+    {{ form_start(form, {attr: {novalidate: true}}) }}
     {{ form_row(form) }}
+    <hr>
+    <div>
+        <input type="submit" value="Save Configuration" class="btn btn-primary">
+    </div>
     {{ form_end(form) }}
 {% endblock %}
