@@ -18,6 +18,7 @@ services:
 
   Optime\Acl\Bundle\Security\User\DefaultRolesProvider:
     arguments:
+      - ""
       - '%security.role_hierarchy.roles%'
 
   Optime\Acl\Bundle\EventListener\ResourceListener:

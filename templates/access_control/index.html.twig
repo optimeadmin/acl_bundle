@@ -1,0 +1,15 @@
+{% extends '@OptimeEmail/layout.html.twig' %}
+
+{% block page_header 'Access Control Configuration' %}
+
+{% block page_header_actions %}
+    <a href="{{ path('optime_acl_load_resources') }}" class="btn btn-primary">Refresh Resources</a>
+{% endblock page_header_actions %}
+
+{% form_theme form '@OptimeAcl/form_theme/access_control.html.twig' %}
+
+{% block content %}
+    {{ form_start(form) }}
+    {{ form_row(form) }}
+    {{ form_end(form) }}
+{% endblock %}

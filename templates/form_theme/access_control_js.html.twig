@@ -1,0 +1,52 @@
+<script>
+    if (!(typeof window.jQuery == 'undefined')) {
+        jQuery(function ($) {
+            $(".js-acl-select-all-profiles :checkbox").each(function () {
+                $(this).addClass('js-select-all-profiles-checkbox');
+            });
+
+            $(".js-acl-select-all-profiles :checkbox").on('change', function () {
+                const $this = $(this);
+                const $profiles = $this.closest('.acl-resource-container').find(':checkbox').not(this);
+                $profiles.prop('checked', $this.is(':checked')).trigger('change');
+            });
+
+            $(".acl-resource-container :checkbox").on('change', function () {
+                const $this = $(this);
+                const $container = $this.closest('.acl-resource-container');
+
+                if (!$this.is('.js-select-all-profiles-checkbox') && !$this.is(':checked')) {
+                    $container.find(':checkbox.js-select-all-profiles-checkbox').prop('checked', false);
+                }
+
+                if (!$container.is('[data-parent]') || !$container.data('parent')) {
+                    return;
+                }
+
+                const parentResourceName = $container.data('parent');
+                const $parent = $(".acl-resource-container[data-resource='" + parentResourceName + "']");
+
+                if ($parent.length === 0) {
+                    return;
+                }
+
+                const $parentCheckbox = $parent.find(':checkbox[value="' + $this.val() + '"]');
+
+                if (!$parentCheckbox) {
+                    return;
+                }
+
+                const $childCheckboxes = $(".acl-resource-container[data-parent='" + parentResourceName + "']")
+                    .find(':checkbox[value="' + $this.val() + '"]');
+
+                if ($childCheckboxes.is(':checked')) {
+                    $parentCheckbox.prop('checked', true).prop('disabled', true);
+                } else {
+                    $parentCheckbox.prop('checked', false).attr('disabled', false);
+                }
+
+                $parentCheckbox.trigger('change');
+            });
+        });
+    }
+</script>

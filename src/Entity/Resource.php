@@ -7,6 +7,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Optime\Acl\Bundle\Repository\ResourceRepository;
+use function preg_replace;
+use function str_contains;
+use function substr_count;
 
 #[ORM\Table("optime_acl_resource")]
 #[ORM\Entity(repositoryClass: ResourceRepository::class)]
@@ -19,7 +22,7 @@ class Resource
     #[ORM\Column(type: 'integer')]
     private int $id;
 
-    #[ORM\Column]
+    #[ORM\Column(unique: true)]
     private string $name;
 
     #[ORM\Column]
@@ -69,6 +72,29 @@ class Resource
         return $this->name;
     }
 
+    public function hasParent(): bool
+    {
+        return str_contains(trim($this->getName()), ' ');
+    }
+
+    public function getParent(): ?string
+    {
+        if (!$this->hasParent()) {
+            return null;
+        }
+
+        return trim(preg_replace('/(^.+)(\s[^\s]+)$/', '$1', $this->getName()));
+    }
+
+    public function getLevel(): int
+    {
+        if (!$this->hasParent()) {
+            return 0;
+        }
+
+        return substr_count(trim($this->getName()), ' ');
+    }
+
     public function changeName(string $name): void
     {
         if (1 < count($this->getReferences())) {
@@ -103,12 +129,17 @@ class Resource
         }
 
         if (!$this->getReferenceByName($referenceName)) {
-            throw new \LogicException('No se encontró la referencia '.$referenceName.' que se esta intentando mover');
+            throw new \LogicException('No se encontró la referencia ' . $referenceName . ' que se esta intentando mover');
         }
 
         $this->removeReference($referenceName);
 
         return new self($resource, $referenceName, $visible);
+    }
+
+    public function __toString(): string
+    {
+        return $this->getName();
     }
 
     private function getReferenceByName(string $name): ?ResourceReference
