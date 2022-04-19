@@ -1,0 +1,43 @@
+{% block access_control_form_row %}
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th class="text-center align-middle" rowspan="2">Resource</th>
+            <th class="text-center align-middle" colspan="200">Roles</th>
+        </tr>
+        <tr>
+            <th class="text-center align-middle">All</th>
+            {% for role in roles %}
+                <th class="text-center align-middle">{{ role.label }}</th>
+            {% endfor %}
+        </tr>
+        </thead>
+        {{ form_widget(form) }}
+    </table>
+    {{ include('@OptimeAcl/form_theme/access_control_js.html.twig') }}
+{% endblock access_control_form_row %}
+
+{% block access_control_form_widget %}
+    <tbody>
+    {% for item in form %}
+        {{ form_row(item) }}
+    {% endfor %}
+    </tbody>
+{% endblock access_control_form_widget %}
+
+{% block acl_resource_row %}
+    <tr class="acl-resource-container "
+        data-resource="{{ current_resource }}"
+        {%- if parent_resource %} data-parent="{{ parent_resource }}"{% endif -%}>
+        <td class="fw-bold">
+            {%- for x in 0..(item_level * 4) -%}
+                &nbsp;
+            {%- endfor -%}
+            {{- label -}}
+        </td>
+        <td class="text-center align-middle js-acl-select-all-roles">{{ form_row(form.all) }}</td>
+        {% for role in form.roles %}
+            <td class="text-center align-middle">{{ form_row(role) }}</td>
+        {% endfor %}
+    </tr>
+{% endblock acl_resource_row %}

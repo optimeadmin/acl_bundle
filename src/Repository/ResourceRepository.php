@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Optime\Acl\Bundle\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -22,5 +24,15 @@ class ResourceRepository extends ServiceEntityRepository
     public function hasByName(string $name): bool
     {
         return !is_null($this->findOneByName($name));
+    }
+
+    /**
+     * @return array|Resource[]
+     */
+    public function allVisible(): array
+    {
+        return $this->findBy(['visible' => true], [
+            'name' => 'ASC',
+        ]);
     }
 }

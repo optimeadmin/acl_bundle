@@ -1,0 +1,92 @@
+{% extends '@OptimeEmail/layout.html.twig' %}
+
+{% block page_header 'Email Template Form' %}
+
+{% block page_header_actions %}
+    <a href="{{ path('optime_emails_template_list') }}" class="btn btn-outline-secondary">Back</a>
+{% endblock page_header_actions %}
+
+{% form_theme form 'bootstrap_5_layout.html.twig' %}
+
+{% set form_contents %}
+    <ul class="nav nav-pills mb-3" id="email-contens-tab" role="tablist">
+        {% for locale, subject in form.subject %}
+            {% set has_error = not subject.vars.valid or not form.content[locale].vars.valid %}
+            <li class="nav-item {{ has_error ? 'border-danger border-2 border-bottom pb-2 me-2' }}">
+                <button class="nav-link {{ loop.first ? 'active' }}"
+                        data-bs-toggle="pill"
+                        data-bs-target="#locale-item-{{ locale }}"
+                        type="button"
+                        role="tab">
+                    {{ locale|upper }}
+                </button>
+            </li>
+        {% endfor %}
+    </ul>
+    <div class="tab-content" id="pills-tabContent">
+        {% for locale, subject in form.subject %}
+            <div class="tab-pane fade {{ loop.first ? 'show active' }}" id="locale-item-{{ locale }}">
+                {{ form_label(form.subject) }}
+                {{ form_row(subject, {label: false}) }}
+                {{ form_label(form.content) }}
+                {{ form_row(form.content[locale], {label: false}) }}
+            </div>
+        {% endfor %}
+    </div>
+{% endset %}
+
+{% block content %}
+
+    {{ form_start(form, {attr: { novalidate: true }}) }}
+    {% embed '@OptimeEmail/_form_layout.html.twig' %}
+        {% block form %}
+
+            <div class="mb-3">
+                {{ form_label(form.app) }}
+                <div class="d-flex gap-2 align-items-start">
+                    <div class="flex-fill">
+                        {{ form_widget(form.app) }}
+                        {{ form_errors(form.app) }}
+                    </div>
+
+                    {% if empty_apps %}
+                        <a class="btn btn-outline-secondary"
+                           href="{{ path('optime_emails_app_create_default') }}"
+                           onclick="return confirm('Confirm page reload?')"
+                        >Create Default App</a>
+                    {% endif %}
+                </div>
+            </div>
+            {{ form_widget(form) }}
+
+            {{ form_contents }}
+        {% endblock %}
+
+        {% block buttons %}
+            {{ parent() }}
+
+            {% if item.id is not empty %}
+                <hr class="d-none d-xl-block">
+
+                <a href="{{ path('optime_emails_template_preview', {uuid: item.uuid}) }}"
+                   class="btn btn-secondary"
+                   target="_blank">Preview</a>
+
+                <a href="{{ path('optime_emails_send_test', {uuid: item.uuid}) }}"
+                   class="btn btn-outline-secondary">Send Test</a>
+            {% endif %}
+        {% endblock %}
+    {% endembed %}
+    {{ form_end(form) }}
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ include('@OptimeEmail/_import_codemirror.html.twig') }}
+    <script>
+        $(function () {
+            $('#email-contens-tab [data-bs-toggle]').on('shown.bs.tab', (e) => $.applyCodeMirror());
+        });
+    </script>
+{% endblock %}

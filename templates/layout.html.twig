@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="{{ app.request.locale }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>App Email Config - Backend</title>
+    <link rel="stylesheet" href="{{ asset('bundles/optimeacl/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/optimeacl/css/app.css') }}">
+    {% block javascripts %}
+        <script src="{{ asset('bundles/optimeacl/js/popper.min.js') }}"></script>
+        <script src="{{ asset('bundles/optimeacl/js/jquery.min.js') }}"></script>
+        <script src="{{ asset('bundles/optimeacl/js/bootstrap.min.js') }}"></script>
+    {% endblock %}
+</head>
+<body>
+<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">Company name</a>
+    <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse"
+            data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
+            aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
+    <div class="navbar-nav">
+        <div class="nav-item text-nowrap">
+            <a class="nav-link px-3" href="#">Sign out</a>
+        </div>
+    </div>
+</header>
+
+<div class="container-fluid">
+    <div class="row">
+        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+            <div class="position-sticky pt-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{{ path('optime_emails_template_list') }}">
+                            <span data-feather="home"></span>
+                            Email Templates
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{{ path('optime_emails_layout_list') }}">
+                            <span data-feather="home"></span>
+                            Email Layouts
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{{ path('optime_emails_config_list') }}">
+                            <span data-feather="home"></span>
+                            Email Configs
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{{ path('optime_emails_log_list') }}">
+                            <span data-feather="home"></span>
+                            Email Logs
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <section style="min-height: 500px">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-5 border-bottom">
+                    <h1 class="h2">{% block page_header %}{% endblock %}</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        {% block page_header_actions %}
+                        {% endblock page_header_actions %}
+                    </div>
+                </div>
+
+                {{ include('@OptimeEmail/_flashes.html.twig') }}
+
+                {% block content %}
+                {% endblock %}
+            </section>
+            <footer style="min-height: 50px" class="border-top mt-4 p-4">
+                Footer.
+            </footer>
+        </main>
+    </div>
+
+</div>
+
+{% block javascripts_bottom %}
+    <script>
+        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+            return new bootstrap.Popover(popoverTriggerEl)
+        })
+    </script>
+{% endblock %}
+
+</body>
+</html>

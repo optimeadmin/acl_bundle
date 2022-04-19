@@ -6,6 +6,7 @@ namespace Optime\Acl\Bundle\Security\Voter;
 
 use Optime\Acl\Bundle\Repository\ResourceRepository;
 use Optime\Acl\Bundle\Repository\ResourceRoleRepository;
+use Optime\Acl\Bundle\Security\User\AclRole;
 use Optime\Acl\Bundle\Security\User\RolesProviderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -48,7 +49,6 @@ class ResourceVoter extends Voter
 //        }
 
         $currentRoles = $this->rolesProvider->getRolesByToken($token);
-
 //        if (!count($currentRoles)) {
 //            return false;
 //        }

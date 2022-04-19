@@ -1,0 +1,16 @@
+<div class="row email-form-container">
+    <div class="col-12 col-xxl-10 col-xl-9 email-form-fields">
+
+        {% block form %}
+        {% endblock %}
+
+        <hr class="d-block d-xl-none">
+    </div>
+    <div class="col-12 col-xxl-2 col-xl-3 border-start email-form-buttons">
+        <div class="d-xl-flex flex-xl-column gap-xl-2">
+            {% block buttons %}
+                <input class="btn btn-primary" type="submit" value="Save">
+            {% endblock %}
+        </div>
+    </div>
+</div>

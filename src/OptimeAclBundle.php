@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace Optime\Acl\Bundle;
 
-use Optime\Acl\Bundle\DependencyInjection\Compiler\ConfigureEnabledAuthPass;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+use function dirname;
 
 class OptimeAclBundle extends Bundle
 {
+    public function getPath()
+    {
+        return dirname(__DIR__);
+    }
 }

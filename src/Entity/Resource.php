@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Optime\Acl\Bundle\Entity;
 
 use DateTimeImmutable;
@@ -7,6 +9,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Optime\Acl\Bundle\Repository\ResourceRepository;
+use function preg_replace;
+use function str_contains;
+use function substr_count;
 
 #[ORM\Table("optime_acl_resource")]
 #[ORM\Entity(repositoryClass: ResourceRepository::class)]
@@ -19,7 +24,7 @@ class Resource
     #[ORM\Column(type: 'integer')]
     private int $id;
 
-    #[ORM\Column]
+    #[ORM\Column(unique: true)]
     private string $name;
 
     #[ORM\Column]
@@ -44,6 +49,14 @@ class Resource
     )]
     private Collection $references;
 
+    #[ORM\OneToMany(
+        mappedBy: 'resource',
+        targetEntity: ResourceRole::class,
+        cascade: ['all'],
+        orphanRemoval: true
+    )]
+    private Collection $roles;
+
     public function __construct(string $name, string $reference, bool $visible)
     {
         $this->name = $name;
@@ -51,6 +64,8 @@ class Resource
         $this->createdAt = new DateTimeImmutable();
         $this->updatedAt = new DateTimeImmutable();
         $this->references = new ArrayCollection();
+        $this->roles = new ArrayCollection();
+
         $this->addReference($reference);
     }
 
@@ -67,6 +82,29 @@ class Resource
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function hasParent(): bool
+    {
+        return str_contains(trim($this->getName()), ' ');
+    }
+
+    public function getParent(): ?string
+    {
+        if (!$this->hasParent()) {
+            return null;
+        }
+
+        return trim(preg_replace('/(^.+)(\s[^\s]+)$/', '$1', $this->getName()));
+    }
+
+    public function getLevel(): int
+    {
+        if (!$this->hasParent()) {
+            return 0;
+        }
+
+        return substr_count(trim($this->getName()), ' ');
     }
 
     public function changeName(string $name): void
@@ -103,7 +141,7 @@ class Resource
         }
 
         if (!$this->getReferenceByName($referenceName)) {
-            throw new \LogicException('No se encontró la referencia '.$referenceName.' que se esta intentando mover');
+            throw new \LogicException('No se encontró la referencia ' . $referenceName . ' que se esta intentando mover');
         }
 
         $this->removeReference($referenceName);
@@ -111,11 +149,46 @@ class Resource
         return new self($resource, $referenceName, $visible);
     }
 
+    public function getRoles(): ArrayCollection|Collection
+    {
+        return $this->roles->map(fn(ResourceRole $role) => $role->getRole());
+    }
+
+    public function addRole(string|int $role): void
+    {
+        if (!$this->getRoleByValue($role)) {
+            $this->roles->add(new ResourceRole($this, (string)$role));
+        }
+    }
+
+    public function removeRole(string|int $role): void
+    {
+        if ($relation = $this->getRoleByValue($role)) {
+            $this->roles->removeElement($relation);
+        }
+    }
+
+    public function __toString(): string
+    {
+        return $this->getName();
+    }
+
     private function getReferenceByName(string $name): ?ResourceReference
     {
         foreach ($this->references as $reference) {
             if ($reference->getReference() === $name) {
                 return $reference;
+            }
+        }
+
+        return null;
+    }
+
+    private function getRoleByValue(string $role): ?ResourceRole
+    {
+        foreach ($this->roles as $resourceRole) {
+            if ($resourceRole->getRole() === $role) {
+                return $resourceRole;
             }
         }
 
