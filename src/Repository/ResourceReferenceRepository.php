@@ -29,8 +29,18 @@ class ResourceReferenceRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    public function verifyIfExistByResourceNameAndStringReference(string $resourceName, string $reference): bool
+    public function hasByResourceAndReference(string $resourceName, string $reference): bool
     {
         return is_null($this->getReferenceByResourceNameAndStringReference($resourceName, $reference));
+    }
+
+    public function findOneByReference(string $reference): ?ResourceReference
+    {
+        return $this->findOneBy(['reference' => $reference]);
+    }
+
+    public function hasByReference(string $reference): bool
+    {
+        return !is_null($this->findOneByReference($reference));
     }
 }
