@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Optime\Acl\Bundle\DependencyInjection;
 
+use Optime\Acl\Bundle\Security\User\DefaultRolesProvider;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -20,7 +21,14 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->canBeDisabled()
             ->children()
+                ->scalarNode('roles_provider')
+                    ->cannotBeEmpty()
+                    ->defaultValue(DefaultRolesProvider::class)
+                ->end()
                 ->arrayNode('resources')
+                    ->scalarPrototype()->end()
+                ->end()
+                ->arrayNode('excluded_resources')
                     ->scalarPrototype()->end()
                 ->end()
             ->end();

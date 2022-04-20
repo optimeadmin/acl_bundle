@@ -12,6 +12,11 @@ use ReflectionMethod;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
+use function dd;
+use function str_contains;
+use function str_ends_with;
+use function str_starts_with;
+use function trim;
 
 /**
  * @author Manuel Aguirre
@@ -22,6 +27,7 @@ class DirectoryReferencesLoader
 
     public function __construct(
         private array $dirs,
+        private array $excludedResourcesPatterns,
         private LoaderInterface $loader,
         private ResourceNameGenerator $nameGenerator,
     ) {
@@ -74,6 +80,53 @@ class DirectoryReferencesLoader
             return;
         }
 
+        if ($this->isExcluded($this->getReferenceName($reflection))) {
+            return;
+        }
+
         $resources->add($reference, $resourceName, $routeName, $route->getPath());
+    }
+
+    private function getReferenceName(ReflectionMethod $reflection): string
+    {
+        return sprintf('%s::%s', $reflection->class, $reflection->getName());
+    }
+
+    private function isExcluded(string $reference): bool
+    {
+        foreach ($this->excludedResourcesPatterns as $pattern) {
+            if ($this->match($reference, $pattern)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function match(string $reference, string $pattern): bool
+    {
+        $pattern = trim($pattern);
+        $search = trim($pattern, '*');
+
+        if ($search !== $pattern) {
+            $start = str_starts_with($pattern, '*');
+            $end = str_ends_with($pattern, '*');
+
+            if ($start and $end) {
+                return str_contains($reference, $search);
+            }
+
+            if ($start and str_ends_with($reference, $search)) {
+                return true;
+            }
+
+            if ($end and str_starts_with($reference, $search)) {
+                return true;
+            }
+
+            return false;
+        } else {
+            return $search == $reference;
+        }
     }
 }
