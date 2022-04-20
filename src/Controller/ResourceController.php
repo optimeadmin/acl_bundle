@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Optime\Acl\Bundle\Controller;
 
 use Optime\Acl\Bundle\Form\Type\ResourcesConfigType;
+use Optime\Acl\Bundle\Service\Reference\UseCase\CleanReferencesUseCase;
 use Optime\Acl\Bundle\Service\Reference\UseCase\SaveReferencesUseCase;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
@@ -21,9 +22,14 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route("/resources")]
 class ResourceController extends AbstractController
 {
+    public function __construct(
+        private SaveReferencesUseCase $saveReferencesUseCase,
+        private CleanReferencesUseCase $cleanReferencesUseCase,
+    ) {
+    }
 
     #[Route("/config/", name: "optime_acl_resources_config")]
-    public function config(Request $request, SaveReferencesUseCase $useCase): Response
+    public function config(Request $request): Response
     {
         $persistedForm = $this->createResourcesForm($request,);
         $newsForm = $this->createResourcesForm($request, false);
@@ -31,7 +37,8 @@ class ResourceController extends AbstractController
 
         foreach ([$persistedForm, $newsForm, $hiddenForm] as $form) {
             if ($form->isSubmitted() and $form->isValid()) {
-                $useCase->handle($form);
+                $this->saveReferencesUseCase->handle($form);
+                $this->cleanReferencesUseCase->handle();
 
                 $this->addFlash('success', 'Data saved successfully!');
 
@@ -44,6 +51,18 @@ class ResourceController extends AbstractController
             'news_form' => $newsForm,
             'hidden_form' => $hiddenForm,
         ]);
+    }
+
+    #[Route("/clean/", name: "optime_acl_resources_clean")]
+    public function clean(Request $request): Response
+    {
+        $this->cleanReferencesUseCase->handle();
+        $this->addFlash('success', 'Data saved successfully!');
+
+        return $this->redirect($request->headers->get(
+            'referer',
+            $this->generateUrl('optime_acl_resources_config')
+        ));
     }
 
     private function createResourcesForm(

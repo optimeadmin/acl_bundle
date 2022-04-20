@@ -2,6 +2,12 @@
 
 {% block page_header 'Access Control Configuration' %}
 
+{% block page_header_actions %}
+    <a href="{{ path('optime_acl_resources_clean') }}" class="btn btn-outline-danger">
+        Clean Unused Resources
+    </a>
+{% endblock %}
+
 {% from _self import render_form %}
 
 {% set active_tab = persisted_form.vars.submitted

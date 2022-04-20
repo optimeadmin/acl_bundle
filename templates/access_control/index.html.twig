@@ -4,11 +4,11 @@
 
 {% block styles %}
     {{ parent() }}
-{#    <style>#}
-{#        .acl-resource-child td:first-child {#}
-{#            padding-left: 30px;#}
-{#        }#}
-{#    </style>#}
+    {# <style> #}
+    {# .acl-resource-child td:first-child { #}
+    {# padding-left: 30px; #}
+    {# } #}
+    {# </style> #}
 {% endblock %}
 
 {% form_theme form '@OptimeAcl/form_theme/access_control.html.twig' %}
@@ -17,8 +17,13 @@
     {{ form_start(form, {attr: {novalidate: true}}) }}
     {{ form_row(form) }}
     <hr>
-    <div>
+    <div class="d-flex">
         <input type="submit" value="Save Configuration" class="btn btn-primary">
+
+        <a href="{{ path('optime_acl_resources_clean') }}" class="btn btn-outline-danger ms-auto">
+            Clean Unused Resources
+        </a>
+
     </div>
     {{ form_end(form) }}
 {% endblock %}
