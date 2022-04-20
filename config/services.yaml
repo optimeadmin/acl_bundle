@@ -33,3 +33,18 @@ services:
       - ""
       - ""
       - "%optime_acl.enabled%"
+
+  Optime\Acl\Bundle\Security\Voter\ResourceRouteVoter:
+    arguments:
+      - ""
+      - ""
+      - ""
+      - ""
+      - "%optime_acl.enabled%"
+
+  Optime\Acl\Bundle\Security\Voter\ResourceReferenceVoter:
+    arguments:
+      - ""
+      - ""
+      - ""
+      - "%optime_acl.enabled%"
