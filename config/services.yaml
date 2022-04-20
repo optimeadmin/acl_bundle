@@ -12,17 +12,18 @@ services:
       - '../src/Entity/'
       - '../src/OptimeAclBundle.php'
 
-#  Optime\Acl\Bundle\Controller\:
-#    resource: '../src/Controller/'
-#    tags: [ 'controller.service_arguments' ]
+  Optime\Acl\Bundle\Controller\:
+    resource: '../src/Controller/'
+    tags: [ 'controller.service_arguments' ]
 
   Optime\Acl\Bundle\Security\User\DefaultRolesProvider:
     arguments:
       - ""
       - '%security.role_hierarchy.roles%'
 
-  Optime\Acl\Bundle\EventListener\ResourceListener:
+  Optime\Acl\Bundle\EventListener\SecurityListener:
     arguments:
+      - ""
       - ""
       - "%optime_acl.enabled%"
 
