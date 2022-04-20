@@ -42,7 +42,7 @@ class ResourceReferenceVoter extends Voter
             return $this->previousResults[$token->getUserIdentifier()][$reference];
         }
 
-        if (!$resourceReference = $this->aclResourceReferenceRepository->findOneByReference($reference)) {
+        if (!$resourceReference = $this->aclResourceReferenceRepository->byName($reference)) {
             return false;
         }
 

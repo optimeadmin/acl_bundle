@@ -45,7 +45,7 @@ class ResourceRouteVoter extends Voter
             return false; //definir que pasa si la ruta no existe
         }
 
-        if (!$resourceReference = $this->aclResourceReferenceRepository->findOneByReference($route->getDefault('_controller'))) {
+        if (!$resourceReference = $this->aclResourceReferenceRepository->byName($route->getDefault('_controller'))) {
             return false;
         }
 

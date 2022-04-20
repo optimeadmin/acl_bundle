@@ -56,14 +56,4 @@ class ResourceReferenceRepository extends ServiceEntityRepository
     {
         return $this->findOneBy(['reference' => $name]);
     }
-
-    public function findOneByReference(string $reference): ?ResourceReference
-    {
-        return $this->findOneBy(['reference' => $reference]);
-    }
-
-    public function hasByReference(string $reference): bool
-    {
-        return !is_null($this->findOneByReference($reference));
-    }
 }
