@@ -5,7 +5,7 @@
 
 declare(strict_types=1);
 
-namespace Optime\Acl\Bundle\Service\Reference\UseCase;
+namespace Optime\Acl\Bundle\Service\Resource\UseCase;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Optime\Acl\Bundle\Repository\ResourceRepository;
@@ -13,7 +13,7 @@ use Optime\Acl\Bundle\Repository\ResourceRepository;
 /**
  * @author Manuel Aguirre
  */
-class CleanReferencesUseCase
+class CleanResourcesUseCase
 {
     public function __construct(
         private ResourceRepository $resourceRepository,

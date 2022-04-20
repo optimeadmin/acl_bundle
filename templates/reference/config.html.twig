@@ -1,12 +1,12 @@
 {% extends '@OptimeAcl/layout.html.twig' %}
 
-{% block page_header 'Access Control Configuration' %}
+{% block page_header 'Controllers Configuration' %}
 
-{% block page_header_actions %}
-    <a href="{{ path('optime_acl_resources_clean') }}" class="btn btn-outline-danger">
-        Clean Unused Resources
-    </a>
-{% endblock %}
+{#{% block page_header_actions %}#}
+{#    <a href="{{ path('optime_acl_references_clean') }}" class="btn btn-outline-danger">#}
+{#        Clean Unused Resources#}
+{#    </a>#}
+{#{% endblock %}#}
 
 {% from _self import render_form %}
 
@@ -23,21 +23,21 @@
             <li class="nav-item">
                 <button class="nav-link {{ active_tab == 'persisted' ? 'active' }}" data-bs-toggle="pill"
                         data-bs-target="#persisted-references" type="button">
-                    Persisted References
+                    Persisted
                 </button>
             </li>
         {% endif %}
         <li class="nav-item">
             <button class="nav-link {{ active_tab == 'news' ? 'active' }}" data-bs-toggle="pill"
                     data-bs-target="#new-references" type="button">
-                New References
+                News
             </button>
         </li>
         {% if hidden_form.references|length > 0 %}
             <li class="nav-item">
                 <button class="nav-link {{ active_tab == 'hidden' ? 'active' }}" data-bs-toggle="pill"
                         data-bs-target="#hidden-references" type="button">
-                    Hidden References
+                    Hidden
                 </button>
             </li>
         {% endif %}
@@ -113,7 +113,7 @@
 
         <hr>
         <div>
-            <input type="submit" value="{{ buttonTitle|default('Save References') }}" class="btn btn-primary">
+            <input type="submit" value="{{ buttonTitle|default('Apply Changes') }}" class="btn btn-primary">
         </div>
     </div>
 

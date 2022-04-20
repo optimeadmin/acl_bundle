@@ -1,0 +1,15 @@
+{% extends '@OptimeAcl/layout.html.twig' %}
+
+{% block page_header 'Resources Configuration' %}
+
+{% block page_header_actions %}
+    <a href="{{ path('optime_acl_resources_clean') }}" class="btn btn-outline-danger">
+        Clean Unused Resources
+    </a>
+{% endblock %}
+
+{% from _self import render_form %}
+
+{% block content %}
+
+{% endblock %}
