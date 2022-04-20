@@ -6,12 +6,9 @@ namespace Optime\Acl\Bundle\Security\Voter;
 
 use Optime\Acl\Bundle\Repository\ResourceRepository;
 use Optime\Acl\Bundle\Repository\ResourceRoleRepository;
-use Optime\Acl\Bundle\Security\User\AclRole;
 use Optime\Acl\Bundle\Security\User\RolesProviderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
-use function dd;
-use function func_get_args;
 
 class ResourceVoter extends Voter
 {
@@ -39,8 +36,6 @@ class ResourceVoter extends Voter
 
 //        dump($subject);
         if (isset($this->previousResults[$token->getUserIdentifier()][$subject])) {
-            //retornando valor guardado en caché
-//            dump('cache');
             return $this->previousResults[$token->getUserIdentifier()][$subject];
         }
 
@@ -61,8 +56,6 @@ class ResourceVoter extends Voter
 
         $this->processCache($token, $subject, $result);
 
-//        dump($this->previousResults);
-//        return true;
         return $result;
     }
 
@@ -96,7 +89,6 @@ class ResourceVoter extends Voter
     {
         if (str_contains($resource, ' ')) {
             $stringCut = substr($resource, 0, strrpos($resource, ' '));
-//            dump($resource, strrpos($resource, ' '), $stringCut);
             return [$resource, ...$this->splitDistinctResourceName($stringCut)];
         } else {
             return [$resource];
