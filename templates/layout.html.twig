@@ -6,12 +6,14 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>App Email Config - Backend</title>
-    <link rel="stylesheet" href="{{ asset('bundles/optimeacl/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('bundles/optimeacl/css/app.css') }}">
+    {% block styles %}
+        <link rel="stylesheet" href="{{ asset('bundles/optimeemail/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('bundles/optimeemail/css/app.css') }}">
+    {% endblock %}
     {% block javascripts %}
-        <script src="{{ asset('bundles/optimeacl/js/popper.min.js') }}"></script>
-        <script src="{{ asset('bundles/optimeacl/js/jquery.min.js') }}"></script>
-        <script src="{{ asset('bundles/optimeacl/js/bootstrap.min.js') }}"></script>
+        <script src="{{ asset('bundles/optimeemail/js/popper.min.js') }}"></script>
+        <script src="{{ asset('bundles/optimeemail/js/jquery.min.js') }}"></script>
+        <script src="{{ asset('bundles/optimeemail/js/bootstrap.min.js') }}"></script>
     {% endblock %}
 </head>
 <body>
@@ -36,27 +38,15 @@
             <div class="position-sticky pt-3">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="{{ path('optime_emails_template_list') }}">
+                        <a class="nav-link" aria-current="page" href="{{ path('optime_acl_configuration') }}">
                             <span data-feather="home"></span>
-                            Email Templates
+                            Access Control
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="{{ path('optime_emails_layout_list') }}">
+                        <a class="nav-link" aria-current="page" href="{{ path('optime_acl_resources_config') }}">
                             <span data-feather="home"></span>
-                            Email Layouts
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="{{ path('optime_emails_config_list') }}">
-                            <span data-feather="home"></span>
-                            Email Configs
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="{{ path('optime_emails_log_list') }}">
-                            <span data-feather="home"></span>
-                            Email Logs
+                            Resources Config
                         </a>
                     </li>
                 </ul>

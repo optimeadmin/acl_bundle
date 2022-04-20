@@ -103,3 +103,13 @@ class ResourceVoter extends Voter
         }
     }
 }
+
+class AclRoute
+{
+
+}
+
+class AclReference
+{
+
+}

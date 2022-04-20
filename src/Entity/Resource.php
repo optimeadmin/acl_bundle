@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Optime\Acl\Bundle\Repository\ResourceRepository;
+use Optime\Acl\Bundle\Service\Reference\Loader\LoadedReference;
 use function preg_replace;
 use function str_contains;
 use function substr_count;
@@ -27,8 +28,14 @@ class Resource
     #[ORM\Column(unique: true)]
     private string $name;
 
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $description;
+
     #[ORM\Column]
     private bool $visible;
+
+    #[ORM\Column]
+    private bool $createdByUser;
 
     #[ORM\Column]
     private DateTimeImmutable $createdAt;
@@ -57,21 +64,19 @@ class Resource
     )]
     private Collection $roles;
 
-    public function __construct(string $name, string $reference, bool $visible)
+    public function __construct(string $name, string $reference = null, bool $createdByUser = false)
     {
         $this->name = $name;
-        $this->visible = $visible;
+        $this->createdByUser = $createdByUser;
+        $this->visible = LoadedReference::HIDDEN !== $name;
         $this->createdAt = new DateTimeImmutable();
         $this->updatedAt = new DateTimeImmutable();
         $this->references = new ArrayCollection();
         $this->roles = new ArrayCollection();
 
-        $this->addReference($reference);
-    }
-
-    public static function createFromAttribute(\Optime\Acl\Bundle\Attribute\Resource $resource): self
-    {
-        return new self($resource->getResource(), $resource->getReference(), true);
+        if (null !== $reference) {
+            $this->addReference($reference);
+        }
     }
 
     public function getId(): int
@@ -107,6 +112,11 @@ class Resource
         return substr_count(trim($this->getName()), ' ');
     }
 
+    public function isCreatedByUser(): bool
+    {
+        return $this->createdByUser;
+    }
+
     public function changeName(string $name): void
     {
         if (1 < count($this->getReferences())) {
@@ -132,21 +142,6 @@ class Resource
         if ($reference = $this->getReferenceByName($name)) {
             $this->references->removeElement($reference);
         }
-    }
-
-    public function moveReferenceToNewResource(string $referenceName, string $resource, bool $visible): self
-    {
-        if (1 === count($this->getReferences())) {
-            throw new \LogicException('No se puede remover la referencia cuando solo hay una');
-        }
-
-        if (!$this->getReferenceByName($referenceName)) {
-            throw new \LogicException('No se encontró la referencia ' . $referenceName . ' que se esta intentando mover');
-        }
-
-        $this->removeReference($referenceName);
-
-        return new self($resource, $referenceName, $visible);
     }
 
     public function getRoles(): ArrayCollection|Collection

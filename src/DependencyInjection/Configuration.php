@@ -20,6 +20,9 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->canBeDisabled()
             ->children()
+                ->arrayNode('resources')
+                    ->scalarPrototype()->end()
+                ->end()
             ->end();
 
         return $treeBuilder;

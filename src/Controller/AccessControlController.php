@@ -44,12 +44,4 @@ class AccessControlController extends AbstractController
             'form' => $form,
         ]);
     }
-
-    #[Route("/resources/load", name: "optime_acl_load_resources")]
-    public function loadResources(ResourceLoader $loader): Response
-    {
-        $loader->process();
-
-        return $this->redirectToRoute('optime_acl_configuration');
-    }
 }

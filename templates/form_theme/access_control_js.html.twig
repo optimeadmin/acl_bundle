@@ -5,6 +5,16 @@
                 $(this).addClass('js-select-all-roles-checkbox');
             });
 
+            // $(".acl-resource-container[data-parent]").each(function () {
+            //     const name = $(this).data('parent');
+            //
+            //     if (0 === $(".acl-resource-container[data-resource='" + name + "']").length) {
+            //         return;
+            //     }
+            //
+            //     $(this).addClass('acl-resource-child');
+            // });
+
             $(".js-acl-select-all-roles :checkbox").on('change', function (event, trigger = true) {
                 const $this = $(this);
                 const $roles = $this.closest('.acl-resource-container').find(':checkbox').not(this);
