@@ -89,6 +89,21 @@ class Resource
         return $this->name;
     }
 
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
+
+    public function setDescription(?string $description): void
+    {
+        $this->description = $description;
+    }
+
     public function hasParent(): bool
     {
         return str_contains(trim($this->getName()), ' ');
@@ -115,14 +130,6 @@ class Resource
     public function isCreatedByUser(): bool
     {
         return $this->createdByUser;
-    }
-
-    public function changeName(string $name): void
-    {
-        if (1 < count($this->getReferences())) {
-            throw new \LogicException('No se puede renombrar Resource con mas de una referencia');
-        }
-        $this->name = $name;
     }
 
     public function getReferences(): Collection

@@ -5,7 +5,7 @@
 
 declare(strict_types=1);
 
-namespace Optime\Acl\Bundle\Form\Type;
+namespace Optime\Acl\Bundle\Form\Type\AccessControl;
 
 use Optime\Acl\Bundle\Entity\Resource;
 use Optime\Acl\Bundle\Form\DataMapper\ResourceDataMapper;
@@ -21,7 +21,6 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use function count;
 use function Symfony\Component\String\s;
 
 /**

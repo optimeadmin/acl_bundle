@@ -5,7 +5,7 @@
 
 declare(strict_types=1);
 
-namespace Optime\Acl\Bundle\Form\Type;
+namespace Optime\Acl\Bundle\Form\Type\Config;
 
 use Optime\Acl\Bundle\Service\Reference\Loader\LoadedReference;
 use Symfony\Component\Form\AbstractType;
@@ -23,7 +23,7 @@ use function strlen;
 /**
  * @author Manuel Aguirre
  */
-class ResourceConfigType extends AbstractType
+class ReferenceConfigType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {

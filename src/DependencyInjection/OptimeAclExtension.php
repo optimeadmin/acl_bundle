@@ -30,11 +30,6 @@ class OptimeAclExtension extends Extension
         );
         $loader->load('services.yaml');
 
-        $container->registerAttributeForAutoconfiguration(Resource::class,
-            function (ChildDefinition $definition) {
-                $definition->addTag('optime_acl.resource');
-            });
-
         $container->setParameter('optime_acl.enabled', $config['enabled']);
         $container->addObjectResource($this);
 

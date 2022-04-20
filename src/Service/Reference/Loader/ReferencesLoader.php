@@ -22,12 +22,12 @@ class ReferencesLoader
     ) {
     }
 
-    public function getResources(): ReferenceCollection
+    public function getReferences(): ReferenceCollection
     {
-        return $this->loadedCollection ??= $this->doGetResources();
+        return $this->loadedCollection ??= $this->doGetReferences();
     }
 
-    private function doGetResources(): ReferenceCollection
+    private function doGetReferences(): ReferenceCollection
     {
         $collection = $this->referencesLoader->getResources();
         $databaseReferences = $this->repository->findAll();

@@ -5,7 +5,7 @@
 
 declare(strict_types=1);
 
-namespace Optime\Acl\Bundle\Form\Type;
+namespace Optime\Acl\Bundle\Form\Type\AccessControl;
 
 use Optime\Acl\Bundle\Repository\ResourceRepository;
 use Optime\Acl\Bundle\Security\User\RolesProviderInterface;
@@ -16,8 +16,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use function array_map;
-use function dd;
 
 /**
  * @author Manuel Aguirre

@@ -85,10 +85,11 @@
             </thead>
             <tbody>
             {% for item in form.references %}
-                {% set td_class = item.vars.reference.route is empty ? 'border border-danger bg-warning' %}
-                <tr class="align-middle reference-item-container">
+                {% set is_empty_route = item.vars.reference.route is empty %}
+                {% set td_class = is_empty_route ? 'border border-danger bg-warning' %}
+                <tr class="align-middle reference-item-container {{ is_empty_route and form.vars.only_hidden ? 'd-none' }}">
                     <td class="reference-apply-container align-middle text-center {{ td_class }}">
-                        <div class="{{ item.vars.reference.route is empty ? 'd-none' }}">
+                        <div class="{{ is_empty_route ? 'd-none' }}">
                             {{ form_widget(item.apply) }}
                         </div>
                     </td>
@@ -124,7 +125,7 @@
     {{ parent() }}
     <script>
         $(function ($) {
-            $(".reference-field-container :input").on('change paste', function () {
+            $(".reference-field-container :input:not(:checkbox)").on('change paste', function () {
                 $(this)
                     .closest('.reference-item-container')
                     .find('.reference-apply-container :checkbox')
@@ -135,13 +136,15 @@
                 const $this = $(this);
                 const search = $this.val().trim();
                 const $references = $this.closest('.references-container').find('.reference-item-container');
-                const filterSelector = ':contains(' + search + '), :has(:input[value*="' + search + '"])';
+                const filter = function () {
+                    return this.innerHTML.includes(search);
+                };
 
                 if (3 > search.length) {
                     $references.show();
                 } else {
-                    $references.filter(filterSelector).show();
-                    $references.not(filterSelector).hide();
+                    $references.filter(filter).show();
+                    $references.not(filter).hide();
                 }
             });
         });

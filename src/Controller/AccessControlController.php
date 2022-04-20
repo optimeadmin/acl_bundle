@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Optime\Acl\Bundle\Controller;
 
-use Optime\Acl\Bundle\Form\Type\AccessControlFormType;
+use Optime\Acl\Bundle\Form\Type\AccessControl\AccessControlFormType;
 use Optime\Acl\Bundle\Service\Resource\ResourceLoader;
 use Optime\Acl\Bundle\Service\Resource\UseCase\Request\RequestFactory;
 use Optime\Acl\Bundle\Service\Resource\UseCase\UpdateAllResourcesRolesUseCase;

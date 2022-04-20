@@ -8,8 +8,112 @@
     </a>
 {% endblock %}
 
-{% from _self import render_form %}
+{% form_theme form 'bootstrap_5_layout.html.twig' %}
 
 {% block content %}
+    <div class="resources-container">
+        {{ form_start(form, {attr: {novalidate: true}}) }}
 
+        <div class="py-2">
+            <input type="text" class="form-control resources-search" placeholder="Search...">
+        </div>
+
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th style="width: 40px">Apply</th>
+                <th>Resource</th>
+                <th>Description</th>
+                <th class="text-center">Created By</th>
+                <th class="text-center">References</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in form.resources %}
+                {% set resource = item.vars.resource %}
+                <tr class="align-middle resource-item-container">
+                    <td class="resource-apply-container">{{ form_widget(item.apply) }}</td>
+                    <td>{{ form_widget(item.name) }}</td>
+                    <td>{{ form_widget(item.description, {attr: {rows: 1}}) }}</td>
+                    <td class="text-center">{{ resource.createdByUser ? 'User' : 'App' }}</td>
+                    <td class="text-center">
+                        {% set references = resource.references %}
+                        <button type="button"
+                                class="btn btn-outline-secondary btn-sm"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modal-references-{{ resource.id }}"
+                                style="min-width: 80px"
+                        >Show ({{ references|length }})
+                        </button>
+                        <div class="modal fade" id="modal-references-{{ resource.id }}" tabindex="-1">
+                            <div class="modal-dialog modal-lg text-start">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">
+                                            References for "<i>{{ resource.name }}</i>"
+                                        </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        {% if references|length > 0 %}
+                                            <ul>
+                                                {% for reference in references %}
+                                                    <li class="fst-italic">{{ reference }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% else %}
+                                            <h4>This resource not have direct references</h4>
+                                        {% endif %}
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <hr>
+        <div>
+            <input type="submit" value="{{ buttonTitle|default('Apply Changes') }}" class="btn btn-primary">
+        </div>
+
+        {{ form_end(form) }}
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(function ($) {
+            $(".resource-item-container :input:not(:checkbox)").on('change paste', function () {
+                $(this)
+                    .closest('.resource-item-container')
+                    .find('.resource-apply-container :checkbox')
+                    .prop('checked', true);
+            });
+
+            $(".resources-search").on('change keyup paste', function () {
+                const $this = $(this);
+                const search = $this.val().trim();
+                const $references = $('.resource-item-container');
+                const filter = function () {
+                    return this.innerHTML.includes(search);
+                };
+
+                if (3 > search.length) {
+                    $references.show();
+                } else {
+                    $references.filter(filter).show();
+                    $references.not(filter).hide();
+                }
+            });
+        });
+    </script>
 {% endblock %}

@@ -9,7 +9,7 @@ namespace Optime\Acl\Bundle\Service\Reference\UseCase;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Optime\Acl\Bundle\Entity\Resource;
-use Optime\Acl\Bundle\Form\Type\ResourcesConfigType;
+use Optime\Acl\Bundle\Form\Type\Config\ReferencesConfigType;
 use Optime\Acl\Bundle\Repository\ResourceReferenceRepository;
 use Optime\Acl\Bundle\Repository\ResourceRepository;
 use Optime\Acl\Bundle\Service\Reference\Loader\LoadedReference;
@@ -29,9 +29,9 @@ class SaveReferencesUseCase
 
     public function handle(FormInterface $form): void
     {
-        if (!$form->getConfig()->getType()->getInnerType() instanceof ResourcesConfigType) {
+        if (!$form->getConfig()->getType()->getInnerType() instanceof ReferencesConfigType) {
             throw new \InvalidArgumentException(
-                "Solo se puede pasar un form de tipo '" . ResourcesConfigType::class . "'"
+                "Solo se puede pasar un form de tipo '" . ReferencesConfigType::class . "'"
             );
         }
 

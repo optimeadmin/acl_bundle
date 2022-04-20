@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Optime\Acl\Bundle\Controller;
 
-use Optime\Acl\Bundle\Form\Type\ResourcesConfigType;
+use Optime\Acl\Bundle\Form\Type\Config\ReferencesConfigType;
 use Optime\Acl\Bundle\Service\Reference\UseCase\SaveReferencesUseCase;
 use Optime\Acl\Bundle\Service\Resource\UseCase\CleanResourcesUseCase;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -58,7 +58,7 @@ class ReferenceController extends AbstractController
         bool $persisted = true,
         bool $hidden = false
     ): FormInterface {
-        $form = $this->createForm(ResourcesConfigType::class, null, [
+        $form = $this->createForm(ReferencesConfigType::class, null, [
             'persisted' => $persisted,
             'hidden' => $hidden,
         ]);

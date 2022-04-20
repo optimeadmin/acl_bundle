@@ -5,7 +5,7 @@
 
 declare(strict_types=1);
 
-namespace Optime\Acl\Bundle\Form\Type;
+namespace Optime\Acl\Bundle\Form\Type\Config;
 
 use Optime\Acl\Bundle\Service\Reference\Loader\ReferenceCollectionFilter;
 use Optime\Acl\Bundle\Service\Reference\Loader\ReferencesLoader;
@@ -15,13 +15,11 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use function dd;
-use function dump;
 
 /**
  * @author Manuel Aguirre
  */
-class ResourcesConfigType extends AbstractType
+class ReferencesConfigType extends AbstractType
 {
     private static int $nameSuffix = 0;
 
@@ -33,7 +31,7 @@ class ResourcesConfigType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $resources = $this->loader->getResources();
+        $resources = $this->loader->getReferences();
 
         if ($options['hidden']) {
             $resources = $this->collectionFilter->hidden($resources);
@@ -47,7 +45,7 @@ class ResourcesConfigType extends AbstractType
 
         /** @var \Optime\Acl\Bundle\Service\Reference\Loader\LoadedReference $resource */
         foreach ($resources as $resource) {
-            $form->add($resource->getIdentifier(), ResourceConfigType::class, [
+            $form->add($resource->getIdentifier(), ReferenceConfigType::class, [
                 'data' => $resource,
                 'edit' => $options['persisted'],
             ]);
