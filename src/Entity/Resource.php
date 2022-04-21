@@ -170,6 +170,11 @@ class Resource
         }
     }
 
+    public function isActive(): bool
+    {
+        return LoadedReference::HIDDEN !== $this->getName();
+    }
+
     public function __toString(): string
     {
         return $this->getName();

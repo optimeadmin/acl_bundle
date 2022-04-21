@@ -7,10 +7,9 @@ namespace Optime\Acl\Bundle\Security\Voter;
 use Optime\Acl\Bundle\Repository\ResourceReferenceRepository;
 use Optime\Acl\Bundle\Repository\ResourceRoleRepository;
 use Optime\Acl\Bundle\Security\User\RolesProviderInterface;
-use ReflectionMethod;
-use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+use function dd;
 
 class ResourceReferenceVoter extends Voter
 {
@@ -43,6 +42,10 @@ class ResourceReferenceVoter extends Voter
         }
 
         if (!$resourceReference = $this->aclResourceReferenceRepository->byName($reference)) {
+            return true;
+        }
+
+        if (!$resourceReference->getResource()->isActive()) {
             return true;
         }
 

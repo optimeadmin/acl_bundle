@@ -50,6 +50,10 @@ class ResourceRouteVoter extends Voter
             return true;
         }
 
+        if (!$resourceReference->getResource()->isActive()) {
+            return true;
+        }
+
         $currentRoles = $this->rolesProvider->getRolesByToken($token);
 
         $result = $this->aclResourceRoleRepository->verifyAccessToResourceByNameAndRoles(

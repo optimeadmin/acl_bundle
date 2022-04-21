@@ -25,6 +25,7 @@ services:
     arguments:
       - ""
       - ""
+      - ""
       - "%optime_acl.enabled%"
 
   Optime\Acl\Bundle\Security\Voter\ResourceVoter:
