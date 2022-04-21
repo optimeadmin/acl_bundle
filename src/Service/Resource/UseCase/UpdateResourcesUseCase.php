@@ -32,7 +32,7 @@ class UpdateResourcesUseCase
     {
         if (!$form->getConfig()->getType()->getInnerType() instanceof ResourcesConfigType) {
             throw new \InvalidArgumentException(
-                "Solo se puede pasar un form de tipo '" . ResourcesConfigType::class . "'"
+                "Solo se puede pasar un form de tipo '".ResourcesConfigType::class."'"
             );
         }
 
@@ -54,15 +54,15 @@ class UpdateResourcesUseCase
         ]);
 
         if ($otherResource && $otherResource->getId() !== $resource->getId()) {
-            // hay otro recurso, y es disinto del que se está editando.
+            // hay otro recurso, y es distinto del que se está editando.
             // debemos pasar los datos del recurso que se edita al otro recurso y eliminar el editado.
-            // todo: validar que debe pasar con los perfiles.
 
             $this->logger?->debug(
-                'Se encontró otro recurso existente ({resource}) con el mismo nombre, ' .
-                'por lo que se pasan todas la referencias a dicho recurso.', [
+                'Se encontró otro recurso existente ({resource}) con el mismo nombre, '.
+                'por lo que se pasan todas la referencias y roles a dicho recurso.', [
                 'resource' => $otherResource->getId(),
                 'references' => $resource->getReferences()->toArray(),
+                'roles' => $resource->getRoles()->toArray(),
             ]);
 
             foreach ($resource->getReferences() as $reference) {
@@ -70,22 +70,21 @@ class UpdateResourcesUseCase
                 $resource->removeReference($reference);
             }
 
+            foreach ($resource->getRoles() as $role) {
+                $otherResource->addRole($role);
+                $resource->removeRole($role);
+            }
+
             $this->entityManager->persist($otherResource);
 
-            if (0 === count($resource->getRoles())) {
-                $this->entityManager->remove($resource);
+            $this->entityManager->remove($resource);
 
-                $this->logger?->debug(
-                    'Como el recurso {resource} ya no tiene referencias ni roles asociados,' .
-                    ' se elimina de la base de datos!', [
-                    'resource' => $otherResource->getId(),
-                ]);
-            } else {
-                $this->logger?->debug(
-                    'El recurso {resource} tiene roles asociados, por lo que se mantiene en la base de datos!', [
-                    'resource' => $otherResource->getId(),
-                ]);
-            }
+            $this->logger?->debug(
+                'Como el recurso {resource} ya no tiene referencias ni roles asociados,'.
+                ' se elimina de la base de datos!', [
+                'resource' => $resource->getId(),
+            ]);
+
         } else {
             $this->entityManager->persist($resource);
         }

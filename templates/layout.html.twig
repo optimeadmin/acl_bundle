@@ -7,13 +7,13 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>App Email Config - Backend</title>
     {% block styles %}
-        <link rel="stylesheet" href="{{ asset('bundles/optimeemail/css/bootstrap.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('bundles/optimeemail/css/app.css') }}">
+        <link rel="stylesheet" href="{{ asset('bundles/optimeacl/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('bundles/optimeacl/css/app.css') }}">
     {% endblock %}
     {% block javascripts %}
-        <script src="{{ asset('bundles/optimeemail/js/popper.min.js') }}"></script>
-        <script src="{{ asset('bundles/optimeemail/js/jquery.min.js') }}"></script>
-        <script src="{{ asset('bundles/optimeemail/js/bootstrap.min.js') }}"></script>
+        <script src="{{ asset('bundles/optimeacl/js/popper.min.js') }}"></script>
+        <script src="{{ asset('bundles/optimeacl/js/jquery.min.js') }}"></script>
+        <script src="{{ asset('bundles/optimeacl/js/bootstrap.min.js') }}"></script>
     {% endblock %}
 </head>
 <body>
@@ -69,7 +69,7 @@
                     </div>
                 </div>
 
-                {{ include('@OptimeEmail/_flashes.html.twig') }}
+                {{ include('@OptimeAcl/_flashes.html.twig') }}
 
                 {% block content %}
                 {% endblock %}

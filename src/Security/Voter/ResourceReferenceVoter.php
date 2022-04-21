@@ -43,14 +43,12 @@ class ResourceReferenceVoter extends Voter
         }
 
         if (!$resourceReference = $this->aclResourceReferenceRepository->byName($reference)) {
-            return false;
+            return true;
         }
-
-        $currentRoles = $this->rolesProvider->getRolesByToken($token);
 
         $result = $this->aclResourceRoleRepository->verifyAccessToResourceByNameAndRoles(
             $resourceReference->getResource(),
-            $currentRoles
+            $this->rolesProvider->getRolesByToken($token)
         );
 
         return $this->previousResults[$token->getUserIdentifier()][$reference] ??= $result;

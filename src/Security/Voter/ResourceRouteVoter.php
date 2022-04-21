@@ -41,12 +41,13 @@ class ResourceRouteVoter extends Voter
         if (isset($this->previousResults[$token->getUserIdentifier()][$routeName])) {
             return $this->previousResults[$token->getUserIdentifier()][$routeName];
         }
+
         if (!$route = $this->router->getRouteCollection()->get($routeName)) {
-            return false; //definir que pasa si la ruta no existe
+            return true;
         }
 
         if (!$resourceReference = $this->aclResourceReferenceRepository->byName($route->getDefault('_controller'))) {
-            return false;
+            return true;
         }
 
         $currentRoles = $this->rolesProvider->getRolesByToken($token);

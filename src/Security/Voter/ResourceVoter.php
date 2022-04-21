@@ -34,19 +34,11 @@ class ResourceVoter extends Voter
             return true;
         }
 
-//        dump($subject);
         if (isset($this->previousResults[$token->getUserIdentifier()][$subject])) {
             return $this->previousResults[$token->getUserIdentifier()][$subject];
         }
 
-//        if(!$token->getUser()){
-//            return false;
-//        }
-
         $currentRoles = $this->rolesProvider->getRolesByToken($token);
-//        if (!count($currentRoles)) {
-//            return false;
-//        }
 
         if (!$aclResource = $this->aclResourceRepository->findOneByName($subject)) {
             return false; //hay que definir que se hará en caso de no conseguir el registro
@@ -94,14 +86,4 @@ class ResourceVoter extends Voter
             return [$resource];
         }
     }
-}
-
-class AclRoute
-{
-
-}
-
-class AclReference
-{
-
 }
