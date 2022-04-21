@@ -9,10 +9,9 @@ namespace Optime\Acl\Bundle\Service\Reference\Loader;
 use Optime\Acl\Bundle\Service\Resource\ResourceNameGenerator;
 use ReflectionException;
 use ReflectionMethod;
-use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
-use function dd;
+use Symfony\Component\Routing\RouterInterface;
 use function str_contains;
 use function str_ends_with;
 use function str_starts_with;
@@ -26,9 +25,9 @@ class DirectoryReferencesLoader
     private ?ReferenceCollection $loadedCollection;
 
     public function __construct(
-        private array $dirs,
+        private array $namespaces,
         private array $excludedResourcesPatterns,
-        private LoaderInterface $loader,
+        private RouterInterface $router,
         private ResourceNameGenerator $nameGenerator,
     ) {
     }
@@ -41,15 +40,16 @@ class DirectoryReferencesLoader
     private function doGetResources(): ReferenceCollection
     {
         $collection = new ReferenceCollection();
+        $routes = $this->router->getRouteCollection();
 
-        foreach ($this->dirs as $dir) {
-            /** @var RouteCollection $routes */
-            $routes = $this->loader->load($dir);
-
-            $this->loadFromRoutes($collection, $routes);
-        }
+        $this->loadFromRoutes($collection, $routes);
 
         return $collection;
+    }
+
+    private function filterRoutesByDefinedDirs(RouteCollection $routes): RouteCollection
+    {
+        return $routes;
     }
 
     private function loadFromRoutes(ReferenceCollection $resources, RouteCollection $routes): void
@@ -57,6 +57,17 @@ class DirectoryReferencesLoader
         foreach ($routes as $routeName => $route) {
             $this->loadFromRoute($resources, $route, $routeName);
         }
+    }
+
+    private function applyNamespace(string $reference): bool
+    {
+        foreach ($this->namespaces as $prefixNamespace) {
+            if (str_starts_with($reference, $prefixNamespace)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function loadFromRoute(
@@ -70,17 +81,21 @@ class DirectoryReferencesLoader
 
         $reference = $route->getDefault('_controller');
 
+        if (!$this->applyNamespace($reference)) {
+            return;
+        }
+
         try {
             $reflection = new ReflectionMethod($reference);
         } catch (ReflectionException) {
             return;
         }
 
-        if (false === ($resourceName = $this->nameGenerator->generateFromReference($reflection))) {
+        if ($this->isExcluded($this->getReferenceName($reflection))) {
             return;
         }
 
-        if ($this->isExcluded($this->getReferenceName($reflection))) {
+        if (false === ($resourceName = $this->nameGenerator->generateFromReference($reflection))) {
             return;
         }
 

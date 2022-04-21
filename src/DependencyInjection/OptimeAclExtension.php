@@ -36,27 +36,14 @@ class OptimeAclExtension extends Extension
         $container->setParameter('optime_acl.enabled', $config['enabled']);
 
         $this->configureRolesProvider($config, $container);
-        $this->configureResourcesDirs($config, $container);
+        $this->configureResourcesPrefixes($config, $container);
     }
 
-    private function configureResourcesDirs(array $config, ContainerBuilder $container): void
+    private function configureResourcesPrefixes(array $config, ContainerBuilder $container): void
     {
-        $projectDir = rtrim($container->getParameter('kernel.project_dir'));
-        $resources = array_map(function ($dir) use ($projectDir) {
-            $path = $projectDir . '/' . trim($dir);
-
-            if (!is_dir($path)) {
-                throw new InvalidArgumentException("No existe el directorio '" . $path .
-                    "'. Revisar la configuración del bundle de ACL");
-            }
-
-            return realpath($path);
-        }, $config['resources']);
-
         $container->findDefinition(DirectoryReferencesLoader::class)
-            ->setArgument(0, $resources)
-            ->setArgument(1, $config['excluded_resources'])
-            ->setArgument(2, new Reference('routing.loader'));
+            ->setArgument(0, $config['resources'])
+            ->setArgument(1, $config['excluded_resources']);
     }
 
     private function configureRolesProvider(array $config, ContainerBuilder $container): void

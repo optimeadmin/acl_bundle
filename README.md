@@ -35,13 +35,14 @@ optime_acl:
     # Por defecto usa los roles del security.yaml
     # roles_provider: LoyaltyRolesProvider 
 
-    # Rutas donde se van a buscar los recursos/referencias del proyecto
-    # Son rutas a las carpetas de los controladres del proyecto y de los
+    # Prefijos de Namespace donde se van a buscar los recursos/referencias del proyecto
+    # Son Namespaces de los controladres del proyecto y de los
     # diferentes bundles que esté usando la app.
-    # La ruta siempre debe ser relativa y comenzar desde la raíz del proyecto.
     resources:
-        - src/Controller/
-        - bundles/optime/acl/src/Controller/
+        - App\   # Ruta del propio proyecto
+        - Optime\ # Ruta de todo lo que comienze con el namespace Optime
+        # - "" # Con esto registramos todas las posibles rutas del proyecto y bundles como recursos.
+        # - Optime\Acl\Bundle\ # Ejemplo de Bundle especifico
 
     # Opcional. Se puede indicar nombres de Controladores o namespaces a excluir de los
     # posibles recursos de seguridad en la aplicación.
