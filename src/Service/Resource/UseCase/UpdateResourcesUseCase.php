@@ -11,6 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Optime\Acl\Bundle\Entity\Resource;
 use Optime\Acl\Bundle\Form\Type\Config\ResourcesConfigType;
 use Optime\Acl\Bundle\Repository\ResourceRepository;
+use Optime\Acl\Bundle\Service\Resource\ParentResourceCreator;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\Form\FormInterface;
@@ -24,6 +25,7 @@ class UpdateResourcesUseCase
     public function __construct(
         private ResourceRepository $repository,
         private EntityManagerInterface $entityManager,
+        private ParentResourceCreator $parentResourceCreator,
         private ?LoggerInterface $logger = null,
     ) {
     }
@@ -84,9 +86,9 @@ class UpdateResourcesUseCase
                 ' se elimina de la base de datos!', [
                 'resource' => $resource->getId(),
             ]);
-
         } else {
             $this->entityManager->persist($resource);
+            $this->parentResourceCreator->createIfApply($resource);
         }
 
         $this->entityManager->flush();

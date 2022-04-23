@@ -19,7 +19,6 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @author Manuel Aguirre
  */
-#[Route("/configuration")]
 class AccessControlController extends AbstractController
 {
     #[Route("/", name: "optime_acl_configuration")]

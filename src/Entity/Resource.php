@@ -10,6 +10,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Optime\Acl\Bundle\Repository\ResourceRepository;
 use Optime\Acl\Bundle\Service\Reference\Loader\LoadedReference;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use function preg_replace;
 use function str_contains;
 use function substr_count;
@@ -18,6 +20,7 @@ use function substr_count;
 #[ORM\Entity(repositoryClass: ResourceRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[ORM\ChangeTrackingPolicy("DEFERRED_EXPLICIT")]
+#[UniqueEntity("name")]
 class Resource
 {
     #[ORM\Id]
@@ -25,6 +28,7 @@ class Resource
     #[ORM\Column(type: 'integer')]
     private int $id;
 
+    #[NotBlank]
     #[ORM\Column(unique: true)]
     private string $name;
 

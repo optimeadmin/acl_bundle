@@ -13,6 +13,7 @@ use Optime\Acl\Bundle\Form\Type\Config\ReferencesConfigType;
 use Optime\Acl\Bundle\Repository\ResourceReferenceRepository;
 use Optime\Acl\Bundle\Repository\ResourceRepository;
 use Optime\Acl\Bundle\Service\Reference\Loader\LoadedReference;
+use Optime\Acl\Bundle\Service\Resource\ParentResourceCreator;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\Form\FormInterface;
@@ -27,6 +28,7 @@ class SaveReferencesUseCase
         private ResourceRepository $resourceRepository,
         private ResourceReferenceRepository $referenceRepository,
         private EntityManagerInterface $entityManager,
+        private ParentResourceCreator $parentResourceCreator,
         private ?LoggerInterface $logger = null,
     ) {
     }
@@ -112,7 +114,7 @@ class SaveReferencesUseCase
         $this->entityManager->flush();
 
         if ($loadedReference->isActive()) {
-            $this->createParentResourcesIfApply($resource);
+            $this->parentResourceCreator->createIfApply($resource);
         }
     }
 
@@ -124,28 +126,5 @@ class SaveReferencesUseCase
 
         $loadedReference->setModifiedResourceName(LoadedReference::HIDDEN);
         $this->saveReference($loadedReference);
-    }
-
-    private function createParentResourcesIfApply(Resource $resource): void
-    {
-        if (!$resource->hasParent()) {
-            return;
-        }
-
-        $parentName = $resource->getParent();
-
-        if (!$parent = $this->resourceRepository->findOneByName($parentName)) {
-            $this->logger?->debug('El recurso {resource} debe tener un padre y este no existe en la BD, '
-                . 'por lo que se crea el nuevo recurso padre {parent}', [
-                'resource' => $resource->getName(),
-                'parent' => $parentName,
-            ]);
-
-            $parent = new Resource($parentName);
-            $this->entityManager->persist($parent);
-            $this->entityManager->flush();
-        }
-
-        $this->createParentResourcesIfApply($parent);
     }
 }

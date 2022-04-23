@@ -1,0 +1,34 @@
+{% extends '@OptimeAcl/layout.html.twig' %}
+
+{% block page_header 'Create Resource' %}
+
+{% block page_header_actions %}
+    <a href="{{ path('optime_acl_resources_list') }}" class="btn btn-outline-secondary">
+        Back to list
+    </a>
+{% endblock %}
+
+{% form_theme form 'bootstrap_5_layout.html.twig' %}
+
+{% block content %}
+
+    <div class="create-resource-container">
+        {{ form_start(form, {attr: {novalidate: true}}) }}
+
+        <div class="d-flex flex-column flex-md-row gap-md-3">
+            <div class="form-items flex-fill border-end pe-2">
+                {{ form_widget(form) }}
+                <hr class="d-md-none">
+            </div>
+            <div class="form-actions d-flex flex-md-column gap-2" style="min-width: 200px">
+                <input type="submit" value="{{ buttonTitle|default('Create') }}" class="btn btn-primary">
+                <a href="{{ path('optime_acl_resources_list') }}" class="btn btn-outline-secondary">
+                    Back to list
+                </a>
+            </div>
+        </div>
+
+        {{ form_end(form) }}
+    </div>
+
+{% endblock %}

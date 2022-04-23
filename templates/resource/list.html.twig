@@ -3,6 +3,9 @@
 {% block page_header 'Resources Configuration' %}
 
 {% block page_header_actions %}
+    <a href="{{ path('optime_acl_resource_create') }}" class="btn-outline-secondary btn">
+        Create Resource
+    </a>
     <a href="{{ path('optime_acl_resources_clean') }}" class="btn btn-outline-danger">
         Clean Unused Resources
     </a>
@@ -25,7 +28,7 @@
                 <th>Resource</th>
                 <th>Description</th>
                 <th class="text-center">Created By</th>
-                <th class="text-center">References</th>
+                <th class="text-center" style="width: 200px">References</th>
             </tr>
             </thead>
             <tbody>
@@ -36,7 +39,7 @@
                     <td>{{ form_widget(item.name) }}</td>
                     <td>{{ form_widget(item.description, {attr: {rows: 1}}) }}</td>
                     <td class="text-center">{{ resource.createdByUser ? 'User' : 'App' }}</td>
-                    <td class="text-center">
+                    <td class="ps-4">
                         {% set references = resource.references %}
                         <button type="button"
                                 class="btn btn-outline-secondary btn-sm"
@@ -72,6 +75,14 @@
                                 </div>
                             </div>
                         </div>
+
+                        {% if resource.createdByUser %}
+                            <a href="{{ path('optime_acl_resource_remove', {'id': resource.id}) }}"
+                               class="btn btn-outline-danger btn-sm"
+                               onclick="return confirm('Are you sure to delete this item?')">
+                                Delete
+                            </a>
+                        {% endif %}
                     </td>
                 </tr>
             {% endfor %}
