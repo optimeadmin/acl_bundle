@@ -5,7 +5,7 @@
     "psr-4": {
       "Optime\\Acl\\Bundle\\": "src/"
     }
-  }
+  },
   "require": {
     "php": ">=8.0",
     "symfony/framework-bundle": "^5.4|^6.0",
