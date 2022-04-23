@@ -5,7 +5,7 @@ Bundle para manejo de control de accesos.
 ## Instalación
 
 ```
-composer require "XXX/XXX" "^1.0@dev"
+composer require "optimeconsulting/acl_bundle" "^1.0@dev"
 ```
 
 ## Configuración

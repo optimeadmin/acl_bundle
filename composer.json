@@ -1,0 +1,9 @@
+{
+  "name": "optimeconsulting/acl_bundle",
+  "license": "proprietary",
+  "autoload": {
+    "psr-4": {
+      "Optime\\Acl\\Bundle\\": "src/"
+    }
+  }
+}
