@@ -20,7 +20,7 @@ use function substr_count;
 #[ORM\Entity(repositoryClass: ResourceRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[ORM\ChangeTrackingPolicy("DEFERRED_EXPLICIT")]
-#[UniqueEntity("name")]
+#[UniqueEntity("name", groups: ["create"])]
 class Resource
 {
     #[ORM\Id]
