@@ -8,7 +8,23 @@
         <tr>
             <th class="text-center align-middle">All</th>
             {% for role in roles %}
-                <th class="text-center align-middle">{{ role.label }}</th>
+                <th class="align-middle text-nowrap">
+                    <div class="d-flex align-items-center">
+                        <span>{{- role.label -}}</span>
+                        {% if role.parentRoles|length > 0 %}
+                            <button type="button"
+                                    class="btn btn-sm btn-secondary ms-auto"
+                                    data-bs-toggle="popover"
+                                    data-bs-trigger="focus"
+                                    data-bs-placement="top"
+                                    data-bs-html="true"
+                                    title="Inherited Roles"
+                                    data-bs-content="{{ role.parentRoles|join('\n')|nl2br }}">
+                                ?
+                            </button>
+                        {% endif %}
+                    </div>
+                </th>
             {% endfor %}
         </tr>
         </thead>
@@ -28,7 +44,7 @@
 {% block acl_resource_row %}
     <tr class="acl-resource-container"
         data-resource="{{ current_resource }}"
-        {%- if parent_resource %} data-parent="{{ parent_resource }}"{% endif -%}>
+            {%- if parent_resource %} data-parent="{{ parent_resource }}"{% endif -%}>
         <td class="fw-bold">
             {%- for x in 0..(item_level * 4) -%}
                 &nbsp;

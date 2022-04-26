@@ -5,6 +5,7 @@ namespace Optime\Acl\Bundle\Security\User;
 use Optime\Acl\Bundle\Entity\Resource;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
+use function array_diff;
 use function array_keys;
 use function array_map;
 
@@ -50,6 +51,8 @@ class DefaultRolesProvider implements RolesProviderInterface
      */
     private function mapToAclRoles(array $securityRoles): array
     {
-        return array_map(fn($role) => AclRole::fromSecurityRole($role), $securityRoles);
+        $securityRoles = array_diff($securityRoles, ['ROLE_ALLOWED_TO_SWITCH']);
+
+        return array_map(fn($role) => AclRole::fromSecurityRole($role, $this->roleHierarchy), $securityRoles);
     }
 }
