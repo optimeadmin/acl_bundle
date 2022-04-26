@@ -21,6 +21,7 @@ use function substr_count;
 #[ORM\HasLifecycleCallbacks]
 #[ORM\ChangeTrackingPolicy("DEFERRED_EXPLICIT")]
 #[UniqueEntity("name", groups: ["create"])]
+#[ORM\Index(fields: ["name"], name: "IDX_OPTIME_ACL_RESOURCE_NAME")]
 class Resource
 {
     #[ORM\Id]
