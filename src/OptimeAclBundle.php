@@ -9,7 +9,7 @@ use function dirname;
 
 class OptimeAclBundle extends Bundle
 {
-    public function getPath()
+    public function getPath(): string
     {
         return dirname(__DIR__);
     }
