@@ -12,6 +12,7 @@ use Optime\Acl\Bundle\Repository\ResourceRoleRepository;
 #[ORM\Entity(repositoryClass: ResourceRoleRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[ORM\ChangeTrackingPolicy("DEFERRED_EXPLICIT")]
+#[ORM\Index(fields: ["role"], name: "IDX_OPTIME_ACL_ROLE_NAME")]
 class ResourceRole
 {
     #[ORM\Id]

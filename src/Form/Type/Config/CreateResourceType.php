@@ -41,5 +41,6 @@ class CreateResourceType extends AbstractType
                 true,
             );
         });
+        $resolver->setDefault('validation_groups', ['Default', 'create']);
     }
 }

@@ -12,6 +12,7 @@ use Optime\Acl\Bundle\Repository\ResourceReferenceRepository;
 #[ORM\Entity(repositoryClass: ResourceReferenceRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[ORM\ChangeTrackingPolicy("DEFERRED_EXPLICIT")]
+#[ORM\Index(fields: ["reference"], name: "IDX_OPTIME_ACL_REFERENCE_NAME")]
 class ResourceReference
 {
     #[ORM\Id]
