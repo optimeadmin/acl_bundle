@@ -33,7 +33,7 @@ class  AccessControlFormType extends AbstractType
         $resources = $this->resourceRepository->allVisible();
 
         foreach ($resources as $resource) {
-            $builder->add($resource->getId(), ResourceType::class, [
+            $builder->add((string)$resource->getId(), ResourceType::class, [
                 'resource' => $resource,
                 'show_role_label' => $options['show_role_label'],
                 'property_path' => 'resources[' . $resource->getId() . ']',
@@ -49,7 +49,7 @@ class  AccessControlFormType extends AbstractType
         ]);
 
         $resolver->setAllowedTypes('show_role_label', 'bool');
-        $resolver->setDefault('empty_data', function (FormInterface $form){
+        $resolver->setDefault('empty_data', function (FormInterface $form) {
             return new ResourcesWithRolesRequest([]);
         });
     }

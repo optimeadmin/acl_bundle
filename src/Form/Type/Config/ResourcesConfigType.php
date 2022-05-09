@@ -28,7 +28,7 @@ class ResourcesConfigType extends AbstractType
         $form = $builder->create('resources', FormType::class);
 
         foreach ($resources as $resource) {
-            $form->add($resource->getId(), ResourceConfigType::class, [
+            $form->add((string)$resource->getId(), ResourceConfigType::class, [
                 'data' => $resource,
             ]);
         }
