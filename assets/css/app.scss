@@ -1,0 +1,19 @@
+@import "bootstrap.css";
+
+.modal .modal-body .email-form-fields,
+.modal .modal-body .email-form-buttons {
+    width: 100%;
+}
+
+.modal .modal-body .email-form-buttons {
+    border-top: 1px;
+}
+
+.modal .modal-body .email-form-buttons > div {
+    display: inline-flex !important;
+}
+
+.email-form-filter-checkboxs{
+    max-height: 260px;
+    overflow: auto;
+}

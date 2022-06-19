@@ -1,0 +1,16 @@
+{% extends '@OptimeAcl/layout.html.twig' %}
+
+{% block page_header 'Access Control Configuration' %}
+
+{% block styles %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    <div id="acl_root"></div>
+{% endblock %}
+
+{% block javascripts_bottom %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/optimeacl/acl.js') }}"></script>
+{% endblock %}

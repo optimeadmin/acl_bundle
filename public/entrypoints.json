@@ -1,0 +1,14 @@
+{
+  "entrypoints": {
+    "acl": {
+      "js": [
+        "./acl.js"
+      ]
+    },
+    "styles": {
+      "css": [
+        "./styles.css"
+      ]
+    }
+  }
+}
