@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>App Email Config - Backend</title>
     {% block styles %}
-{#        <link rel="stylesheet" href="{{ asset('bundles/optimeacl/css/bootstrap.min.css') }}">#}
+        {# <link rel="stylesheet" href="{{ asset('bundles/optimeacl/css/bootstrap.min.css') }}"> #}
         <link rel="stylesheet" href="{{ asset('bundles/optimeacl/styles.css') }}">
     {% endblock %}
     {% block javascripts %}
@@ -34,53 +34,57 @@
 </header>
 
 <div class="container-fluid">
-    <div class="row">
-        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-            <div class="position-sticky pt-3">
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="{{ path('optime_acl_configuration') }}">
-                            <span data-feather="home"></span>
-                            Access Control
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="{{ path('optime_acl_resources_list') }}">
-                            <span data-feather="home"></span>
-                            Resources Config
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="{{ path('optime_acl_references_config') }}">
-                            <span data-feather="home"></span>
-                            Controllers Config
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <section style="min-height: 500px">
-                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-5 border-bottom">
-                    <h1 class="h2">{% block page_header %}{% endblock %}</h1>
-                    <div class="btn-toolbar mb-2 mb-md-0 d-flex gap-2">
-                        {% block page_header_actions %}
-                        {% endblock page_header_actions %}
-                    </div>
+    {% block page_content %}
+        <div class="row">
+            <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+                <div class="position-sticky pt-3">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="{{ path('optime_acl_configuration') }}">
+                                <span data-feather="home"></span>
+                                Access Control
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="{{ path('optime_acl_resources_list') }}">
+                                <span data-feather="home"></span>
+                                Resources Config
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="{{ path('optime_acl_references_config') }}">
+                                <span data-feather="home"></span>
+                                Controllers Config
+                            </a>
+                        </li>
+                    </ul>
                 </div>
+            </nav>
 
-                {{ include('@OptimeAcl/_flashes.html.twig') }}
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <section style="min-height: 500px">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-5 border-bottom">
+                        <h1 class="h2">{% block page_header %}{% endblock %}</h1>
+                        <div class="btn-toolbar mb-2 mb-md-0 d-flex gap-2">
+                            {% block page_header_actions %}
+                            {% endblock page_header_actions %}
+                        </div>
+                    </div>
 
-                {% block content %}
-                {% endblock %}
-            </section>
-            <footer style="min-height: 50px" class="border-top mt-4 p-4">
-                Footer.
-            </footer>
-        </main>
-    </div>
+                    {{ include('@OptimeAcl/_flashes.html.twig') }}
 
+                    {% block content %}
+                    {% endblock %}
+                </section>
+
+                {% block page_footer %}
+                    <footer style="min-height: 50px" class="border-top mt-4 p-4">
+                        Footer.
+                    </footer>
+                {% endblock page_footer %}
+            </main>
+        </div>
+    {% endblock page_content %}
 </div>
 
 {% block javascripts_bottom %}

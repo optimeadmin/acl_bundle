@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class HomeController extends AbstractController
 {
-    #[Route("/react/{page<.*>}", name: "optime_acl_homepage")]
+    #[Route("/react/{page?null<.*>}", name: "optime_acl_homepage")]
     public function index(): Response
     {
         return $this->renderForm('@OptimeAcl/access_control/home.html.twig', [

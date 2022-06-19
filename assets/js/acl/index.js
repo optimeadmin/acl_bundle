@@ -1,11 +1,16 @@
 import React from "react"
 import {createRoot} from "react-dom/client"
+import App from "./App";
+import {BrowserRouter} from "react-router-dom";
 
 const $container = document.getElementById('acl_root')
+const basename = $container.dataset.basename ?? '/';
 const root = createRoot($container);
 
 root.render(
     <React.StrictMode>
-        <h3>Ahora si, hola Mundo!</h3>
+        <BrowserRouter basename={basename}>
+            <App/>
+        </BrowserRouter>
     </React.StrictMode>
 )

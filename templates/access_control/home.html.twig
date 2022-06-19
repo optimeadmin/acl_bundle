@@ -6,8 +6,12 @@
     {{ parent() }}
 {% endblock %}
 
-{% block content %}
-    <div id="acl_root"></div>
+{% block page_content %}
+    <div id="acl_root"
+         data-basename="{{ path('optime_acl_homepage') }}"
+    ></div>
+
+    {{ block('page_footer') }}
 {% endblock %}
 
 {% block javascripts_bottom %}
