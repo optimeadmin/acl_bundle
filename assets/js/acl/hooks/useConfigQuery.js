@@ -4,6 +4,7 @@ import {getConfig} from "../api/config";
 const useConfigQuery = (setResources) => {
     const {
         isLoading,
+        isFetching,
         data: {
             roles = [],
             resources = {},
@@ -42,6 +43,7 @@ const useConfigQuery = (setResources) => {
 
     return {
         isLoading,
+        isFetching,
         roles,
         resources,
     }

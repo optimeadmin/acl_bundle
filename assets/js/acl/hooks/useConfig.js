@@ -49,8 +49,13 @@ const setResourcesFactory = (set) => {
 const useConfig = () => {
     const queryClient = useQueryClient()
     const [resources, setResources] = useImmer({})
-    const {isLoading, roles, resources: savedResources} = useConfigQuery(setResourcesFactory(setResources))
-    const {mutate} = useMutation(saveResourcesRoles, {
+    const {
+        isLoading,
+        isFetching,
+        roles,
+        resources: savedResources
+    } = useConfigQuery(setResourcesFactory(setResources))
+    const {mutateAsync, isLoading: isSaving} = useMutation(saveResourcesRoles, {
         onSuccess() {
             queryClient.invalidateQueries(["config"])
         }
@@ -69,12 +74,13 @@ const useConfig = () => {
         })
     }, [savedResources, setResources])
 
-    const saveConfig = useCallback(() => {
-        mutate(resources)
-    }, [mutate, resources])
+    const saveConfig = useCallback(async () => {
+        await mutateAsync(resources)
+    }, [mutateAsync, resources])
 
     return {
-        isLoading,
+        isLoaded: !isLoading,
+        isLoading: isFetching || isSaving,
         roles,
         resources,
         editResource,

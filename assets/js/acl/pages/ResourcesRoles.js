@@ -1,17 +1,26 @@
-import React from 'react';
+import React, {useState} from 'react';
 import ResourceRolesItem from "../components/ResourceRolesItem";
 import useConfig from "../hooks/useConfig";
-import {Button} from "react-bootstrap"
+import {Button, Spinner} from "react-bootstrap"
 import RoleHeader from "../components/RoleHeader"
+import {FaCheckDouble} from "react-icons/fa"
 
 const ResourcesRoles = () => {
-    const {isLoading, resources, roles, editResource, saveConfig} = useConfig()
+    const {isLoading, isLoaded, resources, roles, editResource, saveConfig} = useConfig()
+    const [isSaved, setSaved] = useState(false)
+    const [showSavedIcon, setShowSavedIcon] = useState(false)
 
     const handleSaveConfigClick = () => {
-        saveConfig()
+        setShowSavedIcon(true)
+        saveConfig().then(() => {
+            setSaved(true)
+            setTimeout(() => {
+                setSaved(false)
+            }, 1500)
+        })
     }
 
-    if (isLoading) {
+    if (!isLoaded) {
         return <h3>Loading...</h3>
     }
 
@@ -47,7 +56,31 @@ const ResourcesRoles = () => {
 
                 </table>
 
-                <Button variant="primary" onClick={handleSaveConfigClick}>Save Configuration</Button>
+                <Button variant="primary" onClick={handleSaveConfigClick} style={{
+                    minWidth: 165,
+                    display: 'inline-block',
+                }}>
+                    {isLoading && (
+                        <Spinner
+                            className="me-2"
+                            as="span"
+                            animation="border"
+                            size="sm"
+                        />
+                    )}
+                    {isLoading
+                        ? 'Saving Data...'
+                        : 'Save Configuration'
+                    }
+                </Button>
+                <FaCheckDouble
+                    className={`ms-2 animate__animated ${
+                        isSaved ? 'animate__tada' : 'animate__fadeOut'} ${
+                        showSavedIcon ? '' : 'invisible'
+                    }`}
+                    size="1.5em"
+                    color="#AAAAAA"
+                />
             </section>
         </div>
     );
