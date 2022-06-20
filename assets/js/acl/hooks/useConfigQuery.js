@@ -2,7 +2,14 @@ import {useQuery} from "react-query";
 import {getConfig} from "../api/config";
 
 const useConfigQuery = (setResources) => {
-    const {isLoading, data: {roles = [], resources = {}} = {}} = useQuery(["config"], getConfig, {
+    const {
+        isLoading,
+        data: {
+            roles = [],
+            resources = {},
+            rolesCount
+        } = {}
+    } = useQuery(["config"], getConfig, {
         select({roles, resources}) {
             const mappedRoles = roles.map(role => ({
                 ...role,
@@ -12,6 +19,7 @@ const useConfigQuery = (setResources) => {
             return {
                 roles: mappedRoles,
                 resources,
+                rolesCount: mappedRoles.length,
             }
         },
         onSuccess({resources: currentResources}) {
@@ -25,6 +33,7 @@ const useConfigQuery = (setResources) => {
                     parent,
                     children,
                     roles,
+                    initialRoles: roles,
                 }
             }
 
@@ -35,6 +44,7 @@ const useConfigQuery = (setResources) => {
     return {
         isLoading,
         roles,
+        rolesCount,
         resources,
     }
 }
