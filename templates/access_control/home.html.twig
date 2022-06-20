@@ -9,6 +9,7 @@
 {% block page_content %}
     <div id="acl_root"
          data-basename="{{ path('optime_acl_homepage') }}"
+         data-endpoint-api="{{ path('optime_acl_homepage')|replace({'/react': '/api'}) }}"
     ></div>
 
     {{ block('page_footer') }}

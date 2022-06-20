@@ -1,11 +1,24 @@
 import React from 'react';
+import ResourceRolesItem from "../components/ResourceRolesItem";
+import useConfig from "../hooks/useConfig";
+import {Button} from "react-bootstrap"
 
 const ResourcesRoles = () => {
+    const {isLoading, resources, roles, editResource, saveConfig} = useConfig()
+
+    const handleSaveConfigClick = () => {
+        saveConfig()
+    }
+
+    if (isLoading) {
+        return <h3>Loading...</h3>
+    }
+
     return (
         <div>
             <h3 className="border-bottom pb-3">Access Control Configuration</h3>
 
-            <section>
+            <section className="mt-5">
 
                 <table className="table table-bordered">
                     <thead>
@@ -15,50 +28,29 @@ const ResourcesRoles = () => {
                     </tr>
                     <tr>
                         <th className="text-center align-middle">All</th>
-                        <th className="align-middle text-nowrap">
-                            <div className="d-flex align-items-center">
-                                <span>ROLE_USER</span>
-                            </div>
-                        </th>
-                        <th className="align-middle text-nowrap">
-                            <div className="d-flex align-items-center">
-                                <span>ROLE_ADMIN</span>
-                            </div>
-                        </th>
-                        <th className="align-middle text-nowrap">
-                            <div className="d-flex align-items-center">
-                                <span>ROLE_OPTIME</span>
-                            </div>
-                        </th>
+                        {roles.map(({label, role}) => (
+                            <th key={role} className="align-middle text-nowrap">
+                                <div className="d-flex align-items-center">
+                                    <span>{label}</span>
+                                </div>
+                            </th>
+                        ))}
                     </tr>
                     </thead>
                     <tbody>
-                    <tr className="acl-resource-container" data-resource="edit">
-                        <td className="fw-bold">&nbsp;edit</td>
-                        <td className="text-center align-middle js-acl-select-all-roles">
-                            <div><input type="checkbox" id="access_control_form_93_all"
-                                        name="access_control_form[93][all]" required="required" value="1"
-                                        className="js-select-all-roles-checkbox"/></div>
-                        </td>
-                        <td className="text-center align-middle">
-                            <div><input type="checkbox" id="access_control_form_93_roles_0"
-                                        name="access_control_form[93][roles][]" value="ROLE_USER" checked="checked"/>
-                            </div>
-                        </td>
-                        <td className="text-center align-middle">
-                            <div><input type="checkbox" id="access_control_form_93_roles_1"
-                                        name="access_control_form[93][roles][]" value="ROLE_ADMIN" checked="checked"/>
-                            </div>
-                        </td>
-                        <td className="text-center align-middle">
-                            <div><input type="checkbox" id="access_control_form_93_roles_2"
-                                        name="access_control_form[93][roles][]" value="ROLE_OPTIME"/></div>
-                        </td>
-                    </tr>
+                    {Object.entries(resources).map(([name, item]) => (
+                        <ResourceRolesItem
+                            key={name}
+                            resource={item}
+                            appRoles={roles}
+                            onEdit={editResource}
+                        />
+                    ))}
                     </tbody>
 
                 </table>
 
+                <Button variant="primary" onClick={handleSaveConfigClick}>Save Configuration</Button>
             </section>
         </div>
     );
