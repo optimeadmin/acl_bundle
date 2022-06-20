@@ -7,7 +7,6 @@ const useConfigQuery = (setResources) => {
         data: {
             roles = [],
             resources = {},
-            rolesCount
         } = {}
     } = useQuery(["config"], getConfig, {
         select({roles, resources}) {
@@ -19,7 +18,6 @@ const useConfigQuery = (setResources) => {
             return {
                 roles: mappedRoles,
                 resources,
-                rolesCount: mappedRoles.length,
             }
         },
         onSuccess({resources: currentResources}) {
@@ -34,6 +32,7 @@ const useConfigQuery = (setResources) => {
                     children,
                     roles,
                     initialRoles: roles,
+                    blockedRoles: [],
                 }
             }
 
@@ -44,7 +43,6 @@ const useConfigQuery = (setResources) => {
     return {
         isLoading,
         roles,
-        rolesCount,
         resources,
     }
 }

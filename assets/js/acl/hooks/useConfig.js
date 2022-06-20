@@ -1,7 +1,7 @@
 import {useImmer} from "use-immer";
 import {useCallback} from "react";
 import useConfigQuery from "./useConfigQuery";
-import {useMutation} from "react-query";
+import {useMutation, useQueryClient} from "react-query";
 import {saveResourcesRoles} from "../api/config";
 
 const updateParentRoles = (items, resource) => {
@@ -13,6 +13,7 @@ const updateParentRoles = (items, resource) => {
 
     const parentResource = items[parent]
     parentResource.roles = [...new Set([...parentResource.roles, ...roles])]
+    parentResource.blockedRoles = [...roles]
 
     updateParentRoles(items, parentResource)
 }
@@ -34,10 +35,26 @@ const updateChildrenRoles = (items, resource) => {
     })
 }
 
+const setResourcesFactory = (set) => {
+    return (resources) => {
+        Object.entries(resources).forEach(([, resource]) => {
+            updateParentRoles(resources, resource)
+            updateChildrenRoles(resources, resource)
+        })
+
+        set(resources)
+    }
+}
+
 const useConfig = () => {
+    const queryClient = useQueryClient()
     const [resources, setResources] = useImmer({})
-    const {isLoading, roles, resources: savedResources, rolesCount} = useConfigQuery(setResources)
-    const {mutate} = useMutation(saveResourcesRoles)
+    const {isLoading, roles, resources: savedResources} = useConfigQuery(setResourcesFactory(setResources))
+    const {mutate} = useMutation(saveResourcesRoles, {
+        onSuccess() {
+            queryClient.invalidateQueries(["config"])
+        }
+    })
 
     const editResource = useCallback((name, roles) => {
         setResources(items => {
