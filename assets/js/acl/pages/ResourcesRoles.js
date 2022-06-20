@@ -56,7 +56,7 @@ const ResourcesRoles = () => {
 
                 </table>
 
-                <Button variant="primary" onClick={handleSaveConfigClick} style={{
+                <Button disabled={isLoading} variant="primary" onClick={handleSaveConfigClick} style={{
                     minWidth: 165,
                     display: 'inline-block',
                 }}>
