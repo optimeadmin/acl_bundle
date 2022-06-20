@@ -2,7 +2,7 @@ import {useImmer} from "use-immer";
 import {useCallback} from "react";
 import useConfigQuery from "./useConfigQuery";
 import {useMutation} from "react-query";
-import {saveConfig, saveResourcesRoles} from "../api/config";
+import {saveResourcesRoles} from "../api/config";
 
 const useConfig = () => {
     const [resources, setResources] = useImmer({})

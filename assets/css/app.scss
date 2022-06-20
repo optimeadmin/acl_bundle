@@ -1,32 +1,32 @@
-@import "bootstrap.css";
+@import "../../node_modules/bootstrap/scss/bootstrap";
 
 .modal .modal-body .email-form-fields,
 .modal .modal-body .email-form-buttons {
-    width: 100%;
+  width: 100%;
 }
 
 .modal .modal-body .email-form-buttons {
-    border-top: 1px;
+  border-top: 1px;
 }
 
 .modal .modal-body .email-form-buttons > div {
-    display: inline-flex !important;
+  display: inline-flex !important;
 }
 
-.email-form-filter-checkboxs{
-    max-height: 260px;
-    overflow: auto;
+.email-form-filter-checkboxs {
+  max-height: 260px;
+  overflow: auto;
 }
 
 .acl-page-content {
-    min-height: 500px;
+  min-height: 500px;
 }
 
 .nav {
-    .nav-item {
-        .nav-link.active {
-            filter: brightness(70%);
-            transform: translateX(2px);
-        }
+  .nav-item {
+    .nav-link.active {
+      filter: brightness(70%);
+      transform: translateX(2px);
     }
+  }
 }

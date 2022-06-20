@@ -2,6 +2,7 @@ import React from 'react';
 import ResourceRolesItem from "../components/ResourceRolesItem";
 import useConfig from "../hooks/useConfig";
 import {Button} from "react-bootstrap"
+import RoleHeader from "../components/RoleHeader"
 
 const ResourcesRoles = () => {
     const {isLoading, resources, roles, editResource, saveConfig} = useConfig()
@@ -28,12 +29,8 @@ const ResourcesRoles = () => {
                     </tr>
                     <tr>
                         <th className="text-center align-middle">All</th>
-                        {roles.map(({label, role}) => (
-                            <th key={role} className="align-middle text-nowrap">
-                                <div className="d-flex align-items-center">
-                                    <span>{label}</span>
-                                </div>
-                            </th>
+                        {roles.map(role => (
+                            <RoleHeader key={role.role} role={role}/>
                         ))}
                     </tr>
                     </thead>
