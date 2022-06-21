@@ -22,7 +22,7 @@ const ResourceRolesItem = ({resource, appRoles, onEdit: editRoles}) => {
         if (event.target.checked) {
             editRoles(name, appRoles.map(({role}) => role))
         } else {
-            editRoles(name, [])
+            editRoles(name, blockedRoles)
         }
     }
 
