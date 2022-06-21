@@ -79,8 +79,9 @@ const useConfig = () => {
     }, [mutateAsync, resources])
 
     return {
-        isLoaded: !isLoading,
-        isLoading: isFetching || isSaving,
+        hasData: !isLoading,
+        isLoading: isFetching,
+        isSaving,
         roles,
         resources,
         editResource,

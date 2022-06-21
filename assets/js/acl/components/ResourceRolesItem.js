@@ -1,4 +1,5 @@
 import React from 'react';
+import EditedField from "./EditedField";
 
 const ResourceRolesItem = ({resource, appRoles, onEdit: editRoles}) => {
     const {name, roles, initialRoles, blockedRoles} = resource
@@ -59,16 +60,14 @@ const ResourceRolesItem = ({resource, appRoles, onEdit: editRoles}) => {
             {appRoles.map(({role}) => (
                 <td key={role} className="text-center align-middle">
                     <div>
-                        <div className={`d-inline-block border-2 border-bottom border-${
-                            isChanged(role) ? 'secondary' : 'light'
-                        }`}>
+                        <EditedField edited={isChanged(role)}>
                             <input
                                 disabled={isBlocked(role)}
                                 type="checkbox"
                                 checked={hasRole(role)}
                                 onChange={e => toggleRole(role, e)}
                             />
-                        </div>
+                        </EditedField>
                     </div>
                 </td>
             ))}

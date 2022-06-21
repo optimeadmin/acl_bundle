@@ -6,7 +6,7 @@ import RoleHeader from "../components/RoleHeader"
 import {FaCheckDouble} from "react-icons/fa"
 
 const ResourcesRoles = () => {
-    const {isLoading, isLoaded, resources, roles, editResource, saveConfig} = useConfig()
+    const {isLoading, hasData, isSaving, resources, roles, editResource, saveConfig} = useConfig()
     const [isSaved, setSaved] = useState(false)
     const [showSavedIcon, setShowSavedIcon] = useState(false)
 
@@ -16,19 +16,54 @@ const ResourcesRoles = () => {
             setSaved(true)
             setTimeout(() => {
                 setSaved(false)
-            }, 1500)
+            }, 1000)
         })
     }
 
-    if (!isLoaded) {
+    if (!hasData) {
         return <h3>Loading...</h3>
     }
+
+    const renderSaveBtn = (
+        <div className="mb-2 d-flex align-items-center">
+            <Button
+                disabled={isSaving || isLoading}
+                variant="primary"
+                onClick={handleSaveConfigClick}
+                style={{
+                    minWidth: 165,
+                    display: 'inline-block',
+                }}>
+                {isSaving && (
+                    <Spinner
+                        className="me-2"
+                        animation="border"
+                        size="sm"
+                    />
+                )}
+                {isSaving
+                    ? 'Saving Data...'
+                    : 'Save Configuration'
+                }
+            </Button>
+            <FaCheckDouble
+                className={`ms-2 animate__animated ${
+                    isSaved ? 'animate__tada' : 'animate__fadeOut'} ${
+                    showSavedIcon ? '' : 'invisible'
+                }`}
+                size="1.5em"
+                color="#AAAAAA"
+            />
+        </div>
+    )
 
     return (
         <div>
             <h3 className="border-bottom pb-3">Access Control Configuration</h3>
 
             <section className="mt-5">
+
+                {renderSaveBtn}
 
                 <table className="table table-bordered">
                     <thead>
@@ -56,31 +91,8 @@ const ResourcesRoles = () => {
 
                 </table>
 
-                <Button disabled={isLoading} variant="primary" onClick={handleSaveConfigClick} style={{
-                    minWidth: 165,
-                    display: 'inline-block',
-                }}>
-                    {isLoading && (
-                        <Spinner
-                            className="me-2"
-                            as="span"
-                            animation="border"
-                            size="sm"
-                        />
-                    )}
-                    {isLoading
-                        ? 'Saving Data...'
-                        : 'Save Configuration'
-                    }
-                </Button>
-                <FaCheckDouble
-                    className={`ms-2 animate__animated ${
-                        isSaved ? 'animate__tada' : 'animate__fadeOut'} ${
-                        showSavedIcon ? '' : 'invisible'
-                    }`}
-                    size="1.5em"
-                    color="#AAAAAA"
-                />
+                {renderSaveBtn}
+
             </section>
         </div>
     );

@@ -10,6 +10,7 @@ const useConfigQuery = (setResources) => {
             resources = {},
         } = {}
     } = useQuery(["config"], getConfig, {
+        keepPreviousData: true,
         select({roles, resources}) {
             const mappedRoles = roles.map(role => ({
                 ...role,
