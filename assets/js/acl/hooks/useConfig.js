@@ -1,8 +1,8 @@
 import {useImmer} from "use-immer";
 import {useCallback} from "react";
 import useConfigQuery from "./useConfigQuery";
-import {useMutation, useQueryClient} from "react-query";
-import {saveResourcesRoles} from "../api/config";
+import {useQueryClient} from "react-query";
+import useResourcesRolesMutation from "./useResourcesRolesMutation"
 
 const updateParentRoles = (items, resource) => {
     const {parent, roles} = resource
@@ -55,11 +55,8 @@ const useConfig = () => {
         roles,
         resources: savedResources
     } = useConfigQuery(setResourcesFactory(setResources))
-    const {mutateAsync, isLoading: isSaving} = useMutation(saveResourcesRoles, {
-        onSuccess() {
-            queryClient.invalidateQueries(["config"])
-        }
-    })
+
+    const {saveConfig, isSaving} = useResourcesRolesMutation(resources)
 
     const editResource = useCallback((name, roles) => {
         setResources(items => {
@@ -73,10 +70,6 @@ const useConfig = () => {
             updateChildrenRoles(items, items[name])
         })
     }, [savedResources, setResources])
-
-    const saveConfig = useCallback(async () => {
-        await mutateAsync(resources)
-    }, [mutateAsync, resources])
 
     return {
         hasData: !isLoading,

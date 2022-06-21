@@ -8,16 +8,10 @@ use Optime\Acl\Bundle\Attribute\Resource;
 use Optime\Acl\Bundle\Security\User\RolesProviderInterface;
 use Optime\Acl\Bundle\Service\Reference\Loader\DirectoryReferencesLoader;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Config\Resource\DirectoryResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
-use Symfony\Component\DependencyInjection\Reference;
-use function array_map;
-use function is_dir;
-use function realpath;
-use function rtrim;
-use function trim;
 
 class OptimeAclExtension extends Extension
 {
@@ -37,6 +31,8 @@ class OptimeAclExtension extends Extension
 
         $this->configureRolesProvider($config, $container);
         $this->configureResourcesPrefixes($config, $container);
+
+        $container->addResource(new DirectoryResource(__DIR__ . '/../'));
     }
 
     private function configureResourcesPrefixes(array $config, ContainerBuilder $container): void

@@ -1,12 +1,14 @@
-import React, {useState} from 'react';
-import ResourceRolesItem from "../components/ResourceRolesItem";
-import useConfig from "../hooks/useConfig";
-import {Button, Spinner} from "react-bootstrap"
-import RoleHeader from "../components/RoleHeader"
-import {FaCheckDouble} from "react-icons/fa"
+import React, { useState } from 'react'
+import ResourceRolesItem from '../components/ResourceRolesItem'
+import useConfig from '../hooks/useConfig'
+import RoleHeader from '../components/RoleHeader'
+import { FaCheckDouble } from 'react-icons/fa'
+import useCleaner from '../hooks/useCleaner'
+import ButtonWithLoading from '../components/ButtonWithLoading'
 
 const ResourcesRoles = () => {
-    const {isLoading, hasData, isSaving, resources, roles, editResource, saveConfig} = useConfig()
+    const { isLoading, hasData, isSaving, resources, roles, editResource, saveConfig } = useConfig()
+    const { cleanResources, isCleaning } = useCleaner()
     const [isSaved, setSaved] = useState(false)
     const [showSavedIcon, setShowSavedIcon] = useState(false)
 
@@ -20,32 +22,24 @@ const ResourcesRoles = () => {
         })
     }
 
+    const handleCleanClick = () => {
+        cleanResources()
+    }
+
     if (!hasData) {
         return <h3>Loading...</h3>
     }
 
     const renderSaveBtn = (
         <div className="mb-2 d-flex align-items-center">
-            <Button
+            <ButtonWithLoading
+                isLoading={isSaving}
                 disabled={isSaving || isLoading}
-                variant="primary"
                 onClick={handleSaveConfigClick}
-                style={{
-                    minWidth: 165,
-                    display: 'inline-block',
-                }}>
-                {isSaving && (
-                    <Spinner
-                        className="me-2"
-                        animation="border"
-                        size="sm"
-                    />
-                )}
-                {isSaving
-                    ? 'Saving Data...'
-                    : 'Save Configuration'
-                }
-            </Button>
+                minWidth={165}
+                label="Save Configuration"
+                loadingLabel="Saving Data..."
+            />
             <FaCheckDouble
                 className={`ms-2 animate__animated ${
                     isSaved ? 'animate__tada' : 'animate__fadeOut'} ${
@@ -53,6 +47,16 @@ const ResourcesRoles = () => {
                 }`}
                 size="1.5em"
                 color="#AAAAAA"
+            />
+            <ButtonWithLoading
+                variant="outline-danger"
+                className="ms-auto"
+                isLoading={isCleaning}
+                disabled={isCleaning || isLoading}
+                onClick={handleCleanClick}
+                minWidth={165}
+                label="Clean Unused Resources"
+                loadingLabel="Cleaning Resources..."
             />
         </div>
     )
@@ -95,7 +99,8 @@ const ResourcesRoles = () => {
 
             </section>
         </div>
-    );
-};
+    )
+}
 
-export default ResourcesRoles;
+export default ResourcesRoles
+

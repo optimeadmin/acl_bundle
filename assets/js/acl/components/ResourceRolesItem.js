@@ -1,5 +1,10 @@
 import React from 'react';
 import EditedField from "./EditedField";
+import {FormCheck} from "react-bootstrap";
+
+const getNameMargin = (name) => {
+    return (name.match(/(\s)+/g) ?? []).length * 6
+}
 
 const ResourceRolesItem = ({resource, appRoles, onEdit: editRoles}) => {
     const {name, roles, initialRoles, blockedRoles} = resource
@@ -44,16 +49,21 @@ const ResourceRolesItem = ({resource, appRoles, onEdit: editRoles}) => {
 
     return (
         <tr className="acl-resource-container" data-resource="edit">
-            <td className="fw-bold">{name}</td>
+            <td className={`fw-bold`}>
+                <span style={{marginLeft: getNameMargin(name)}}>
+                    {name}
+                </span>
+            </td>
             <td className="text-center align-middle js-acl-select-all-roles">
                 <div>
                     <div className="d-inline-block border-2 border-bottom border-light">
-                        <input
-                            disabled={isBlockedAll()}
-                            type="checkbox"
-                            checked={isSelectedAll()}
-                            onChange={handleSelectAllChange}
-                        />
+                        <EditedField>
+                            <FormCheck
+                                disabled={isBlockedAll()}
+                                checked={isSelectedAll()}
+                                onChange={handleSelectAllChange}
+                            />
+                        </EditedField>
                     </div>
                 </div>
             </td>
@@ -61,9 +71,8 @@ const ResourceRolesItem = ({resource, appRoles, onEdit: editRoles}) => {
                 <td key={role} className="text-center align-middle">
                     <div>
                         <EditedField edited={isChanged(role)}>
-                            <input
+                            <FormCheck
                                 disabled={isBlocked(role)}
-                                type="checkbox"
                                 checked={hasRole(role)}
                                 onChange={e => toggleRole(role, e)}
                             />

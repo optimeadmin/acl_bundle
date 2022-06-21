@@ -2,6 +2,7 @@ import React from 'react';
 import {Route, Routes} from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import ResourcesRoles from "./pages/ResourcesRoles";
+import Resources from "./pages/Resources";
 
 const App = () => {
     return (
@@ -11,7 +12,10 @@ const App = () => {
 
             <main className="col acl-page-content p-4">
                 <Routes>
-                    <Route path="/" element={<ResourcesRoles/>}/>
+                    <Route path="/" exact element={<ResourcesRoles/>}/>
+                    <Route path="/resources" exact element={<Resources/>}/>
+                    <Route path="/references" exact element={<Resources/>}/>
+                    <Route path="/*" exact element={<h4>Not found!!!</h4>}/>
                 </Routes>
             </main>
         </div>

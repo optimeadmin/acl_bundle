@@ -1,6 +1,6 @@
 import React from 'react';
 
-const EditedField = ({children, edited}) => {
+const EditedField = ({children, edited = false}) => {
 
     return (
         <div className="d-inline-block">

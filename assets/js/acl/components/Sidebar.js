@@ -17,7 +17,7 @@ const Sidebar = () => {
                         </NavLink>
                     </li>
                     <li className="nav-item">
-                        <NavLink to="/controllers" className="nav-link">
+                        <NavLink to="/references" className="nav-link">
                             Controllers Config
                         </NavLink>
                     </li>

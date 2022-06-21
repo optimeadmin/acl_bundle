@@ -17,3 +17,7 @@ export const getConfig = () => {
 export const saveResourcesRoles = (resourcesRoles) => {
     return api.put("/resources-roles/", resourcesRoles).then(({data}) => data)
 }
+
+export const cleanUnusedResources = () => {
+    return api.put("/resources/clean/").then(({data}) => data)
+}
