@@ -3,6 +3,8 @@ import { FormControl, Table } from 'react-bootstrap'
 import ReferenceItem from '../../components/ReferenceItem'
 import useTextFilter from '../../hooks/useTextFilter'
 import ButtonWithLoading from '../../components/ButtonWithLoading'
+import useSuccessIcon from '../../hooks/useSuccessIcon'
+import SuccessIcon from '../../components/SuccessIcon'
 
 const TypedReferences = ({
     isLoading,
@@ -14,6 +16,7 @@ const TypedReferences = ({
     showHide = true,
 }) => {
     const { textSearch, handleTextSearchChange, containsTextSearch } = useTextFilter()
+    const { isShowSuccessIcon, showSuccessIcon } = useSuccessIcon()
     const selectedCount = references.filter(({ selected, hidden }) => selected || hidden).length
 
     const applyFilter = (item) => {
@@ -27,7 +30,9 @@ const TypedReferences = ({
     }
 
     const handleSaveBtnClick = () => {
-        saveReferences()
+        saveReferences().then(() => {
+            showSuccessIcon()
+        })
     }
 
     const saveBtn = (
@@ -40,7 +45,7 @@ const TypedReferences = ({
                 className="mb-2"
                 onClick={handleSaveBtnClick}
             />
-            {/*<SuccessIcon isShow={isShowSuccessIcon}/>*/}
+            <SuccessIcon isShow={isShowSuccessIcon}/>
         </div>
     )
 
