@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import ResourceItem from '../components/ResourceItem'
 import { Button, FormControl } from 'react-bootstrap'
 import ButtonWithLoading from '../components/ButtonWithLoading'
@@ -6,18 +6,15 @@ import useCleaner from '../hooks/useCleaner'
 import useResources from '../hooks/useResources'
 import SuccessIcon from '../components/SuccessIcon'
 import useSuccessIcon from '../hooks/useSuccessIcon'
-import { matchOrX } from '../utils/match'
+import useTextFilter from '../hooks/useTextFilter'
 
-const containsText = (item, text) => {
-    const search = text.toLowerCase()
-    const searchIn = [
+const getItemContents = (item) => {
+    return [
         item.name,
         item.initialName,
         item.description,
         item.initialDescription,
-    ].join('').toLowerCase()
-
-    return matchOrX(searchIn, search)
+    ].join('')
 }
 
 const Resources = () => {
@@ -31,15 +28,11 @@ const Resources = () => {
         saveResources
     } = useResources()
     const { isCleaning, cleanResources } = useCleaner()
-    const [textSearch, setTextSearch] = useState('')
+    const { textSearch, containsTextSearch, handleTextSearchChange } = useTextFilter()
     const { isShowSuccessIcon, showSuccessIcon } = useSuccessIcon()
 
     const handleCleanClick = () => {
         cleanResources()
-    }
-
-    const handleTextSearchChange = (event) => {
-        setTextSearch(event.target.value)
     }
 
     const handleSaveBtnClick = (event) => {
@@ -49,11 +42,7 @@ const Resources = () => {
     }
 
     const filterByText = (item) => {
-        if (textSearch.length < 3) {
-            return true
-        }
-
-        return containsText(item, textSearch)
+        return containsTextSearch(getItemContents(item))
     }
 
     if (isLoading) {

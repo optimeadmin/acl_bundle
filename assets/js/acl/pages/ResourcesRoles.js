@@ -6,11 +6,15 @@ import useCleaner from '../hooks/useCleaner'
 import ButtonWithLoading from '../components/ButtonWithLoading'
 import SuccessIcon from '../components/SuccessIcon'
 import useSuccessIcon from '../hooks/useSuccessIcon'
+import { FormControl } from 'react-bootstrap'
+import useTextFilter from '../hooks/useTextFilter'
 
 const ResourcesRoles = () => {
     const { isLoading, hasData, isSaving, resources, roles, editResource, saveConfig } = useConfig()
     const { cleanResources, isCleaning } = useCleaner()
     const { isShowSuccessIcon, showSuccessIcon } = useSuccessIcon()
+    const { textSearch, handleTextSearchChange, containsTextSearch } = useTextFilter()
+    const resourcesCount = Object.keys(resources).length
 
     const handleSaveConfigClick = () => {
         saveConfig().then(() => {
@@ -20,6 +24,10 @@ const ResourcesRoles = () => {
 
     const handleCleanClick = () => {
         cleanResources()
+    }
+
+    const filterByText = ([name,]) => {
+        return containsTextSearch(name.toLowerCase())
     }
 
     if (!hasData) {
@@ -58,6 +66,15 @@ const ResourcesRoles = () => {
 
                 {renderSaveBtn}
 
+                {resourcesCount > 10 && (
+                    <FormControl
+                        className="my-2"
+                        placeholder="Search..."
+                        value={textSearch}
+                        onChange={handleTextSearchChange}
+                    />
+                )}
+
                 <table className="table table-bordered">
                     <thead>
                     <tr>
@@ -72,7 +89,7 @@ const ResourcesRoles = () => {
                     </tr>
                     </thead>
                     <tbody>
-                    {Object.entries(resources).map(([name, item]) => (
+                    {Object.entries(resources).filter(filterByText).map(([name, item]) => (
                         <ResourceRolesItem
                             key={name}
                             resource={item}
