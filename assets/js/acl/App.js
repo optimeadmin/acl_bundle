@@ -7,11 +7,11 @@ import References from './pages/References'
 
 const App = () => {
     return (
-        <div className="row">
+        <div className="d-flex">
 
             <Sidebar/>
 
-            <main className="col-md-9 col-lg-10 acl-page-content p-4">
+            <main className="flex-fill acl-page-content p-4">
                 <Routes>
                     <Route path="/" exact element={<ResourcesRoles/>}/>
                     <Route path="/resources" exact element={<Resources/>}/>
