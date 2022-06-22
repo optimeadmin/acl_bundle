@@ -1,5 +1,5 @@
 import {useQuery} from "react-query";
-import {getConfig} from "../api/config";
+import {getConfig} from "../api/endpoints";
 
 const useConfigQuery = (setResources) => {
     const {
@@ -26,11 +26,12 @@ const useConfigQuery = (setResources) => {
             const resources = {};
 
             for (const name in currentResources) {
-                const {parent, children, resource: {roles}} = currentResources[name]
+                const {parent, children, resource: {roles, level}} = currentResources[name]
 
                 resources[name] = {
                     name,
                     parent,
+                    level,
                     children,
                     roles,
                     initialRoles: roles,

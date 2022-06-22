@@ -1,6 +1,6 @@
 import React from 'react';
 import {useMutation, useQueryClient} from "react-query";
-import {cleanUnusedResources} from "../api/config";
+import {cleanUnusedResources} from "../api/endpoints";
 
 const useCleaner = () => {
     const queryClient = useQueryClient()

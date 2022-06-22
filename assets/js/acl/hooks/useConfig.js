@@ -1,14 +1,13 @@
-import {useImmer} from "use-immer";
-import {useCallback} from "react";
-import useConfigQuery from "./useConfigQuery";
-import {useQueryClient} from "react-query";
-import useResourcesRolesMutation from "./useResourcesRolesMutation"
+import { useImmer } from 'use-immer'
+import { useCallback } from 'react'
+import useConfigQuery from './useConfigQuery'
+import useResourcesRolesMutation from './useResourcesRolesMutation'
 
 const updateParentRoles = (items, resource) => {
-    const {parent, roles} = resource
+    const { parent, roles } = resource
 
     if (!parent || !items[parent]) {
-        return;
+        return
     }
 
     const parentResource = items[parent]
@@ -19,14 +18,14 @@ const updateParentRoles = (items, resource) => {
 }
 
 const updateChildrenRoles = (items, resource) => {
-    const {roles} = resource
+    const { roles } = resource
     const children = Object.values(resource.children ?? {})
 
     children.forEach(name => {
         const resource = items[name]
 
         if (!resource) {
-            return;
+            return
         }
 
         resource.roles = resource.roles?.filter(role => roles.includes(role))
@@ -47,7 +46,6 @@ const setResourcesFactory = (set) => {
 }
 
 const useConfig = () => {
-    const queryClient = useQueryClient()
     const [resources, setResources] = useImmer({})
     const {
         isLoading,
@@ -56,12 +54,12 @@ const useConfig = () => {
         resources: savedResources
     } = useConfigQuery(setResourcesFactory(setResources))
 
-    const {saveConfig, isSaving} = useResourcesRolesMutation(resources)
+    const { saveConfig, isSaving } = useResourcesRolesMutation(resources)
 
     const editResource = useCallback((name, roles) => {
         setResources(items => {
             if (!name in items) {
-                return;
+                return
             }
 
             items[name].roles = roles
@@ -82,4 +80,4 @@ const useConfig = () => {
     }
 }
 
-export default useConfig;
+export default useConfig

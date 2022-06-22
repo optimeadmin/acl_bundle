@@ -1,13 +1,13 @@
-import React from 'react';
-import EditedField from "./EditedField";
-import {FormCheck} from "react-bootstrap";
+import React from 'react'
+import EditedField from './EditedField'
+import { FormCheck } from 'react-bootstrap'
 
-const getNameMargin = (name) => {
-    return (name.match(/(\s)+/g) ?? []).length * 6
+const getMargin = (level) => {
+    return (level || 0) * 6
 }
 
-const ResourceRolesItem = ({resource, appRoles, onEdit: editRoles}) => {
-    const {name, roles, initialRoles, blockedRoles} = resource
+const ResourceRolesItem = ({ resource, appRoles, onEdit: editRoles }) => {
+    const { name, level, roles, initialRoles, blockedRoles } = resource
 
     const hasRole = (role) => {
         return roles.includes(role)
@@ -25,7 +25,7 @@ const ResourceRolesItem = ({resource, appRoles, onEdit: editRoles}) => {
 
     const handleSelectAllChange = (event) => {
         if (event.target.checked) {
-            editRoles(name, appRoles.map(({role}) => role))
+            editRoles(name, appRoles.map(({ role }) => role))
         } else {
             editRoles(name, blockedRoles)
         }
@@ -50,7 +50,7 @@ const ResourceRolesItem = ({resource, appRoles, onEdit: editRoles}) => {
     return (
         <tr className="acl-resource-container" data-resource="edit">
             <td className={`fw-bold`}>
-                <span style={{marginLeft: getNameMargin(name)}}>
+                <span style={{ marginLeft: getMargin(level) }}>
                     {name}
                 </span>
             </td>
@@ -67,7 +67,7 @@ const ResourceRolesItem = ({resource, appRoles, onEdit: editRoles}) => {
                     </div>
                 </div>
             </td>
-            {appRoles.map(({role}) => (
+            {appRoles.map(({ role }) => (
                 <td key={role} className="text-center align-middle">
                     <div>
                         <EditedField edited={isChanged(role)}>
@@ -81,7 +81,7 @@ const ResourceRolesItem = ({resource, appRoles, onEdit: editRoles}) => {
                 </td>
             ))}
         </tr>
-    );
-};
+    )
+}
 
-export default ResourceRolesItem;
+export default ResourceRolesItem

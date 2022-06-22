@@ -1,24 +1,20 @@
-import React, { useState } from 'react'
+import React from 'react'
 import ResourceRolesItem from '../components/ResourceRolesItem'
 import useConfig from '../hooks/useConfig'
 import RoleHeader from '../components/RoleHeader'
-import { FaCheckDouble } from 'react-icons/fa'
 import useCleaner from '../hooks/useCleaner'
 import ButtonWithLoading from '../components/ButtonWithLoading'
+import SuccessIcon from '../components/SuccessIcon'
+import useSuccessIcon from '../hooks/useSuccessIcon'
 
 const ResourcesRoles = () => {
     const { isLoading, hasData, isSaving, resources, roles, editResource, saveConfig } = useConfig()
     const { cleanResources, isCleaning } = useCleaner()
-    const [isSaved, setSaved] = useState(false)
-    const [showSavedIcon, setShowSavedIcon] = useState(false)
+    const { isShowSuccessIcon, showSuccessIcon } = useSuccessIcon()
 
     const handleSaveConfigClick = () => {
-        setShowSavedIcon(true)
         saveConfig().then(() => {
-            setSaved(true)
-            setTimeout(() => {
-                setSaved(false)
-            }, 1000)
+            showSuccessIcon()
         })
     }
 
@@ -40,14 +36,7 @@ const ResourcesRoles = () => {
                 label="Save Configuration"
                 loadingLabel="Saving Data..."
             />
-            <FaCheckDouble
-                className={`ms-2 animate__animated ${
-                    isSaved ? 'animate__tada' : 'animate__fadeOut'} ${
-                    showSavedIcon ? '' : 'invisible'
-                }`}
-                size="1.5em"
-                color="#AAAAAA"
-            />
+            <SuccessIcon isShow={isShowSuccessIcon}/>
             <ButtonWithLoading
                 variant="outline-danger"
                 className="ms-auto"

@@ -22,6 +22,7 @@
     "sass": "^1.52.3",
     "sass-loader": "^12.0.0",
     "use-immer": "^0.7.0",
+    "uuid": "^8.3.2",
     "webpack-notifier": "^1.6.0"
   },
   "scripts": {

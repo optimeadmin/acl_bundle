@@ -15,12 +15,14 @@ use Optime\Acl\Bundle\Entity\Resource;
 class ResourceRequest
 {
     public string $name;
+    public ?string $description;
     public array $roles = [];
     public bool $selectedAll = false;
 
     public function __construct(private Resource $resource)
     {
         $this->name = $this->resource->getName();
+        $this->description = $this->resource->getDescription();
     }
 
     public function getResource(): Resource

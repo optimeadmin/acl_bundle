@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Optime\Acl\Bundle\Repository\ResourceRepository;
 use Optime\Acl\Bundle\Service\Reference\Loader\LoadedReference;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use function preg_replace;
 use function str_contains;
@@ -27,14 +28,14 @@ class Resource
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private int $id;
+    private ?int $id = null;
 
     #[NotBlank]
     #[ORM\Column(unique: true)]
     private string $name;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    private ?string $description;
+    private ?string $description = null;
 
     #[ORM\Column]
     private bool $visible;
@@ -84,7 +85,7 @@ class Resource
         }
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -123,6 +124,7 @@ class Resource
         return trim(preg_replace('/(^.+)(\s[^\s]+)$/', '$1', $this->getName()));
     }
 
+    #[SerializedName("level")]
     public function getLevel(): int
     {
         if (!$this->hasParent()) {
@@ -132,6 +134,7 @@ class Resource
         return substr_count(trim($this->getName()), ' ');
     }
 
+    #[SerializedName("createdByUser")]
     public function isCreatedByUser(): bool
     {
         return $this->createdByUser;

@@ -8,18 +8,14 @@ declare(strict_types=1);
 namespace Optime\Acl\Bundle\Controller\Api;
 
 use Optime\Acl\Bundle\Repository\ResourceRepository;
-use Optime\Acl\Bundle\Security\User\RolesProviderInterface;
-use Optime\Acl\Bundle\Service\Resource\ResourcesRolesProvider;
 use Optime\Acl\Bundle\Service\Resource\UseCase\CleanResourcesUseCase;
-use Optime\Acl\Bundle\Service\Resource\UseCase\Request\ResourcesRolesRequest;
-use Optime\Acl\Bundle\Service\Resource\UseCase\Request\ResourcesWithRolesRequest;
-use Optime\Acl\Bundle\Service\Resource\UseCase\UpdateAllResourcesRolesUseCase;
+use Optime\Acl\Bundle\Service\Resource\UseCase\Request\ResourcesConfigRequest;
+use Optime\Acl\Bundle\Service\Resource\UseCase\UpdateResourcesUseCase;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
-use function array_values;
 use function dump;
 
 /**
@@ -28,8 +24,8 @@ use function dump;
 #[Route("/api/resources", name: "optime_acl_api_resources_")]
 class ResourcesController extends AbstractController
 {
-    #[Route("/clean/", name: "clean")]
-    public function aclConfig(
+    #[Route("/clean/", name: "clean", methods: "delete")]
+    public function clean(
         CleanResourcesUseCase $useCase,
     ): Response {
         $useCase->handle();
@@ -37,21 +33,23 @@ class ResourcesController extends AbstractController
         return $this->json('success');
     }
 
-    #[Route("/resources-roles/", name: "save_resources_roles", methods: 'put')]
-    public function saveResourcesRoles(
-        Request $request,
-        SerializerInterface $serializer,
-        UpdateAllResourcesRolesUseCase $useCase,
-        ResourcesRolesProvider $resourcesRolesProvider,
+    #[Route("/", name: "get_all", methods: 'get')]
+    public function getResources(
+        ResourceRepository $repository,
     ): Response {
-        $resourcesRequest = $serializer->deserialize(
-            $request->getContent(),
-            ResourcesWithRolesRequest::class,
-            'json'
-        );
+        return $this->json($repository->allVisible());
+    }
 
-        $useCase->handle($resourcesRequest);
+    #[Route("/", name: "save", methods: 'put')]
+    public function save(
+        Request $request,
+        ResourceRepository $repository,
+        UpdateResourcesUseCase $useCase,
+        SerializerInterface $serializer,
+    ): Response {
+        $data = $serializer->deserialize($request->getContent(), ResourcesConfigRequest::class, 'json');
+        $useCase->handleApi($data);
 
-        return $this->json($resourcesRolesProvider->getAll());
+        return $this->json($repository->allVisible());
     }
 }

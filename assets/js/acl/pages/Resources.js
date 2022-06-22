@@ -1,101 +1,134 @@
-import React, {useState} from 'react';
-import ResourceRolesItem from "../components/ResourceRolesItem";
-import useConfig from "../hooks/useConfig";
-import {Button, Spinner} from "react-bootstrap"
-import RoleHeader from "../components/RoleHeader"
-import {FaCheckDouble} from "react-icons/fa"
+import React, { useState } from 'react'
+import ResourceItem from '../components/ResourceItem'
+import { Button, FormControl } from 'react-bootstrap'
+import ButtonWithLoading from '../components/ButtonWithLoading'
+import useCleaner from '../hooks/useCleaner'
+import useResources from '../hooks/useResources'
+import SuccessIcon from '../components/SuccessIcon'
+import useSuccessIcon from '../hooks/useSuccessIcon'
+import { matchOrX } from '../utils/match'
+
+const containsText = (item, text) => {
+    const search = text.toLowerCase()
+    const searchIn = [
+        item.name,
+        item.initialName,
+        item.description,
+        item.initialDescription,
+    ].join('').toLowerCase()
+
+    return matchOrX(searchIn, search)
+}
 
 const Resources = () => {
-    const {isLoading, hasData, isSaving, resources, roles, editResource, saveConfig} = useConfig()
-    const [isSaved, setSaved] = useState(false)
-    const [showSavedIcon, setShowSavedIcon] = useState(false)
+    const {
+        isLoading,
+        isSaving,
+        resources,
+        selectedCount,
+        updateResource,
+        addResource,
+        saveResources
+    } = useResources()
+    const { isCleaning, cleanResources } = useCleaner()
+    const [textSearch, setTextSearch] = useState('')
+    const { isShowSuccessIcon, showSuccessIcon } = useSuccessIcon()
 
-    const handleSaveConfigClick = () => {
-        setShowSavedIcon(true)
-        saveConfig().then(() => {
-            setSaved(true)
-            setTimeout(() => {
-                setSaved(false)
-            }, 1000)
+    const handleCleanClick = () => {
+        cleanResources()
+    }
+
+    const handleTextSearchChange = (event) => {
+        setTextSearch(event.target.value)
+    }
+
+    const handleSaveBtnClick = (event) => {
+        saveResources().then(() => {
+            showSuccessIcon()
         })
     }
 
-    if (!hasData) {
+    const filterByText = (item) => {
+        if (textSearch.length < 3) {
+            return true
+        }
+
+        return containsText(item, textSearch)
+    }
+
+    if (isLoading) {
         return <h3>Loading...</h3>
     }
 
-    const renderSaveBtn = (
-        <div className="mb-2 d-flex align-items-center">
-            <Button
-                disabled={isSaving || isLoading}
-                variant="primary"
-                onClick={handleSaveConfigClick}
-                style={{
-                    minWidth: 165,
-                    display: 'inline-block',
-                }}>
-                {isSaving && (
-                    <Spinner
-                        className="me-2"
-                        animation="border"
-                        size="sm"
-                    />
-                )}
-                {isSaving
-                    ? 'Saving Data...'
-                    : 'Save Configuration'
-                }
-            </Button>
-            <FaCheckDouble
-                className={`ms-2 animate__animated ${
-                    isSaved ? 'animate__tada' : 'animate__fadeOut'} ${
-                    showSavedIcon ? '' : 'invisible'
-                }`}
-                size="1.5em"
-                color="#AAAAAA"
+    const saveBtn = (
+        <div>
+            <ButtonWithLoading
+                disabled={selectedCount === 0 || isSaving || isLoading}
+                isLoading={isSaving}
+                label="Apply Changes"
+                className="mb-2"
+                onClick={handleSaveBtnClick}
             />
+            <SuccessIcon isShow={isShowSuccessIcon}/>
         </div>
     )
 
     return (
         <div>
-            <h3 className="border-bottom pb-3">Resources Configuration</h3>
+            <div className="d-flex gap-2 align-items-center justify-content-between border-bottom pb-3">
+                <h3 className="m-0">Resources Configuration</h3>
+                <Button
+                    variant="outline-secondary"
+                    className="ms-auto"
+                    onClick={addResource}
+                >Create Resource</Button>
+                <ButtonWithLoading
+                    isLoading={isCleaning}
+                    variant="outline-danger"
+                    label="Clean Unused Resources"
+                    loadingLabel="Cleaning Resources..."
+                    onClick={handleCleanClick}
+                    minWidth={165}
+                />
+            </div>
 
             <section className="mt-5">
 
-                {renderSaveBtn}
+                {saveBtn}
+
+                <FormControl
+                    className="mb-2"
+                    placeholder="Search..."
+                    value={textSearch}
+                    onChange={handleTextSearchChange}
+                />
 
                 <table className="table table-bordered">
                     <thead>
                     <tr>
-                        <th className="text-center align-middle" rowSpan="2">Resource</th>
-                        <th className="text-center align-middle" colSpan="200">Roles</th>
-                    </tr>
-                    <tr>
-                        <th className="text-center align-middle">All</th>
-                        {roles.map(role => (
-                            <RoleHeader key={role.role} role={role}/>
-                        ))}
+                        <th className="text-center align-middle">Apply</th>
+                        <th className="text-center align-middle">Resource</th>
+                        <th className="text-center align-middle">Description</th>
+                        <th className="text-center align-middle">Created By</th>
+                        <th className="text-center align-middle">References</th>
                     </tr>
                     </thead>
                     <tbody>
-                    {Object.entries(resources).map(([name, item]) => (
-                        <ResourceRolesItem
-                            key={name}
-                            resource={item}
-                            appRoles={roles}
-                            onEdit={editResource}
+                    {resources.filter(filterByText).map(item => (
+                        <ResourceItem
+                            key={item.key}
+                            item={item}
+                            onEdit={updateResource}
                         />
                     ))}
                     </tbody>
-
                 </table>
 
-                {renderSaveBtn}
+                {saveBtn}
 
             </section>
         </div>
-    );
-};
+    )
+}
 
-export default Resources;
+export default Resources

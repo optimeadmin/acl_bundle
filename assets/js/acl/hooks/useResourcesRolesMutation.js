@@ -1,6 +1,6 @@
 import React, {useCallback} from 'react';
 import {useMutation, useQueryClient} from "react-query";
-import {saveResourcesRoles} from "../api/config";
+import {saveResourcesRoles} from "../api/endpoints";
 
 const useResourcesRolesMutation = (resources) => {
     const queryClient = useQueryClient()
