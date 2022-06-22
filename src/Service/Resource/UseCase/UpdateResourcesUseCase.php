@@ -33,23 +33,7 @@ class UpdateResourcesUseCase
     ) {
     }
 
-    public function handle(FormInterface $form): void
-    {
-        if (!$form->getConfig()->getType()->getInnerType() instanceof ResourcesConfigType) {
-            throw new \InvalidArgumentException(
-                "Solo se puede pasar un form de tipo '" . ResourcesConfigType::class . "'"
-            );
-        }
-
-        /** @var FormInterface $resourceForm */
-        foreach ($form->get('resources') as $resourceForm) {
-            if ($resourceForm->get('apply')->getData()) {
-                $this->updateResource($resourceForm->getData());
-            }
-        }
-    }
-
-    public function handleApi(ResourcesConfigRequest $configRequest): void
+    public function handle(ResourcesConfigRequest $configRequest): void
     {
         /** @var ResourceRequest $resourceRequest */
         foreach ($configRequest->resources as $resourceRequest) {
@@ -57,59 +41,11 @@ class UpdateResourcesUseCase
                 continue;
             }
 
-            $this->updateResourceApi($resourceRequest);
+            $this->updateResource($resourceRequest);
         }
     }
 
-    private function updateResource(Resource $resource): void
-    {
-        $otherResource = $this->repository->findOneByName($resource->getName());
-
-        $this->logger?->debug('Actualizando el recurso {resource}. New name: {new_name}', [
-            'resource' => $resource->getId(),
-            'new_name' => $resource->getName(),
-        ]);
-
-        if ($otherResource && $otherResource->getId() !== $resource->getId()) {
-            // hay otro recurso, y es distinto del que se está editando.
-            // debemos pasar los datos del recurso que se edita al otro recurso y eliminar el editado.
-
-            $this->logger?->debug(
-                'Se encontró otro recurso existente ({resource}) con el mismo nombre, ' .
-                'por lo que se pasan todas la referencias y roles a dicho recurso.', [
-                'resource' => $otherResource->getId(),
-                'references' => $resource->getReferences()->toArray(),
-                'roles' => $resource->getRoles()->toArray(),
-            ]);
-
-            foreach ($resource->getReferences() as $reference) {
-                $otherResource->addReference($reference);
-                $resource->removeReference($reference);
-            }
-
-            foreach ($resource->getRoles() as $role) {
-                $otherResource->addRole($role);
-                $resource->removeRole($role);
-            }
-
-            $this->entityManager->persist($otherResource);
-
-            $this->entityManager->remove($resource);
-
-            $this->logger?->debug(
-                'Como el recurso {resource} ya no tiene referencias ni roles asociados,' .
-                ' se elimina de la base de datos!', [
-                'resource' => $resource->getId(),
-            ]);
-        } else {
-            $this->entityManager->persist($resource);
-            $this->parentResourceCreator->createIfApply($resource);
-        }
-
-        $this->entityManager->flush();
-    }
-
-    private function updateResourceApi(ResourceRequest $resourceRequest): void
+    private function updateResource(ResourceRequest $resourceRequest): void
     {
         $resource = $resourceRequest->getResource();
         $newName = $resourceRequest->name;

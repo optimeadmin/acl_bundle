@@ -34,29 +34,7 @@ class SaveReferencesUseCase
     ) {
     }
 
-    public function handle(FormInterface $form): void
-    {
-        if (!$form->getConfig()->getType()->getInnerType() instanceof ReferencesConfigType) {
-            throw new \InvalidArgumentException(
-                "Solo se puede pasar un form de tipo '" . ReferencesConfigType::class . "'"
-            );
-        }
-
-        $this->entityManager->beginTransaction();
-
-        /** @var FormInterface $reference */
-        foreach ($form->get('references') as $reference) {
-            if ($reference->get('hide')->getData()) {
-                $this->hideReference($reference->getData());
-            } elseif ($reference->get('apply')->getData()) {
-                $this->saveReference($reference->getData());
-            }
-        }
-
-        $this->entityManager->commit();
-    }
-
-    public function handleApi(ReferencesRequest $request): void
+    public function handle(ReferencesRequest $request): void
     {
         $this->entityManager->beginTransaction();
 

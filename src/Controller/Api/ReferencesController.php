@@ -47,7 +47,7 @@ class ReferencesController extends AbstractController
         SerializerInterface $serializer,
     ): Response {
         $data = $serializer->deserialize($request->getContent(), ReferencesRequest::class, 'json');
-        $useCase->handleApi($data);
+        $useCase->handle($data);
         $cleanResourcesUseCase->handle();
 
         return $this->json('success');

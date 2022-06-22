@@ -48,7 +48,7 @@ class ResourcesController extends AbstractController
         SerializerInterface $serializer,
     ): Response {
         $data = $serializer->deserialize($request->getContent(), ResourcesConfigRequest::class, 'json');
-        $useCase->handleApi($data);
+        $useCase->handle($data);
 
         return $this->json($repository->allVisible());
     }
