@@ -35,7 +35,9 @@ const References = () => {
                         )}
                     </Nav>
 
-                    <Tab.Content className="mt-4">
+                    <hr/>
+
+                    <Tab.Content className="mt-5">
                         {existentReferences.count > 0 && (
                             <Tab.Pane eventKey="persisted">
                                 <TypedReferences
@@ -62,10 +64,7 @@ const References = () => {
                             </Tab.Pane>
                         )}
                     </Tab.Content>
-
                 </Tab.Container>
-
-                {/*{saveBtn}*/}
 
             </section>
         </div>

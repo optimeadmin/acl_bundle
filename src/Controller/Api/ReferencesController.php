@@ -7,10 +7,11 @@ declare(strict_types=1);
 
 namespace Optime\Acl\Bundle\Controller\Api;
 
-use Optime\Acl\Bundle\Repository\ResourceRepository;
 use Optime\Acl\Bundle\Service\Reference\Loader\ReferenceCollectionFilter;
 use Optime\Acl\Bundle\Service\Reference\Loader\ReferencesLoader;
-use Optime\Acl\Bundle\Service\Resource\UseCase\UpdateResourcesUseCase;
+use Optime\Acl\Bundle\Service\Reference\UseCase\Request\ReferencesRequest;
+use Optime\Acl\Bundle\Service\Reference\UseCase\SaveReferencesUseCase;
+use Optime\Acl\Bundle\Service\Resource\UseCase\CleanResourcesUseCase;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -38,16 +39,17 @@ class ReferencesController extends AbstractController
         ]);
     }
 
-    #[Route("/", name: "save", methods: 'put')]
+    #[Route("/", name: "save", methods: ['put', 'post'])]
     public function save(
         Request $request,
-        ResourceRepository $repository,
-        UpdateResourcesUseCase $useCase,
+        SaveReferencesUseCase $useCase,
+        CleanResourcesUseCase $cleanResourcesUseCase,
         SerializerInterface $serializer,
     ): Response {
-//        $data = $serializer->deserialize($request->getContent(), ResourcesConfigRequest::class, 'json');
-//        $useCase->handleApi($data);
+        $data = $serializer->deserialize($request->getContent(), ReferencesRequest::class, 'json');
+        $useCase->handleApi($data);
+        $cleanResourcesUseCase->handle();
 
-        return $this->json($repository->allVisible());
+        return $this->json('success');
     }
 }

@@ -22,6 +22,7 @@ const useReferencesQuery = (type, setReferences) => {
                     .map(item => ({
                         ...item,
                         selected: false,
+                        hidden: false,
                         initialResource: item.resource,
                     }))
             )

@@ -2,15 +2,19 @@ import React from 'react'
 import { FormControl, Table } from 'react-bootstrap'
 import ReferenceItem from '../../components/ReferenceItem'
 import useTextFilter from '../../hooks/useTextFilter'
+import ButtonWithLoading from '../../components/ButtonWithLoading'
 
 const TypedReferences = ({
     isLoading,
     isFetching,
+    isSaving,
     references,
     updateReference,
+    saveReferences,
     showHide = true,
 }) => {
     const { textSearch, handleTextSearchChange, containsTextSearch } = useTextFilter()
+    const selectedCount = references.filter(({ selected, hidden }) => selected || hidden).length
 
     const applyFilter = (item) => {
         return containsTextSearch([
@@ -22,8 +26,29 @@ const TypedReferences = ({
         ].join(''))
     }
 
+    const handleSaveBtnClick = () => {
+        saveReferences()
+    }
+
+    const saveBtn = (
+        <div>
+            <ButtonWithLoading
+                disabled={selectedCount === 0 || isLoading || isSaving}
+                active={selectedCount > 0}
+                isLoading={isSaving}
+                label="Apply Changes"
+                className="mb-2"
+                onClick={handleSaveBtnClick}
+            />
+            {/*<SuccessIcon isShow={isShowSuccessIcon}/>*/}
+        </div>
+    )
+
     return (
         <div>
+
+            {references.length > 10 && saveBtn}
+
             <FormControl
                 className="mb-2"
                 placeholder="Search..."
@@ -55,6 +80,9 @@ const TypedReferences = ({
                     </tbody>
                 </Table>
             </div>
+
+            {saveBtn}
+
         </div>
     )
 }

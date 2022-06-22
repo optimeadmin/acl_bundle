@@ -1,10 +1,12 @@
 import React, { useCallback } from 'react'
 import { useImmer } from 'use-immer'
 import useReferencesQuery from './useReferencesQuery'
+import useReferencesMutation from './useReferencesMutation'
 
 const useReferences = (type) => {
     const [references, setReferences] = useImmer([])
     const { isLoading, isFetching, references: dbReferences } = useReferencesQuery(type, setReferences)
+    const { saveReferences, isSaving } = useReferencesMutation(references)
 
     const updateReference = useCallback((identifier, data) => {
         setReferences(references => {
@@ -21,9 +23,11 @@ const useReferences = (type) => {
     return {
         isLoading,
         isFetching,
+        isSaving,
         references,
         count: references.length,
         updateReference,
+        saveReferences,
     }
 }
 

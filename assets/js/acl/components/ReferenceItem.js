@@ -11,11 +11,17 @@ const ReferenceItem = ({ item, onEdit: handleEdit, showHide = true }) => {
         route,
         routePath,
         selected,
+        hidden,
     } = item
 
     const handleSelectedChange = (event) => handleEdit(
         identifier,
         { selected: event.target.checked }
+    )
+
+    const handleHiddenChange = (event) => handleEdit(
+        identifier,
+        { hidden: event.target.checked }
     )
 
     const handleResourceChange = (event) => handleEdit(
@@ -49,7 +55,14 @@ const ReferenceItem = ({ item, onEdit: handleEdit, showHide = true }) => {
             <td className="small">{route}</td>
             <td className="small">{routePath}</td>
             {showHide && (
-                <td></td>
+                <td className="text-center align-middle" style={{ width: 40 }}>
+                    <div>
+                        <FormCheck
+                            checked={hidden}
+                            onChange={handleHiddenChange}
+                        />
+                    </div>
+                </td>
             )}
         </tr>
     )

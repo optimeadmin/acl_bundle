@@ -7,13 +7,14 @@ const ButtonWithLoading = ({
     label,
     loadingLabel,
     disabled,
+    active = true,
     minWidth = 0,
     ...props
 }) => {
 
     return (
         <Button
-            {...{ variant: 'primary', ...props }}
+            {...{ variant: (active ? 'primary' : 'outline-primary'), ...props }}
             disabled={disabled ?? isLoading}
             onClick={onClick}
             style={{

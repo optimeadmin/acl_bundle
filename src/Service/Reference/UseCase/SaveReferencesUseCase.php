@@ -13,6 +13,7 @@ use Optime\Acl\Bundle\Form\Type\Config\ReferencesConfigType;
 use Optime\Acl\Bundle\Repository\ResourceReferenceRepository;
 use Optime\Acl\Bundle\Repository\ResourceRepository;
 use Optime\Acl\Bundle\Service\Reference\Loader\LoadedReference;
+use Optime\Acl\Bundle\Service\Reference\UseCase\Request\ReferencesRequest;
 use Optime\Acl\Bundle\Service\Resource\ParentResourceCreator;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
@@ -50,6 +51,21 @@ class SaveReferencesUseCase
             } elseif ($reference->get('apply')->getData()) {
                 $this->saveReference($reference->getData());
             }
+        }
+
+        $this->entityManager->commit();
+    }
+
+    public function handleApi(ReferencesRequest $request): void
+    {
+        $this->entityManager->beginTransaction();
+
+        foreach ($request->appliedReferences as $reference) {
+            $this->saveReference($reference);
+        }
+
+        foreach ($request->hiddenReferences as $reference) {
+            $this->hideReference($reference);
         }
 
         $this->entityManager->commit();

@@ -33,3 +33,7 @@ export const saveResources = (resources) => {
 export const getReferences = () => {
     return api.get('/references/').then(({ data }) => data)
 }
+
+export const saveReferences = (references) => {
+    return api.post('/references/', references).then(({ data }) => data)
+}

@@ -3,7 +3,7 @@ import EditedField from './EditedField'
 import { FormCheck } from 'react-bootstrap'
 
 const getMargin = (level) => {
-    return (level || 0) * 6
+    return (level || 0) * 10
 }
 
 const ResourceRolesItem = ({ resource, appRoles, onEdit: editRoles }) => {
