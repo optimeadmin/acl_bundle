@@ -76,6 +76,11 @@ class LoadedReference
         return self::HIDDEN !== $this->getResource();
     }
 
+    public function isEditedToActive(): bool
+    {
+        return self::HIDDEN !== $this->getModifiedResourceName();
+    }
+
     private function setName(string $name): void
     {
         $this->name = $name;

@@ -60,11 +60,14 @@ class ResourcesConfigRequestNormalizer implements DenormalizerInterface
             'description' => $description,
         ] = $resolver->resolve($item);
 
-        if ($id && !$resource = $this->resourceRepository->find($id)) {
-            throw new UnexpectedValueException(sprintf(
-                "No se encontró un recurso para el id '%s'",
-                $id,
-            ));
+        if ($id) {
+            if (!$resource = $this->resourceRepository->find($id)) {
+                throw new UnexpectedValueException(sprintf(
+                    "No se encontró un recurso para el id '%s'",
+                    $id,
+                ));
+            }
+
         } else {
             $resource = new Resource($name, null, true);
         }

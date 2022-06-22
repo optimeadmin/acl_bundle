@@ -107,7 +107,7 @@ class SaveReferencesUseCase
         $this->entityManager->persist($resource);
         $this->entityManager->flush();
 
-        if ($loadedReference->isActive()) {
+        if ($loadedReference->isActive() || $loadedReference->isEditedToActive()) {
             $this->parentResourceCreator->createIfApply($resource);
         }
     }
