@@ -17,7 +17,7 @@ const References = () => {
     }
 
     return (
-        <div>
+        <div className={`acl-page-container ${isFetching ? 'is-loading' : ''}`}>
             <div className="d-flex gap-2 align-items-center border-bottom pb-3">
                 <h3 className="m-0">Controllers Configuration</h3>
                 <LoadingIcon isLoading={isFetching} size="md" className="ms-2" />

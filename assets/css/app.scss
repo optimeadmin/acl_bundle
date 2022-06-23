@@ -31,3 +31,17 @@
     }
   }
 }
+
+.acl-page-container.is-loading {
+  input, button {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  .acl-edited-field {
+    .animate__fadeOut {
+      //opacity: 0 !important;
+      visibility: hidden;
+    }
+  }
+}

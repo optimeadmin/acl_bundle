@@ -52,10 +52,10 @@ const ResourcesRoles = () => {
     )
 
     return (
-        <div>
+        <div className={`acl-page-container ${isLoading ? 'is-loading' : ''}`}>
             <div className="d-flex align-items-center border-bottom pb-3 gap-3">
                 <h3 className="m-0">Access Control Configuration</h3>
-                <LoadingIcon isLoading={isLoading} size="md" />
+                <LoadingIcon isLoading={isLoading} size="md"/>
                 <ButtonWithLoading
                     variant="outline-danger"
                     className="ms-auto"
