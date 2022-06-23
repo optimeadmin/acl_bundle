@@ -2,11 +2,13 @@ import React from 'react'
 import { Nav, Tab } from 'react-bootstrap'
 import TypedReferences from './section/TypedReferences'
 import useReferences from '../hooks/useReferences'
+import LoadingIcon from '../components/LoadingIcon'
 
 const References = () => {
     const existentReferences = useReferences('existent')
     const newsReferences = useReferences('news')
     const hiddenReferences = useReferences('hidden')
+    const isFetching = existentReferences.isFetching
 
     const defaultTab = existentReferences.serverCount > 0 ? 'persisted' : 'news'
 
@@ -16,25 +18,26 @@ const References = () => {
 
     return (
         <div>
-            <div className="d-flex gap-2 align-items-center justify-content-between border-bottom pb-3">
+            <div className="d-flex gap-2 align-items-center border-bottom pb-3">
                 <h3 className="m-0">Controllers Configuration</h3>
+                <LoadingIcon isLoading={isFetching} size="md" className="ms-2" />
             </div>
 
             <section className="mt-4">
 
                 <Tab.Container defaultActiveKey={defaultTab} transition={false}>
                     <Nav variant="pills">
-                        {existentReferences.count > 0 && (
+                        {existentReferences.serverCount > 0 && (
                             <Nav.Item>
                                 <Nav.Link role="button" eventKey="persisted">Persisted</Nav.Link>
                             </Nav.Item>
                         )}
-                        {newsReferences.count > 0 && (
+                        {newsReferences.serverCount > 0 && (
                             <Nav.Item>
                                 <Nav.Link role="button" eventKey="news">News</Nav.Link>
                             </Nav.Item>
                         )}
-                        {hiddenReferences.count > 0 && (
+                        {hiddenReferences.serverCount > 0 && (
                             <Nav.Item>
                                 <Nav.Link role="button" eventKey="hidden">Hidden</Nav.Link>
                             </Nav.Item>
@@ -44,7 +47,7 @@ const References = () => {
                     <hr/>
 
                     <Tab.Content className="mt-5">
-                        {existentReferences.count > 0 && (
+                        {existentReferences.serverCount > 0 && (
                             <Tab.Pane eventKey="persisted" unmountOnExit={true}>
                                 <TypedReferences
                                     title="Persisted"
@@ -52,7 +55,7 @@ const References = () => {
                                 />
                             </Tab.Pane>
                         )}
-                        {newsReferences.count > 0 && (
+                        {newsReferences.serverCount > 0 && (
                             <Tab.Pane eventKey="news" unmountOnExit={true}>
                                 <TypedReferences
                                     title="News"
@@ -60,7 +63,7 @@ const References = () => {
                                 />
                             </Tab.Pane>
                         )}
-                        {hiddenReferences.count > 0 && (
+                        {hiddenReferences.serverCount > 0 && (
                             <Tab.Pane eventKey="hidden" unmountOnExit={true}>
                                 <TypedReferences
                                     title="Hidden"

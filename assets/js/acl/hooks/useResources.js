@@ -5,7 +5,7 @@ import useResourcesMutation from './useResourcesMutation'
 
 const useResources = () => {
     const [resources, setResources] = useImmer([])
-    const { isLoading, resources: dbResources } = useResourcesQuery(setResources)
+    const { isLoading, isFetching, resources: dbResources } = useResourcesQuery(setResources)
     const { saveResources, isSaving } = useResourcesMutation(resources)
     const [selectedCount, setSelectedCount] = useState(0)
 
@@ -39,6 +39,7 @@ const useResources = () => {
 
     return {
         isLoading,
+        isFetching,
         isSaving,
         resources,
         selectedCount,

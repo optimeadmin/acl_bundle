@@ -1,5 +1,6 @@
 import React from 'react'
-import { Button, Spinner } from 'react-bootstrap'
+import { Button } from 'react-bootstrap'
+import LoadingIcon from './LoadingIcon'
 
 const ButtonWithLoading = ({
     isLoading,
@@ -21,13 +22,9 @@ const ButtonWithLoading = ({
                 minWidth,
                 display: 'inline-block',
             }}>
-            {isLoading && (
-                <Spinner
-                    className="me-2"
-                    animation="border"
-                    size="sm"
-                />
-            )}
+
+            <LoadingIcon isLoading={isLoading}/>
+
             {isLoading ? (loadingLabel ?? label) : label}
         </Button>
     )

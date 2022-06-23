@@ -8,6 +8,7 @@ import SuccessIcon from '../components/SuccessIcon'
 import useSuccessIcon from '../hooks/useSuccessIcon'
 import { FormControl } from 'react-bootstrap'
 import useTextFilter from '../hooks/useTextFilter'
+import LoadingIcon from '../components/LoadingIcon'
 
 const ResourcesRoles = () => {
     const { isLoading, hasData, isSaving, resources, roles, editResource, saveConfig } = useConfig()
@@ -52,8 +53,9 @@ const ResourcesRoles = () => {
 
     return (
         <div>
-            <div className="d-flex align-items-center">
-                <h3 className="border-bottom pb-3">Access Control Configuration</h3>
+            <div className="d-flex align-items-center border-bottom pb-3 gap-3">
+                <h3 className="m-0">Access Control Configuration</h3>
+                <LoadingIcon isLoading={isLoading} size="md" />
                 <ButtonWithLoading
                     variant="outline-danger"
                     className="ms-auto"

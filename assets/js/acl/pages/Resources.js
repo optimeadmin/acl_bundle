@@ -7,6 +7,7 @@ import useResources from '../hooks/useResources'
 import SuccessIcon from '../components/SuccessIcon'
 import useSuccessIcon from '../hooks/useSuccessIcon'
 import useTextFilter from '../hooks/useTextFilter'
+import LoadingIcon from '../components/LoadingIcon'
 
 const getItemContents = (item) => {
     return [
@@ -20,6 +21,7 @@ const getItemContents = (item) => {
 const Resources = () => {
     const {
         isLoading,
+        isFetching,
         isSaving,
         resources,
         selectedCount,
@@ -68,6 +70,7 @@ const Resources = () => {
         <div>
             <div className="d-flex gap-2 align-items-center justify-content-between border-bottom pb-3">
                 <h3 className="m-0">Resources Configuration</h3>
+                <LoadingIcon isLoading={isFetching} size="md" className="ms-2" />
                 <Button
                     variant="outline-secondary"
                     className="ms-auto"
