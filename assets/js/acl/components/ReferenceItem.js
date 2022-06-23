@@ -16,18 +16,19 @@ const ReferenceItem = ({ item, onEdit: handleEdit, showHide = true }) => {
 
     const handleSelectedChange = (event) => handleEdit(
         identifier,
-        { selected: event.target.checked }
+        { selected: event.target.checked, hidden: false }
     )
 
     const handleHiddenChange = (event) => handleEdit(
         identifier,
-        { hidden: event.target.checked }
+        { hidden: event.target.checked, selected: false }
     )
 
     const handleResourceChange = (event) => handleEdit(
         identifier,
         {
             selected: true,
+            hidden: false,
             resource: event.target.value,
         }
     )

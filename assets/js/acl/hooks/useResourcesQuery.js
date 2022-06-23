@@ -1,6 +1,7 @@
 import { useQuery } from 'react-query'
 import { getResources } from '../api/endpoints'
 import { v4 as uuid } from 'uuid'
+import { useEffect } from 'react'
 
 export const createItem = (item) => {
     return {
@@ -22,12 +23,18 @@ const useResourcesQuery = (setResources) => {
         isLoading,
         isFetching,
         data: resources = [],
+        dataUpdatedAt,
     } = useQuery(['resources'], getResources, {
         keepPreviousData: true,
-        onSuccess (resources) {
-            setResources(resources.map(item => createItem(item)))
-        }
     })
+
+    useEffect(() => {
+        if (0 === dataUpdatedAt) {
+            return
+        }
+
+        setResources(resources.map(item => createItem(item)))
+    }, [dataUpdatedAt])
 
     return {
         isLoading,

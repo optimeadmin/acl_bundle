@@ -34,6 +34,8 @@ const ResourcesRoles = () => {
         return <h3>Loading...</h3>
     }
 
+    const filteredResources = Object.entries(resources).filter(filterByText)
+
     const renderSaveBtn = (
         <div className="mb-2 d-flex align-items-center">
             <ButtonWithLoading
@@ -45,22 +47,24 @@ const ResourcesRoles = () => {
                 loadingLabel="Saving Data..."
             />
             <SuccessIcon isShow={isShowSuccessIcon}/>
-            <ButtonWithLoading
-                variant="outline-danger"
-                className="ms-auto"
-                isLoading={isCleaning}
-                disabled={isCleaning || isLoading}
-                onClick={handleCleanClick}
-                minWidth={165}
-                label="Clean Unused Resources"
-                loadingLabel="Cleaning Resources..."
-            />
         </div>
     )
 
     return (
         <div>
-            <h3 className="border-bottom pb-3">Access Control Configuration</h3>
+            <div className="d-flex align-items-center">
+                <h3 className="border-bottom pb-3">Access Control Configuration</h3>
+                <ButtonWithLoading
+                    variant="outline-danger"
+                    className="ms-auto"
+                    isLoading={isCleaning}
+                    disabled={isCleaning || isLoading}
+                    onClick={handleCleanClick}
+                    minWidth={165}
+                    label="Clean Unused Resources"
+                    loadingLabel="Cleaning Resources..."
+                />
+            </div>
 
             <section className="mt-5">
 
@@ -89,7 +93,7 @@ const ResourcesRoles = () => {
                     </tr>
                     </thead>
                     <tbody>
-                    {Object.entries(resources).filter(filterByText).map(([name, item]) => (
+                    {filteredResources.map(([name, item]) => (
                         <ResourceRolesItem
                             key={name}
                             resource={item}
@@ -97,6 +101,11 @@ const ResourcesRoles = () => {
                             onEdit={editResource}
                         />
                     ))}
+                    {filteredResources.length === 0 && (
+                        <tr>
+                            <td className="text-center" colSpan={100}>No items found</td>
+                        </tr>
+                    )}
                     </tbody>
 
                 </table>

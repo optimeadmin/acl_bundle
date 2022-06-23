@@ -8,15 +8,21 @@ const References = () => {
     const newsReferences = useReferences('news')
     const hiddenReferences = useReferences('hidden')
 
+    const defaultTab = existentReferences.serverCount > 0 ? 'persisted' : 'news'
+
+    if (existentReferences.isLoading) {
+        return <h3>Loading...</h3>
+    }
+
     return (
         <div>
             <div className="d-flex gap-2 align-items-center justify-content-between border-bottom pb-3">
                 <h3 className="m-0">Controllers Configuration</h3>
             </div>
 
-            <section className="mt-5">
+            <section className="mt-4">
 
-                <Tab.Container defaultActiveKey="persisted">
+                <Tab.Container defaultActiveKey={defaultTab} transition={false}>
                     <Nav variant="pills">
                         {existentReferences.count > 0 && (
                             <Nav.Item>
@@ -39,7 +45,7 @@ const References = () => {
 
                     <Tab.Content className="mt-5">
                         {existentReferences.count > 0 && (
-                            <Tab.Pane eventKey="persisted">
+                            <Tab.Pane eventKey="persisted" unmountOnExit={true}>
                                 <TypedReferences
                                     title="Persisted"
                                     {...existentReferences}
@@ -47,7 +53,7 @@ const References = () => {
                             </Tab.Pane>
                         )}
                         {newsReferences.count > 0 && (
-                            <Tab.Pane eventKey="news">
+                            <Tab.Pane eventKey="news" unmountOnExit={true}>
                                 <TypedReferences
                                     title="News"
                                     {...newsReferences}
@@ -55,7 +61,7 @@ const References = () => {
                             </Tab.Pane>
                         )}
                         {hiddenReferences.count > 0 && (
-                            <Tab.Pane eventKey="hidden">
+                            <Tab.Pane eventKey="hidden" unmountOnExit={true}>
                                 <TypedReferences
                                     title="Hidden"
                                     {...hiddenReferences}

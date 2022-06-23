@@ -7,13 +7,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Access Control Configuration - Backend</title>
     {% block styles %}
-        {# <link rel="stylesheet" href="{{ asset('bundles/optimeacl/css/bootstrap.min.css') }}"> #}
         <link rel="stylesheet" href="{{ asset('bundles/optimeacl/styles.css') }}">
     {% endblock %}
     {% block javascripts %}
-        <script src="{{ asset('bundles/optimeacl/js/popper.min.js') }}"></script>
-        <script src="{{ asset('bundles/optimeacl/js/jquery.min.js') }}"></script>
-        <script src="{{ asset('bundles/optimeacl/js/bootstrap.min.js') }}"></script>
     {% endblock %}
 </head>
 <body>
@@ -88,12 +84,6 @@
 </div>
 
 {% block javascripts_bottom %}
-    <script>
-        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
-        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-            return new bootstrap.Popover(popoverTriggerEl)
-        })
-    </script>
 {% endblock %}
 
 </body>

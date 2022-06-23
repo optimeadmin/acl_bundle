@@ -26,6 +26,7 @@ const useReferences = (type) => {
         isSaving,
         references,
         count: references.length,
+        serverCount: dbReferences.length,
         updateReference,
         saveReferences,
     }

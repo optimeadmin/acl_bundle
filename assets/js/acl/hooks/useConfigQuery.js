@@ -1,5 +1,6 @@
-import {useQuery} from "react-query";
-import {getConfig} from "../api/endpoints";
+import { useQuery } from 'react-query'
+import { getConfig } from '../api/endpoints'
+import { useEffect } from 'react'
 
 const useConfigQuery = (setResources) => {
     const {
@@ -8,10 +9,11 @@ const useConfigQuery = (setResources) => {
         data: {
             roles = [],
             resources = {},
-        } = {}
-    } = useQuery(["config"], getConfig, {
+        } = {},
+        dataUpdatedAt,
+    } = useQuery(['config'], getConfig, {
         keepPreviousData: true,
-        select({roles, resources}) {
+        select ({ roles, resources }) {
             const mappedRoles = roles.map(role => ({
                 ...role,
                 parentRoles: Object.values(role.parentRoles),
@@ -22,26 +24,31 @@ const useConfigQuery = (setResources) => {
                 resources,
             }
         },
-        onSuccess({resources: currentResources}) {
-            const resources = {};
-
-            for (const name in currentResources) {
-                const {parent, children, resource: {roles, level}} = currentResources[name]
-
-                resources[name] = {
-                    name,
-                    parent,
-                    level,
-                    children,
-                    roles,
-                    initialRoles: roles,
-                    blockedRoles: [],
-                }
-            }
-
-            setResources(resources)
-        }
     })
+
+    useEffect(() => {
+        if (0 === dataUpdatedAt) {
+            return
+        }
+
+        const resourcesData = {}
+
+        for (const name in resources) {
+            const { parent, children, resource: { roles, level } } = resources[name]
+
+            resourcesData[name] = {
+                name,
+                parent,
+                level,
+                children,
+                roles,
+                initialRoles: roles,
+                blockedRoles: [],
+            }
+        }
+
+        setResources(resourcesData)
+    }, [dataUpdatedAt])
 
     return {
         isLoading,
@@ -51,4 +58,4 @@ const useConfigQuery = (setResources) => {
     }
 }
 
-export default useConfigQuery;
+export default useConfigQuery

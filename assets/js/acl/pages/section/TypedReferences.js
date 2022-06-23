@@ -49,10 +49,12 @@ const TypedReferences = ({
         </div>
     )
 
+    const filteredReferences = references.filter(applyFilter)
+
     return (
         <div>
 
-            {references.length > 10 && saveBtn}
+            {references.length > 8 && saveBtn}
 
             <FormControl
                 className="mb-2"
@@ -74,7 +76,7 @@ const TypedReferences = ({
                     </tr>
                     </thead>
                     <tbody>
-                    {references.filter(applyFilter).map(item => (
+                    {filteredReferences.map(item => (
                         <ReferenceItem
                             key={item.identifier}
                             item={item}
@@ -82,6 +84,11 @@ const TypedReferences = ({
                             showHide={showHide}
                         />
                     ))}
+                    {filteredReferences.length === 0 && (
+                        <tr>
+                            <td className="text-center" colSpan={100}>No items found</td>
+                        </tr>
+                    )}
                     </tbody>
                 </Table>
             </div>

@@ -49,6 +49,8 @@ const Resources = () => {
         return <h3>Loading...</h3>
     }
 
+    const filteredResources = resources.filter(filterByText)
+
     const saveBtn = (
         <div>
             <ButtonWithLoading
@@ -103,13 +105,18 @@ const Resources = () => {
                     </tr>
                     </thead>
                     <tbody>
-                    {resources.filter(filterByText).map(item => (
+                    {filteredResources.map(item => (
                         <ResourceItem
                             key={item.key}
                             item={item}
                             onEdit={updateResource}
                         />
                     ))}
+                    {filteredResources.length === 0 && (
+                        <tr>
+                            <td className="text-center" colSpan={100}>No items found</td>
+                        </tr>
+                    )}
                     </tbody>
                 </table>
 
