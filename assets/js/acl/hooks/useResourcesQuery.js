@@ -34,7 +34,7 @@ const useResourcesQuery = (setResources) => {
         }
 
         setResources(resources.map(item => createItem(item)))
-    }, [dataUpdatedAt])
+    }, [resources, dataUpdatedAt])
 
     return {
         isLoading,

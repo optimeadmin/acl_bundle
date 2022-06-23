@@ -33,7 +33,7 @@ const useReferencesQuery = (type, setReferences) => {
                     initialResource: item.resource,
                 }))
         )
-    }, [dataUpdatedAt, isFetching])
+    }, [dataUpdatedAt, isFetching, references])
 
     return {
         isLoading,

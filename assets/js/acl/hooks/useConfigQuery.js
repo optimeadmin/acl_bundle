@@ -48,7 +48,7 @@ const useConfigQuery = (setResources) => {
         }
 
         setResources(resourcesData)
-    }, [dataUpdatedAt])
+    }, [resources, dataUpdatedAt])
 
     return {
         isLoading,
