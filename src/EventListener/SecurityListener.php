@@ -56,7 +56,12 @@ class SecurityListener
             return;
         }
 
-        $this->checkAccess($request->attributes->get('_controller'));
+        $this->checkAccess($this->normalizeReference($request->attributes->get('_controller')));
+    }
+
+    private function normalizeReference(array|string $reference): string
+    {
+        return is_array($reference) ? join('::', $reference) : $reference;
     }
 
     private function checkAccess(string $reference): void
