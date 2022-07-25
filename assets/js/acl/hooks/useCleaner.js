@@ -1,20 +1,19 @@
-import React from 'react';
-import {useMutation, useQueryClient} from "react-query";
-import {cleanUnusedResources} from "../api/endpoints";
+import { useMutation, useQueryClient } from 'react-query'
+import { cleanUnusedResources } from '../api/endpoints'
 
 const useCleaner = () => {
-    const queryClient = useQueryClient()
+  const queryClient = useQueryClient()
 
-    const {mutateAsync, isLoading} = useMutation(cleanUnusedResources, {
-        onSuccess() {
-            queryClient.invalidateQueries(["config"])
-        }
-    })
-
-    return {
-        cleanResources: mutateAsync,
-        isCleaning: isLoading,
+  const { mutateAsync, isLoading } = useMutation(cleanUnusedResources, {
+    onSuccess () {
+      queryClient.invalidateQueries(['config'])
     }
-};
+  })
 
-export default useCleaner;
+  return {
+    cleanResources: mutateAsync,
+    isCleaning: isLoading
+  }
+}
+
+export default useCleaner

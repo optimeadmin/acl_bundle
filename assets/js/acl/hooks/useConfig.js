@@ -4,80 +4,80 @@ import useConfigQuery from './useConfigQuery'
 import useResourcesRolesMutation from './useResourcesRolesMutation'
 
 const updateParentRoles = (items, resource) => {
-    const { parent, roles } = resource
+  const { parent, roles } = resource
 
-    if (!parent || !items[parent]) {
-        return
-    }
+  if (!parent || !items[parent]) {
+    return
+  }
 
-    const parentResource = items[parent]
-    parentResource.roles = [...new Set([...parentResource.roles, ...roles])]
-    parentResource.blockedRoles = [...roles]
+  const parentResource = items[parent]
+  parentResource.roles = [...new Set([...parentResource.roles, ...roles])]
+  parentResource.blockedRoles = [...roles]
 
-    updateParentRoles(items, parentResource)
+  updateParentRoles(items, parentResource)
 }
 
 const updateChildrenRoles = (items, resource) => {
-    const { roles } = resource
-    const children = Object.values(resource.children ?? {})
+  const { roles } = resource
+  const children = Object.values(resource.children ?? {})
 
-    children.forEach(name => {
-        const resource = items[name]
+  children.forEach(name => {
+    const resource = items[name]
 
-        if (!resource) {
-            return
-        }
+    if (!resource) {
+      return
+    }
 
-        resource.roles = resource.roles?.filter(role => roles.includes(role))
+    resource.roles = resource.roles?.filter(role => roles.includes(role))
 
-        updateChildrenRoles(items, resource)
-    })
+    updateChildrenRoles(items, resource)
+  })
 }
 
 const setResourcesFactory = (set) => {
-    return (resources) => {
-        Object.entries(resources).forEach(([, resource]) => {
-            updateParentRoles(resources, resource)
-            updateChildrenRoles(resources, resource)
-        })
+  return (resources) => {
+    Object.entries(resources).forEach(([, resource]) => {
+      updateParentRoles(resources, resource)
+      updateChildrenRoles(resources, resource)
+    })
 
-        set(resources)
-    }
+    set(resources)
+  }
 }
 
 const useConfig = () => {
-    const [resources, setResources] = useImmer({})
-    const {
-        isLoading,
-        isFetching,
-        roles,
-        resources: savedResources
-    } = useConfigQuery(setResourcesFactory(setResources))
+  const [resources, setResources] = useImmer({})
+  const {
+    isLoading,
+    isFetching,
+    roles,
+    resources: savedResources
+  } = useConfigQuery(setResourcesFactory(setResources))
 
-    const { saveConfig, isSaving } = useResourcesRolesMutation(resources)
+  const { saveConfig, isSaving } = useResourcesRolesMutation(resources)
 
-    const editResource = useCallback((name, roles) => {
-        setResources(items => {
-            if (!name in items) {
-                return
-            }
+  const editResource = useCallback((name, roles) => {
+    setResources(items => {
+      if (!(name in items)) {
+        return
+      }
 
-            items[name].roles = roles
+      items[name].roles = roles
 
-            updateParentRoles(items, items[name])
-            updateChildrenRoles(items, items[name])
-        })
-    }, [savedResources, setResources])
+      updateParentRoles(items, items[name])
+      updateChildrenRoles(items, items[name])
+    })
+  }, [savedResources, setResources])
 
-    return {
-        hasData: !isLoading,
-        isLoading: isFetching,
-        isSaving,
-        roles,
-        resources,
-        editResource,
-        saveConfig,
-    }
+  return {
+    hasData: !isLoading,
+    isLoading: isFetching,
+    isSaving,
+    roles,
+    resources,
+    editResource,
+    saveConfig
+  }
 }
 
 export default useConfig
