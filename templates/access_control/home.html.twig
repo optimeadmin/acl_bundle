@@ -7,15 +7,18 @@
 {% endblock %}
 
 {% block page_content %}
-    <div id="acl_root"
-         data-basename="{{ path('optime_acl_configuration') }}"
-         data-endpoint-api="{{ path('optime_acl_configuration') ~ '/api' }}"
-    ></div>
+
+    {{ render(controller('Optime\\Acl\\Bundle\\Controller\\HomeController::renderReact')) }}
+
+{#    <div id="acl_root"#}
+{#         data-basename="{{ path('optime_acl_configuration') }}"#}
+{#         data-endpoint-api="{{ path('optime_acl_configuration') ~ '/api' }}"#}
+{#    ></div>#}
 
     {{ block('page_footer') }}
 {% endblock %}
 
-{% block javascripts_bottom %}
-    {{ parent() }}
-    <script src="{{ asset('bundles/optimeacl/acl.js') }}"></script>
-{% endblock %}
+{#{% block javascripts_bottom %}#}
+{#    {{ parent() }}#}
+{#    <script src="{{ asset('bundles/optimeacl/acl.js') }}"></script>#}
+{#{% endblock %}#}

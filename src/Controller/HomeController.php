@@ -27,4 +27,9 @@ class HomeController extends AbstractController
             'header_path' => $headerPath,
         ]);
     }
+
+    public function renderReact(): Response
+    {
+        return $this->renderForm('@OptimeAcl/access_control/_react.html.twig');
+    }
 }
