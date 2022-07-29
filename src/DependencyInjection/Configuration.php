@@ -21,6 +21,13 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->canBeDisabled()
             ->children()
+                ->arrayNode('header')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('title')->defaultValue('Access Control Backend')->end()
+                        ->scalarNode('path')->defaultValue('optime_acl_configuration')->end()
+                    ->end()
+                ->end()
                 ->scalarNode('roles_provider')
                     ->cannotBeEmpty()
                     ->defaultValue(DefaultRolesProvider::class)
