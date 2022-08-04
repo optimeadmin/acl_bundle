@@ -6,7 +6,7 @@ const ModalResourceReferences = ({ name, references, show, onHide }) => {
     <Modal show={show} onHide={onHide} size="lg">
       <Modal.Header closeButton>
         <Modal.Title>
-                    References for "<i>{name}</i>"
+          References for "<i>{name}</i>"
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>

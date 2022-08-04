@@ -25,7 +25,7 @@ const useResources = () => {
         resources[index].valid = false
       }
     })
-  }, [setResources, dbResources])
+  }, [setResources])
 
   const addResource = useCallback(() => {
     setResources(resources => {

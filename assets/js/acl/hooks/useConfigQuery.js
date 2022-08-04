@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query'
 import { getConfig } from '../api/endpoints'
-import { useEffect } from 'react'
+import { useState } from 'react'
 
 const useConfigQuery = (setResources) => {
   const {
@@ -25,30 +25,30 @@ const useConfigQuery = (setResources) => {
       }
     }
   })
+  const [previousResources, setPreviousResources] = useState(null)
 
-  useEffect(() => {
-    if (dataUpdatedAt === 0) {
-      return
-    }
+  if (dataUpdatedAt !== 0 && resources !== previousResources) {
+    setPreviousResources(resources)
+    setResources(() => {
+      const resourcesData = {}
 
-    const resourcesData = {}
+      for (const name in resources) {
+        const { parent, children, resource: { roles, level } } = resources[name]
 
-    for (const name in resources) {
-      const { parent, children, resource: { roles, level } } = resources[name]
-
-      resourcesData[name] = {
-        name,
-        parent,
-        level,
-        children,
-        roles,
-        initialRoles: roles,
-        blockedRoles: []
+        resourcesData[name] = {
+          name,
+          parent,
+          level,
+          children,
+          roles,
+          initialRoles: roles,
+          blockedRoles: []
+        }
       }
-    }
 
-    setResources(resourcesData)
-  }, [resources, dataUpdatedAt])
+      return resourcesData
+    })
+  }
 
   return {
     isLoading,

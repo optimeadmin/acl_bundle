@@ -18,7 +18,7 @@ const useReferences = (type) => {
 
       references[index] = { ...references[index], ...data }
     })
-  }, [dbReferences, setReferences])
+  }, [setReferences])
 
   return {
     isLoading,

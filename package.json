@@ -24,6 +24,7 @@
     "eslint-plugin-n": "^15.2.4",
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-react": "^7.30.1",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "immer": "^9.0.15",
     "react-icons": "^4.4.0",
     "sass": "^1.52.3",
@@ -35,7 +36,8 @@
   "scripts": {
     "dev": "encore dev",
     "watch": "encore dev --watch",
-    "build": "encore production --progress"
+    "build": "encore production --progress",
+    "lint": "eslint assets/js/**/*.{js,jsx}"
   },
   "repository": {
     "type": "git",

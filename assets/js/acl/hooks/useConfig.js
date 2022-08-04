@@ -51,7 +51,6 @@ const useConfig = () => {
     isLoading,
     isFetching,
     roles,
-    resources: savedResources
   } = useConfigQuery(setResourcesFactory(setResources))
 
   const { saveConfig, isSaving } = useResourcesRolesMutation(resources)
@@ -67,7 +66,7 @@ const useConfig = () => {
       updateParentRoles(items, items[name])
       updateChildrenRoles(items, items[name])
     })
-  }, [savedResources, setResources])
+  }, [setResources])
 
   return {
     hasData: !isLoading,

@@ -7,7 +7,6 @@ function PageAnimation ({ children }) {
   const { pathname } = useLocation()
   const $ref = useRef()
 
-  console.log({ pathname })
   return (
     <TransitionGroup component={null}>
       <Transition
@@ -22,7 +21,6 @@ function PageAnimation ({ children }) {
             ref={$ref}
             className={`animate__animated ${state === 'exiting' ? 'd-none animate__fadeOut' : 'animate__fadeIn'}`}
           >
-            {console.log({ state })}
             {children}
           </div>
         )}
