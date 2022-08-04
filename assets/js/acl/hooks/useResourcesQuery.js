@@ -27,7 +27,7 @@ const useResourcesQuery = (setResources) => {
   } = useQuery(['resources'], getResources, {
     keepPreviousData: true
   })
-  const [previousResources, setPreviousResources] = useState(resources)
+  const [previousResources, setPreviousResources] = useState(null)
 
   if (dataUpdatedAt !== 0 && previousResources !== resources) {
     setPreviousResources(resources)

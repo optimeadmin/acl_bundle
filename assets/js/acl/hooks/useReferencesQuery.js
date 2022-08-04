@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useState } from 'react'
 import { useQuery } from 'react-query'
 import { getReferences } from '../api/endpoints'
 
@@ -14,17 +14,15 @@ const useReferencesQuery = (type, setReferences) => {
       return type in data ? data[type] : data.news
     }
   })
+  const [previousReferences, setPreviousReferences] = useState(null)
 
-  useEffect(() => {
-    if (dataUpdatedAt === 0 || isFetching) {
-      return
-    }
-
+  if (dataUpdatedAt !== 0 && !isFetching && previousReferences !== references) {
+    setPreviousReferences(references)
     setReferences(
       references
         .filter(item => item.active ||
-                    item.resource !== '__HIDDEN__' ||
-                    item.route !== null
+          item.resource !== '__HIDDEN__' ||
+          item.route !== null
         )
         .map(item => ({
           ...item,
@@ -33,7 +31,7 @@ const useReferencesQuery = (type, setReferences) => {
           initialResource: item.resource
         }))
     )
-  }, [dataUpdatedAt, isFetching, references])
+  }
 
   return {
     isLoading,
