@@ -56,7 +56,7 @@ const ResourceItem = ({ item, onEdit: handleEdit }) => {
       <td className="text-center align-middle">{createdByUser ? 'User' : 'App'}</td>
       <td className="text-center align-middle">
         <Button variant="outline-secondary" size="sm" onClick={() => setShowReferences(true)}>
-                    Show ({references?.length ?? 0})
+          Show ({references?.length ?? 0})
         </Button>
         <ModalResourceReferences
           name={name}

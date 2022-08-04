@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback } from 'react'
 import useResourcesQuery, { createItem } from './useResourcesQuery'
 import { useImmer } from 'use-immer'
 import useResourcesMutation from './useResourcesMutation'
@@ -7,7 +7,7 @@ const useResources = () => {
   const [resources, setResources] = useImmer([])
   const { isLoading, isFetching, resources: dbResources } = useResourcesQuery(setResources)
   const { saveResources, isSaving } = useResourcesMutation(resources)
-  const [selectedCount, setSelectedCount] = useState(0)
+  const selectedCount = resources.filter(r => r.selected).length
 
   const updateResource = useCallback((key, data) => {
     setResources(resources => {
@@ -32,10 +32,6 @@ const useResources = () => {
       resources.unshift(createItem())
     })
   }, [setResources, dbResources])
-
-  useEffect(() => {
-    setSelectedCount(resources.filter(r => r.selected).length)
-  }, [resources])
 
   return {
     isLoading,

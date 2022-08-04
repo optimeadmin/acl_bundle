@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query'
 import { getResources } from '../api/endpoints'
 import { v4 as uuid } from 'uuid'
-import { useEffect } from 'react'
+import { useState } from 'react'
 
 export const createItem = (item) => {
   return {
@@ -27,14 +27,12 @@ const useResourcesQuery = (setResources) => {
   } = useQuery(['resources'], getResources, {
     keepPreviousData: true
   })
+  const [previousResources, setPreviousResources] = useState(resources)
 
-  useEffect(() => {
-    if (dataUpdatedAt === 0) {
-      return
-    }
-
+  if (dataUpdatedAt !== 0 && previousResources !== resources) {
+    setPreviousResources(resources)
     setResources(resources.map(item => createItem(item)))
-  }, [resources, dataUpdatedAt])
+  }
 
   return {
     isLoading,
