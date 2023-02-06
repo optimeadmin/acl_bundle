@@ -24,7 +24,7 @@ class ResourceRole
     #[ORM\JoinColumn]
     private Resource $resource;
 
-    #[ORM\Column(length: 255, nullable: false)]
+    #[ORM\Column(length: 50, nullable: false)]
     private string $role;
 
     #[ORM\Column]
