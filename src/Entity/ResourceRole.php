@@ -34,7 +34,8 @@ class ResourceRole
         nullable: true,
         insertable: false,
         updatable: false,
-        columnDefinition: 'timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
+        columnDefinition: "timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '(DC2Type:datetime_immutable)'",
+        options: ['default' => 'CURRENT_TIMESTAMP'],
     )]
     private DateTimeImmutable $updatedAt;
 
