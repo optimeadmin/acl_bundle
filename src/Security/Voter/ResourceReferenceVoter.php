@@ -9,18 +9,17 @@ use Optime\Acl\Bundle\Repository\ResourceRoleRepository;
 use Optime\Acl\Bundle\Security\User\RolesProviderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
-use function dd;
 
 class ResourceReferenceVoter extends Voter
 {
-
     private array $previousResults = [];
 
     public function __construct(
         private RolesProviderInterface $rolesProvider,
         private ResourceRoleRepository $aclResourceRoleRepository,
         private ResourceReferenceRepository $aclResourceReferenceRepository,
-        private bool $enabled
+        private bool $enabled,
+        private bool $cacheResults,
     ) {
     }
 
@@ -36,8 +35,7 @@ class ResourceReferenceVoter extends Voter
         }
         $reference = $subject;
 
-        if (isset($this->previousResults[$token->getUserIdentifier()][$reference])) {
-            dd('cache');
+        if ($this->cacheResults && isset($this->previousResults[$token->getUserIdentifier()][$reference])) {
             return $this->previousResults[$token->getUserIdentifier()][$reference];
         }
 
@@ -53,6 +51,10 @@ class ResourceReferenceVoter extends Voter
             $resourceReference->getResource(),
             $this->rolesProvider->getRolesByToken($token)
         );
+
+        if (!$this->cacheResults) {
+            return $result;
+        }
 
         return $this->previousResults[$token->getUserIdentifier()][$reference] ??= $result;
     }

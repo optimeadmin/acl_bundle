@@ -16,8 +16,6 @@ use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\FirewallMapInterface;
-use function dd;
-use function dump;
 use function sprintf;
 
 /**

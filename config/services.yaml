@@ -23,29 +23,19 @@ services:
 
   Optime\Acl\Bundle\EventListener\SecurityListener:
     arguments:
-      - ""
-      - ""
-      - ""
-      - "%optime_acl.enabled%"
+      $enabledAuth: "%optime_acl.enabled%"
 
   Optime\Acl\Bundle\Security\Voter\ResourceVoter:
     arguments:
-      - ""
-      - ""
-      - ""
-      - "%optime_acl.enabled%"
+      $enabled: "%optime_acl.enabled%"
+      $cacheResults: "%optime_acl.cache_voters%"
 
   Optime\Acl\Bundle\Security\Voter\ResourceRouteVoter:
     arguments:
-      - ""
-      - ""
-      - ""
-      - ""
-      - "%optime_acl.enabled%"
+      $enabled: "%optime_acl.enabled%"
+      $cacheResults: "%optime_acl.cache_voters%"
 
   Optime\Acl\Bundle\Security\Voter\ResourceReferenceVoter:
     arguments:
-      - ""
-      - ""
-      - ""
-      - "%optime_acl.enabled%"
+      $enabled: "%optime_acl.enabled%"
+      $cacheResults: "%optime_acl.cache_voters%"

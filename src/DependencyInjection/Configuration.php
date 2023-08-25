@@ -21,6 +21,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->canBeDisabled()
             ->children()
+                ->booleanNode('cache_voters')->defaultTrue()->end()
                 ->arrayNode('header')
                     ->addDefaultsIfNotSet()
                     ->children()

@@ -28,6 +28,7 @@ class OptimeAclExtension extends Extension
         $loader->load('services.yaml');
 
         $container->setParameter('optime_acl.enabled', $config['enabled']);
+        $container->setParameter('optime_acl.cache_voters', $config['cache_voters']);
         $container->setParameter('optime_acl.header.title', $config['header']['title']);
         $container->setParameter('optime_acl.header.path', $config['header']['path']);
 

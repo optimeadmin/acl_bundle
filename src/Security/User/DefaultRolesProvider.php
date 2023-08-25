@@ -49,7 +49,7 @@ class DefaultRolesProvider implements RolesProviderInterface
      * @param array|string[] $securityRoles
      * @return array|AclRole[]
      */
-    private function mapToAclRoles(array $securityRoles): array
+    protected function mapToAclRoles(array $securityRoles): array
     {
         $securityRoles = array_diff($securityRoles, ['ROLE_ALLOWED_TO_SWITCH']);
 

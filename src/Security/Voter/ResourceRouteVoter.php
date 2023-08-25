@@ -13,7 +13,6 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 class ResourceRouteVoter extends Voter
 {
-
     private array $previousResults = [];
 
     public function __construct(
@@ -21,7 +20,8 @@ class ResourceRouteVoter extends Voter
         private ResourceRoleRepository $aclResourceRoleRepository,
         private ResourceReferenceRepository $aclResourceReferenceRepository,
         private RouterInterface $router,
-        private bool $enabled
+        private bool $enabled,
+        private bool $cacheResults,
     ) {
     }
 
@@ -38,7 +38,7 @@ class ResourceRouteVoter extends Voter
             return true;
         }
 
-        if (isset($this->previousResults[$token->getUserIdentifier()][$routeName])) {
+        if ($this->cacheResults && isset($this->previousResults[$token->getUserIdentifier()][$routeName])) {
             return $this->previousResults[$token->getUserIdentifier()][$routeName];
         }
 
@@ -60,6 +60,10 @@ class ResourceRouteVoter extends Voter
             $resourceReference->getResource(),
             $currentRoles
         );
+
+        if (!$this->cacheResults) {
+            return $result;
+        }
 
         return $this->previousResults[$token->getUserIdentifier()][$routeName] ??= $result;
     }

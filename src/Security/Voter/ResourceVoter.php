@@ -12,14 +12,14 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 class ResourceVoter extends Voter
 {
-
     private array $previousResults = [];
 
     public function __construct(
         private RolesProviderInterface $rolesProvider,
         private ResourceRepository $aclResourceRepository,
         private ResourceRoleRepository $aclResourceRoleRepository,
-        private bool $enabled
+        private bool $enabled,
+        private bool $cacheResults,
     ) {
     }
 
@@ -34,7 +34,7 @@ class ResourceVoter extends Voter
             return true;
         }
 
-        if (isset($this->previousResults[$token->getUserIdentifier()][$subject])) {
+        if ($this->cacheResults && isset($this->previousResults[$token->getUserIdentifier()][$subject])) {
             return $this->previousResults[$token->getUserIdentifier()][$subject];
         }
 
@@ -46,7 +46,9 @@ class ResourceVoter extends Voter
 
         $result = $this->aclResourceRoleRepository->verifyAccessToResourceByNameAndRoles($aclResource, $currentRoles);
 
-        $this->processCache($token, $subject, $result);
+        if ($this->cacheResults) {
+            $this->processCache($token, $subject, $result);
+        }
 
         return $result;
     }
