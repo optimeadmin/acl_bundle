@@ -30,6 +30,11 @@ optime_acl:
     # Se puede deshabilitar para pruebas
     enabled: true
 
+    # Opcional. Permite desactivar la cache de resultados de los voters
+    # Por defecto es true
+    # Tiene sentido solo cuando los roles del usuario son dinamicos durante la misma sesión.
+    #cache_voters: false
+
     # Opcional. Se puede indicar un servicio propio para manejo de roles/perfiles
     # Dicho servico debe implementar la interfaz \Optime\Acl\Bundle\Security\User\RolesProviderInterface
     # Por defecto usa los roles del security.yaml
