@@ -3,7 +3,7 @@ import React, { useRef } from 'react'
 import { useLocation } from 'react-router-dom'
 import { Transition, TransitionGroup } from 'react-transition-group'
 
-function PageAnimation ({ children }) {
+export default function PageAnimation ({ children }) {
   const { pathname } = useLocation()
   const $ref = useRef()
 
@@ -28,5 +28,3 @@ function PageAnimation ({ children }) {
     </TransitionGroup>
   )
 }
-
-export default PageAnimation

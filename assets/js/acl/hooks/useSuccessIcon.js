@@ -1,9 +1,9 @@
 import { useState } from 'react'
 
-const useSuccessIcon = () => {
+export default function useSuccessIcon () {
   const [isShowSuccessIcon, setIsShowSuccessIcon] = useState(false)
 
-  const showSuccessIcon = () => {
+  function showSuccessIcon () {
     setIsShowSuccessIcon(true)
     setTimeout(() => setIsShowSuccessIcon(false), 1000)
   }
@@ -13,5 +13,3 @@ const useSuccessIcon = () => {
     showSuccessIcon
   }
 }
-
-export default useSuccessIcon

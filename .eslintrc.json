@@ -2,12 +2,14 @@
     "root": true,
     "env": {
         "browser": true,
-        "es2021": true
+        "es2021": true,
+        "node": true
     },
     "extends": [
-        "plugin:react/recommended",
+        "plugin:@tanstack/eslint-plugin-query/recommended",
         "plugin:react-hooks/recommended",
-        "standard"
+        "plugin:react/recommended",
+        "eslint:recommended"
     ],
     "parserOptions": {
         "ecmaFeatures": {
@@ -22,9 +24,18 @@
     "rules": {
         "indent": [
             "error",
-            2
+            2,
+            {
+                "SwitchCase": 1
+            }
         ],
         "comma-dangle": "off",
-        "react/prop-types": "off"
+        "react/prop-types": "off",
+        "eol-last": "off"
+    },
+    "settings": {
+        "react": {
+            "version": "detect"
+        }
     }
 }

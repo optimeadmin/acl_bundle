@@ -6,7 +6,7 @@ import Resources from './pages/Resources'
 import References from './pages/References'
 import PageAnimation from './pages/PageAnimation'
 
-const App = () => {
+export default function App () {
   return (
     <div className="d-flex">
 
@@ -25,5 +25,3 @@ const App = () => {
     </div>
   )
 }
-
-export default App

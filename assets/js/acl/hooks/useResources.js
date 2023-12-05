@@ -1,37 +1,43 @@
 import { useCallback } from 'react'
-import useResourcesQuery, { createItem } from './useResourcesQuery'
+import useResourcesQuery, { createItem } from './resources/useResourcesQuery'
 import { useImmer } from 'use-immer'
-import useResourcesMutation from './useResourcesMutation'
+import useSaveResources from './resources/useResourcesMutation'
 
 const useResources = () => {
   const [resources, setResources] = useImmer([])
   const { isLoading, isFetching, resources: dbResources } = useResourcesQuery(setResources)
-  const { saveResources, isSaving } = useResourcesMutation(resources)
+  const { saveResources, isSaving } = useSaveResources(resources)
   const selectedCount = resources.filter(r => r.selected).length
 
-  const updateResource = useCallback((key, data) => {
-    setResources(resources => {
-      const index = resources.findIndex(item => item.key === key)
+  const updateResource = useCallback(
+    (key, data) => {
+      setResources(resources => {
+        const index = resources.findIndex(item => item.key === key)
 
-      if (index === -1) {
-        return
-      }
+        if (index === -1) {
+          return
+        }
 
-      resources[index] = { ...resources[index], ...data }
-      resources[index].valid = true
+        resources[index] = { ...resources[index], ...data }
+        resources[index].valid = true
 
-      if (resources[index].name.length < 3) {
-        resources[index].selected = false
-        resources[index].valid = false
-      }
-    })
-  }, [setResources])
+        if (resources[index].name.length < 3) {
+          resources[index].selected = false
+          resources[index].valid = false
+        }
+      })
+    },
+    [setResources]
+  )
 
-  const addResource = useCallback(() => {
-    setResources(resources => {
-      resources.unshift(createItem())
-    })
-  }, [setResources, dbResources])
+  const addResource = useCallback(
+    () => {
+      setResources(resources => {
+        resources.unshift(createItem())
+      })
+    },
+    [setResources, dbResources]
+  )
 
   return {
     isLoading,
