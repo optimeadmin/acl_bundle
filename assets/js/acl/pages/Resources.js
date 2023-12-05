@@ -2,47 +2,25 @@ import React from 'react'
 import { Button, FormControl } from 'react-bootstrap'
 import ButtonWithLoading from '../components/ButtonWithLoading'
 import LoadingIcon from '../components/LoadingIcon'
-import ResourceItem from '../components/ResourceItem'
+import ResourceItem, { ResourceItemLoading } from '../components/ResourceItem'
 import SuccessIcon from '../components/SuccessIcon'
 import { useManageResources, useSaveResources } from '../hooks/resources'
 import useCleaner from '../hooks/useCleaner'
 import useSuccessIcon from '../hooks/useSuccessIcon'
 import useTextFilter from '../hooks/useTextFilter'
+import { useIsMutating } from 'react-query'
 
 const getItemContents = item => {
   return [item.name, item.initialName, item.description, item.initialDescription].join('')
 }
 
-export default function Resources () {
+export default function Resources() {
   const { addResource, updateResource, resources, selectedCount, isLoading } = useManageResources()
-  const { isSaving, saveResources } = useSaveResources()
-  const { isCleaning, cleanResources } = useCleaner()
   const { textSearch, handleTextSearchChange, filterByText } = useTextFilter()
-  const { isShowSuccessIcon, showSuccessIcon } = useSuccessIcon()
 
   const filteredResources = filterByText(resources, getItemContents)
 
-  async function handleSaveBtnClick () {
-    await saveResources()
-    showSuccessIcon()
-  }
-
-  if (isLoading) {
-    return <h3>Loading...</h3>
-  }
-
-  const saveBtn = (
-    <div>
-      <ButtonWithLoading
-        disabled={selectedCount === 0 || isSaving || isLoading}
-        isLoading={isSaving}
-        label='Apply Changes'
-        className='mb-2'
-        onClick={handleSaveBtnClick}
-      />
-      <SuccessIcon isShow={isShowSuccessIcon} />
-    </div>
-  )
+  const saveBtn = (<SaveButton count={selectedCount} resources={resources} isLoading={isLoading} />)
 
   return (
     <div className={`acl-page-container ${isLoading ? 'is-loading' : ''}`}>
@@ -52,14 +30,7 @@ export default function Resources () {
         <Button variant='outline-secondary' className='ms-auto' onClick={addResource}>
           Create Resource
         </Button>
-        <ButtonWithLoading
-          isLoading={isCleaning}
-          variant='outline-danger'
-          label='Clean Unused Resources'
-          loadingLabel='Cleaning Resources...'
-          onClick={cleanResources}
-          minWidth={165}
-        />
+        <CleanResources />
       </div>
 
       <section className='mt-5'>
@@ -78,18 +49,63 @@ export default function Resources () {
             </tr>
           </thead>
           <tbody>
-            {filteredResources.map(item => <ResourceItem key={item.key} item={item} onEdit={updateResource} />)}
-            {filteredResources.length === 0 &&
+            {isLoading && <ResourceItemLoading />}
+            {isLoading && <ResourceItemLoading />}
+            {isLoading && <ResourceItemLoading />}
+            {!isLoading && filteredResources.map(item =>
+              <ResourceItem key={item.key} item={item} onEdit={updateResource} />
+            )}
+            {!isLoading && filteredResources.length === 0 && (
               <tr>
                 <td className='text-center' colSpan={100}>
                   No items found
                 </td>
-              </tr>}
+              </tr>
+            )}
           </tbody>
         </table>
 
         {saveBtn}
       </section>
+    </div>
+  )
+}
+
+function CleanResources() {
+  const { isCleaning, cleanResources } = useCleaner()
+
+  return (
+    <ButtonWithLoading
+      isLoading={isCleaning}
+      variant='outline-danger'
+      label='Clean Unused Resources'
+      loadingLabel='Cleaning Resources...'
+      onClick={cleanResources}
+      minWidth={165}
+    />
+  )
+}
+
+function SaveButton({ count, resources, isLoading }) {
+  const isSaving = useIsMutating({ mutationKey: ['resources'] }) > 0
+  const { saveResources } = useSaveResources()
+  const { isShowSuccessIcon, showSuccessIcon } = useSuccessIcon()
+
+  async function save() {
+    await saveResources(resources)
+    showSuccessIcon()
+  }
+
+  return (
+    <div>
+      <ButtonWithLoading
+        disabled={count === 0 || isSaving || isLoading}
+        isLoading={isSaving}
+        label='Apply Changes'
+        className='mb-2'
+        onClick={save}
+      />
+      <SuccessIcon isShow={isShowSuccessIcon} />
     </div>
   )
 }

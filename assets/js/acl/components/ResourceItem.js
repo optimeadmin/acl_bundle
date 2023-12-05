@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
-import { Button, FormCheck, FormControl } from 'react-bootstrap'
-import ModalResourceReferences from './ModalResourceReferences'
+import { Button, FormCheck, FormControl, Placeholder } from 'react-bootstrap'
 import EditedField from './EditedField'
+import ModalResourceReferences from './ModalResourceReferences'
+import { getRandomInt } from '../utils/random'
 
 const ResourceItem = ({ item, onEdit: handleEdit }) => {
   const {
@@ -64,6 +65,33 @@ const ResourceItem = ({ item, onEdit: handleEdit }) => {
           show={showReferences}
           onHide={() => setShowReferences(false)}
         />
+      </td>
+    </tr>
+  )
+}
+
+export function ResourceItemLoading() {
+  console.log(getRandomInt(4, 8))
+  return (
+    <tr>
+      <td className="text-center align-middle" style={{ width: 40 }}>
+        <Placeholder animation="glow">
+          <Placeholder xs={6} className='py-2' />
+        </Placeholder>
+      </td>
+      <td>
+        <Placeholder animation="glow"><Placeholder xs={getRandomInt(4, 8)} className='py-3' /></Placeholder>
+      </td>
+      <td>
+        <Placeholder animation="glow"><Placeholder xs={getRandomInt(5, 11)} className='py-3' /></Placeholder>
+      </td>
+      <td className="text-center align-middle">
+        <Placeholder animation="glow"><Placeholder xs={getRandomInt(3, 10)} className='py-3' /></Placeholder>
+      </td>
+      <td className="text-center align-middle">
+        <Placeholder animation="glow">
+          <Placeholder.Button xs={4} size='sm' className='btn-sm' variant='secondary' />
+        </Placeholder>
       </td>
     </tr>
   )

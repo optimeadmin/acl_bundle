@@ -20,8 +20,8 @@ function createItem(item) {
 
 const resourcesPlaceholder = []
 
-function useResourcesQuery() {
-  const { isLoading, isFetching, data: resources } = useQuery({
+export function useResourcesQuery() {
+  const { isLoading, isFetching, data: resources = resourcesPlaceholder } = useQuery({
     queryKey: ["resources"],
     async queryFn({ signal }) {
       const resources = await getResources(signal)
@@ -29,8 +29,9 @@ function useResourcesQuery() {
       return resources.map((item) => createItem(item))
     },
     keepPreviousData: true,
-    placeholderData: resourcesPlaceholder,
   })
+
+  console.log({ isLoading })
 
   return {
     isLoading,
@@ -93,6 +94,7 @@ export function useSaveResources() {
 
   const { isLoading: isSaving, mutateAsync } = useMutation({
     mutationFn: saveResourcesApi,
+    mutationKey: ['resources'],
     async onSuccess() {
       await Promise.all([
         queryClient.invalidateQueries(["resources"]),
