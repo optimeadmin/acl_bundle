@@ -1,32 +1,35 @@
-import { useMutation, useQuery, useQueryClient } from 'react-query'
-import { useImmer } from 'use-immer'
-import { v4 as uuid } from 'uuid'
-import { getResources, saveResources as saveResourcesApi  } from '../../api/endpoints'
+import { useEffect, useState } from "react"
+import { useMutation, useQuery, useQueryClient } from "react-query"
+import { v4 as uuid } from "uuid"
+import { getResources, saveResources as saveResourcesApi } from "../../api/endpoints"
 
-function createItem (item) {
+function createItem(item) {
   return {
     id: item?.id ?? null,
     key: uuid(),
-    initialName: item?.name ?? '',
-    initialDescription: item?.description ?? '',
-    name: item?.name ?? '',
-    description: item?.description ?? '',
+    initialName: item?.name ?? "",
+    initialDescription: item?.description ?? "",
+    name: item?.name ?? "",
+    description: item?.description ?? "",
     references: item?.references ?? [],
     createdByUser: item?.createdByUser ?? true,
     selected: false,
-    valid: !!item?.id
+    valid: !!item?.id,
   }
 }
 
-function useResourcesQuery () {
-  const { isLoading, isFetching, data: resources = [] } = useQuery({
-    queryKey: ['resources'], 
-    async queryFn(){
-      const resources = await getResources()
+const resourcesPlaceholder = []
 
-      return resources.map(item => createItem(item))
+function useResourcesQuery() {
+  const { isLoading, isFetching, data: resources } = useQuery({
+    queryKey: ["resources"],
+    async queryFn({ signal }) {
+      const resources = await getResources(signal)
+
+      return resources.map((item) => createItem(item))
     },
-    keepPreviousData: true
+    keepPreviousData: true,
+    placeholderData: resourcesPlaceholder,
   })
 
   return {
@@ -37,33 +40,42 @@ function useResourcesQuery () {
 }
 
 export function useManageResources() {
-  const [resourcesFromState, setResources] = useImmer()
+  const [resources, setResources] = useState([])
   const { isLoading, isFetching, resources: dbResources } = useResourcesQuery()
-  
-  const resources = resourcesFromState ?? dbResources
-  console.log({  resources })
-  const selectedCount = resources.filter(r => r.selected).length
+
+  useEffect(() => {
+    setResources(dbResources)
+  }, [dbResources])
+
+  const selectedCount = resources.filter((r) => r.selected).length
 
   function updateResource(key, data) {
-    setResources(resources => {
-      const index = resources.findIndex(item => item.key === key)
+    setResources((resources) => {
+      const newResources = [...resources]
+
+      const index = newResources.findIndex((item) => item.key === key)
 
       if (index === -1) {
-        return
+        return newResources
       }
 
-      resources[index] = { ...resources[index], ...data }
-      resources[index].valid = true
+      const newItem = { ...newResources[index], ...data, valid: true }
 
-      if (resources[index].name.length < 3) {
-        resources[index].selected = false
-        resources[index].valid = false
+      if (newItem.name.length < 3) {
+        newItem.selected = false
+        newItem.valid = false
       }
+
+      newResources[index] = newItem
+
+      return newResources
     })
   }
 
   function addResource() {
-    setResources(resources => (resources ?? dbResources).unshift(createItem()))
+    setResources((resources) => {
+      return [createItem(), ...resources]
+    })
   }
 
   return {
@@ -76,20 +88,21 @@ export function useManageResources() {
   }
 }
 
-
 export function useSaveResources() {
   const queryClient = useQueryClient()
 
   const { isLoading: isSaving, mutateAsync } = useMutation({
     mutationFn: saveResourcesApi,
-    onSuccess() {
-      queryClient.invalidateQueries(['resources'])
-      queryClient.invalidateQueries(['config'])
-    }
+    async onSuccess() {
+      await Promise.all([
+        queryClient.invalidateQueries(["resources"]),
+        queryClient.invalidateQueries(["config"]),
+      ])
+    },
   })
 
   async function saveResources(resources) {
-    const selectedResources = resources.filter(resource => resource.selected)
+    const selectedResources = resources.filter((resource) => resource.selected)
 
     if (selectedResources.length === 0) {
       return
@@ -100,6 +113,6 @@ export function useSaveResources() {
 
   return {
     isSaving,
-    saveResources
+    saveResources,
   }
 }

@@ -22,8 +22,8 @@ export const cleanUnusedResources = () => {
   return api.delete('/resources/clean/').then(({ data }) => data)
 }
 
-export const getResources = () => {
-  return api.get('/resources/').then(({ data }) => data)
+export const getResources = (signal) => {
+  return api.get('/resources/', { signal }).then(({ data }) => data)
 }
 
 export const saveResources = (resources) => {
