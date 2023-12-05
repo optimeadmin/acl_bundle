@@ -23,7 +23,7 @@ export function useReferencesQuery (type) {
 }
 
 export function useReferences (databaseReferences) {
-  const [references, setReferences] = useState(null)
+  const [references, setReferences] = useState([])
   const [prevReferences, setPrevReferences] = useState(null)
 
   if (prevReferences !== databaseReferences) {
@@ -45,7 +45,7 @@ export function useReferences (databaseReferences) {
 
   function updateReference (identifier, data) {
     setReferences(references => {
-      const newReferencs = [...(references ?? databaseReferences)]
+      const newReferencs = [...references]
       const index = newReferencs.findIndex(item => item.identifier === identifier)
 
       if (index === -1) {
@@ -59,8 +59,8 @@ export function useReferences (databaseReferences) {
   }
 
   return {
-    references: (references ?? databaseReferences),
-    count: (references ?? databaseReferences).length,
+    references,
+    count: references.length,
     updateReference,
   }
 }

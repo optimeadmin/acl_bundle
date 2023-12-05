@@ -14,7 +14,7 @@ const getItemContents = item => {
   return [item.name, item.initialName, item.description, item.initialDescription].join('')
 }
 
-export default function Resources() {
+export default function Resources () {
   const { addResource, updateResource, resources, selectedCount, isLoading } = useManageResources()
   const { textSearch, handleTextSearchChange, filterByText } = useTextFilter()
 
@@ -71,7 +71,7 @@ export default function Resources() {
   )
 }
 
-function CleanResources() {
+function CleanResources () {
   const { isCleaning, cleanResources } = useCleaner()
 
   return (
@@ -86,12 +86,12 @@ function CleanResources() {
   )
 }
 
-function SaveButton({ count, resources, isLoading }) {
+function SaveButton ({ count, resources, isLoading }) {
   const isSaving = useIsMutating({ mutationKey: ['resources'] }) > 0
   const { saveResources } = useSaveResources()
   const { isShowSuccessIcon, showSuccessIcon } = useSuccessIcon()
 
-  async function save() {
+  async function save () {
     await saveResources(resources)
     showSuccessIcon()
   }
