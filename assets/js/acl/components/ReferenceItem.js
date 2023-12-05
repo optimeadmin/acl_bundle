@@ -2,16 +2,9 @@ import React from 'react'
 import { FormCheck, FormControl } from 'react-bootstrap'
 import EditedField from './EditedField'
 
-const ReferenceItem = ({ item, onEdit: handleEdit, showHide = true }) => {
+export default function ReferenceItem ({ item, onEdit: handleEdit, showHide = true }) {
   const {
-    identifier,
-    resource,
-    initialResource,
-    name,
-    route,
-    routePath,
-    selected,
-    hidden
+    identifier, resource, initialResource, name, route, routePath, selected, hidden
   } = item
 
   const handleSelectedChange = (event) => handleEdit(
@@ -39,8 +32,7 @@ const ReferenceItem = ({ item, onEdit: handleEdit, showHide = true }) => {
         <div>
           <FormCheck
             checked={selected}
-            onChange={handleSelectedChange}
-          />
+            onChange={handleSelectedChange} />
         </div>
       </td>
       <td>
@@ -48,8 +40,7 @@ const ReferenceItem = ({ item, onEdit: handleEdit, showHide = true }) => {
           <FormControl
             // size="sm"
             value={resource}
-            onChange={handleResourceChange}
-          />
+            onChange={handleResourceChange} />
         </EditedField>
       </td>
       <td className="small">{name}</td>
@@ -60,13 +51,10 @@ const ReferenceItem = ({ item, onEdit: handleEdit, showHide = true }) => {
           <div>
             <FormCheck
               checked={hidden}
-              onChange={handleHiddenChange}
-            />
+              onChange={handleHiddenChange} />
           </div>
         </td>
       )}
     </tr>
   )
 }
-
-export default ReferenceItem

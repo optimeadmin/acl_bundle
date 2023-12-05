@@ -1,18 +1,18 @@
 import React from 'react'
 import { Nav, Tab } from 'react-bootstrap'
-import TypedReferences from './section/TypedReferences'
-import useReferences from '../hooks/useReferences'
 import LoadingIcon from '../components/LoadingIcon'
+import { useReferencesQuery } from '../hooks/references'
+import ReferencesByType from './section/ReferencesByType'
 
-const References = () => {
-  const existentReferences = useReferences('existent')
-  const newsReferences = useReferences('news')
-  const hiddenReferences = useReferences('hidden')
-  const isFetching = existentReferences.isFetching
+export default function References () {
+  const existentReferences = useReferencesQuery('existent')
+  const newsReferences = useReferencesQuery('news')
+  const hiddenReferences = useReferencesQuery('hidden')
+  const { isFetching, isLoading } = existentReferences
 
   const defaultTab = existentReferences.serverCount > 0 ? 'persisted' : 'news'
 
-  if (existentReferences.isLoading) {
+  if (isLoading) {
     return <h3>Loading...</h3>
   }
 
@@ -27,47 +27,50 @@ const References = () => {
 
         <Tab.Container defaultActiveKey={defaultTab} transition={false}>
           <Nav variant="pills">
-            {existentReferences.serverCount > 0 && (
+            {existentReferences.length > 0 && (
               <Nav.Item>
                 <Nav.Link role="button" eventKey="persisted">Persisted</Nav.Link>
               </Nav.Item>
             )}
-            {newsReferences.serverCount > 0 && (
+            {newsReferences.length > 0 && (
               <Nav.Item>
                 <Nav.Link role="button" eventKey="news">News</Nav.Link>
               </Nav.Item>
             )}
-            {hiddenReferences.serverCount > 0 && (
+            {hiddenReferences.length > 0 && (
               <Nav.Item>
                 <Nav.Link role="button" eventKey="hidden">Hidden</Nav.Link>
               </Nav.Item>
             )}
           </Nav>
 
-          <hr/>
+          <hr />
 
           <Tab.Content className="mt-5">
-            {existentReferences.serverCount > 0 && (
+            {existentReferences.length > 0 && (
               <Tab.Pane eventKey="persisted" unmountOnExit={true}>
-                <TypedReferences
+                <ReferencesByType
                   title="Persisted"
-                  {...existentReferences}
+                  isLoading={existentReferences.isLoading}
+                  references={existentReferences.references}
                 />
               </Tab.Pane>
             )}
-            {newsReferences.serverCount > 0 && (
+            {newsReferences.length > 0 && (
               <Tab.Pane eventKey="news" unmountOnExit={true}>
-                <TypedReferences
+                <ReferencesByType
                   title="News"
-                  {...newsReferences}
+                  isLoading={newsReferences.isLoading}
+                  references={newsReferences.references}
                 />
               </Tab.Pane>
             )}
-            {hiddenReferences.serverCount > 0 && (
+            {hiddenReferences.length > 0 && (
               <Tab.Pane eventKey="hidden" unmountOnExit={true}>
-                <TypedReferences
+                <ReferencesByType
                   title="Hidden"
-                  {...hiddenReferences}
+                  isLoading={hiddenReferences.isLoading}
+                  references={hiddenReferences.references}
                   showHide={false}
                 />
               </Tab.Pane>
@@ -79,5 +82,3 @@ const References = () => {
     </div>
   )
 }
-
-export default References

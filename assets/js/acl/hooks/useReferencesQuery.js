@@ -2,15 +2,12 @@ import { useState } from 'react'
 import { useQuery } from 'react-query'
 import { getReferences } from '../api/endpoints'
 
-const useReferencesQuery = (type, setReferences) => {
-  const {
-    isLoading,
-    isFetching,
-    data: references = [],
-    dataUpdatedAt
-  } = useQuery(['references'], getReferences, {
+export default function useReferencesQuery(type, setReferences) {
+  const { isLoading, isFetching, data: references = [], dataUpdatedAt } = useQuery({
+    queryKey: ['references'],
+    queryFn: getReferences,
     keepPreviousData: true,
-    select (data) {
+    select(data) {
       return type in data ? data[type] : data.news
     }
   })
@@ -39,5 +36,3 @@ const useReferencesQuery = (type, setReferences) => {
     references
   }
 }
-
-export default useReferencesQuery

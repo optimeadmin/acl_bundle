@@ -70,8 +70,7 @@ const ResourceItem = ({ item, onEdit: handleEdit }) => {
   )
 }
 
-export function ResourceItemLoading() {
-  console.log(getRandomInt(4, 8))
+export function ResourceItemLoading () {
   return (
     <tr>
       <td className="text-center align-middle" style={{ width: 40 }}>

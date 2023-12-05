@@ -9,7 +9,8 @@
         "plugin:@tanstack/eslint-plugin-query/recommended",
         "plugin:react-hooks/recommended",
         "plugin:react/recommended",
-        "eslint:recommended"
+        "eslint:recommended",
+        "standard"
     ],
     "parserOptions": {
         "ecmaFeatures": {
