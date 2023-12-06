@@ -4,9 +4,10 @@ import { cleanUnusedResources } from '../api/endpoints'
 const useCleaner = () => {
   const queryClient = useQueryClient()
 
-  const { mutateAsync, isLoading } = useMutation(cleanUnusedResources, {
-    onSuccess () {
-      queryClient.invalidateQueries(['config'])
+  const { mutateAsync, isLoading } = useMutation({
+    mutationFn: cleanUnusedResources,
+    async onSuccess () {
+      await queryClient.invalidateQueries(['config'])
     }
   })
 

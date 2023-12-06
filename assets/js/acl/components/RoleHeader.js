@@ -1,7 +1,8 @@
 import React from 'react'
-import { Button, OverlayTrigger, Popover } from 'react-bootstrap'
+import { Button, OverlayTrigger, Placeholder, Popover } from 'react-bootstrap'
+import { getRandomInt } from '../utils/random'
 
-const RoleHeader = ({ role }) => {
+export default function RoleHeader ({ role }) {
   const { label, parentRoles } = role
 
   const popover = (
@@ -20,16 +21,8 @@ const RoleHeader = ({ role }) => {
       <div className="d-flex align-items-center">
         <span>{label}</span>
         {parentRoles.length > 0 && (
-          <OverlayTrigger
-            trigger="focus"
-            placement="top"
-            overlay={popover}
-          >
-            <Button
-              className="ms-auto rounded-circle"
-              variant="outline-secondary"
-              size="sm"> ? </Button>
-            {/* overlay={<RoleParents parents={parentRoles}/>} */}
+          <OverlayTrigger trigger="focus" placement="top" overlay={popover}>
+            <Button className="ms-auto rounded-circle" variant="outline-secondary" size="sm"> ? </Button>
           </OverlayTrigger>
         )}
       </div>
@@ -37,4 +30,12 @@ const RoleHeader = ({ role }) => {
   )
 }
 
-export default RoleHeader
+export function RoleHeaderLoading () {
+  return (
+    <th className="align-middle text-nowrap">
+      <Placeholder animation="glow">
+        <Placeholder xs={getRandomInt(2, 11)} />
+      </Placeholder>
+    </th>
+  )
+}

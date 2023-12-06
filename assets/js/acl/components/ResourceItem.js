@@ -4,17 +4,9 @@ import EditedField from './EditedField'
 import ModalResourceReferences from './ModalResourceReferences'
 import { getRandomInt } from '../utils/random'
 
-const ResourceItem = ({ item, onEdit: handleEdit }) => {
+export default function ResourceItem ({ item, onEdit: handleEdit }) {
   const {
-    key,
-    name,
-    description,
-    initialName,
-    initialDescription,
-    references,
-    createdByUser,
-    selected,
-    valid
+    key, name, description, initialName, initialDescription, references, createdByUser, selected, valid
   } = item
   const [showReferences, setShowReferences] = useState(false)
 
@@ -32,16 +24,14 @@ const ResourceItem = ({ item, onEdit: handleEdit }) => {
           <FormCheck
             disabled={!valid}
             checked={selected}
-            onChange={handleSelectedChange}
-          />
+            onChange={handleSelectedChange} />
         </div>
       </td>
       <td>
         <EditedField edited={initialName !== name} block>
           <FormControl
             value={name}
-            onChange={handleNameChange}
-          />
+            onChange={handleNameChange} />
         </EditedField>
       </td>
       <td>
@@ -50,8 +40,7 @@ const ResourceItem = ({ item, onEdit: handleEdit }) => {
             rows="1"
             as="textarea"
             value={description}
-            onChange={handleDescriptionChange}
-          />
+            onChange={handleDescriptionChange} />
         </EditedField>
       </td>
       <td className="text-center align-middle">{createdByUser ? 'User' : 'App'}</td>
@@ -63,8 +52,7 @@ const ResourceItem = ({ item, onEdit: handleEdit }) => {
           name={name}
           references={references}
           show={showReferences}
-          onHide={() => setShowReferences(false)}
-        />
+          onHide={() => setShowReferences(false)} />
       </td>
     </tr>
   )
@@ -95,5 +83,3 @@ export function ResourceItemLoading () {
     </tr>
   )
 }
-
-export default ResourceItem
