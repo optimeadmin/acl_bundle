@@ -125,7 +125,7 @@ export function useConfig (dbResources) {
 export function useSaveResourcesRoles () {
   const queryClient = useQueryClient()
 
-  const { mutateAsync, isLoading: isSaving } = useMutation({
+  const { mutateAsync, isPending: isSaving } = useMutation({
     mutationFn: saveResourcesRoles,
     mutationKey: ['resources', 'roles'],
     async onSuccess () {

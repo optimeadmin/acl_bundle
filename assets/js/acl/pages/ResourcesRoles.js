@@ -1,7 +1,7 @@
 import React from 'react'
 import ResourceRolesItem, { ResourceRolesItemLoading } from '../components/ResourceRolesItem'
 import RoleHeader, { RoleHeaderLoading } from '../components/RoleHeader'
-import useCleaner from '../hooks/useCleaner'
+import useCleaner from '../hooks/resources/useCleaner'
 import ButtonWithLoading from '../components/ButtonWithLoading'
 import SuccessIcon from '../components/SuccessIcon'
 import useSuccessIcon from '../hooks/useSuccessIcon'
@@ -20,14 +20,14 @@ export default function ResourcesRoles () {
 
   const filteredResources = filterByText(Object.entries(resources), ([name]) => name.toLowerCase())
 
-  const saveBtn = <SaveButton isLoading={isLoading} resources={resources} />
+  const saveBtn = <SaveButton isLoading={isLoading} resources={resources}/>
 
   return (
     <div className={`acl-page-container ${isLoading ? 'is-loading' : ''}`}>
       <div className="d-flex align-items-center border-bottom pb-3 gap-3">
         <h3 className="m-0">Access Control Configuration</h3>
-        <LoadingIcon isLoading={isLoading} size="md" />
-        <CleanButton isLoading={isLoading} />
+        <LoadingIcon isLoading={isLoading} size="md"/>
+        <CleanButton isLoading={isLoading}/>
       </div>
 
       <section className="mt-5">
@@ -39,7 +39,7 @@ export default function ResourcesRoles () {
             className="my-2"
             placeholder="Search..."
             value={textSearch}
-            onChange={handleTextSearchChange} />
+            onChange={handleTextSearchChange}/>
         )}
 
         <table className="table table-bordered">
@@ -47,30 +47,31 @@ export default function ResourcesRoles () {
             <tr>
               <th className="text-center align-middle" rowSpan="2" style={{
                 width: isLoading ? '30%' : null
-              }}>Resource</th>
+              }}>Resource
+              </th>
               <th className="text-center align-middle" colSpan="200">Roles</th>
             </tr>
             <tr>
               <th className="text-center align-middle" style={{ width: isLoading ? '10%' : null }}>All</th>
               {isLoading && (
                 <>
-                  <RoleHeaderLoading />
-                  <RoleHeaderLoading />
-                  <RoleHeaderLoading />
-                  <RoleHeaderLoading />
+                  <RoleHeaderLoading/>
+                  <RoleHeaderLoading/>
+                  <RoleHeaderLoading/>
+                  <RoleHeaderLoading/>
                 </>
               )}
               {!isLoading && roles.map(role => (
-                <RoleHeader key={role.role} role={role} />
+                <RoleHeader key={role.role} role={role}/>
               ))}
             </tr>
           </thead>
           <tbody>
             {isLoading && (
               <>
-                <ResourceRolesItemLoading />
-                <ResourceRolesItemLoading />
-                <ResourceRolesItemLoading />
+                <ResourceRolesItemLoading/>
+                <ResourceRolesItemLoading/>
+                <ResourceRolesItemLoading/>
               </>
             )}
             {!isLoading && filteredResources.map(([name, item]) => (
@@ -78,7 +79,7 @@ export default function ResourcesRoles () {
                 key={name}
                 resource={item}
                 appRoles={roles}
-                onEdit={editResource} />
+                onEdit={editResource}/>
             ))}
             {!isLoading && filteredResources.length === 0 && (
               <tr>
@@ -114,8 +115,8 @@ function SaveButton ({ isLoading, resources }) {
         onClick={save}
         minWidth={165}
         label="Save Configuration"
-        loadingLabel="Saving Data..." />
-      <SuccessIcon isShow={isShowSuccessIcon} />
+        loadingLabel="Saving Data..."/>
+      <SuccessIcon isShow={isShowSuccessIcon}/>
     </div>
   )
 }

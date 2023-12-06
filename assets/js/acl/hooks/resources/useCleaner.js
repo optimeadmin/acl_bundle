@@ -1,10 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { cleanUnusedResources } from '../api/endpoints'
+import { cleanUnusedResources } from '../../api/endpoints'
 
 const useCleaner = () => {
   const queryClient = useQueryClient()
 
-  const { mutateAsync, isLoading } = useMutation({
+  const { mutateAsync, isPending } = useMutation({
     mutationFn: cleanUnusedResources,
     async onSuccess () {
       await queryClient.invalidateQueries(['config'])
@@ -13,7 +13,7 @@ const useCleaner = () => {
 
   return {
     cleanResources: mutateAsync,
-    isCleaning: isLoading
+    isCleaning: isPending
   }
 }
 

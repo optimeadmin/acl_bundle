@@ -68,7 +68,7 @@ export function useReferences (databaseReferences) {
 export function useSaveReferences () {
   const queryClient = useQueryClient()
 
-  const { isLoading: isSaving, mutateAsync } = useMutation({
+  const { isPending: isSaving, mutateAsync } = useMutation({
     mutationFn: saveReferencesApi,
     mutationKey: ['references'],
     async onSuccess () {

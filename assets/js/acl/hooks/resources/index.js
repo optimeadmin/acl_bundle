@@ -31,8 +31,6 @@ export function useResourcesQuery () {
     keepPreviousData: true,
   })
 
-  console.log({ isLoading })
-
   return {
     isLoading,
     isFetching,
@@ -92,7 +90,7 @@ export function useManageResources () {
 export function useSaveResources () {
   const queryClient = useQueryClient()
 
-  const { isLoading: isSaving, mutateAsync } = useMutation({
+  const { isPending: isSaving, mutateAsync } = useMutation({
     mutationFn: saveResourcesApi,
     mutationKey: ['resources'],
     async onSuccess () {
