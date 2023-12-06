@@ -6,7 +6,7 @@ import SuccessIcon from '../../components/SuccessIcon'
 import useSuccessIcon from '../../hooks/useSuccessIcon'
 import useTextFilter from '../../hooks/useTextFilter'
 import { useReferences, useSaveReferences } from '../../hooks/references'
-import { useIsMutating } from 'react-query'
+import { useIsMutating } from '@tanstack/react-query'
 
 const getItemContents = item => {
   return [

@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from 'react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { cleanUnusedResources } from '../api/endpoints'
 
 const useCleaner = () => {

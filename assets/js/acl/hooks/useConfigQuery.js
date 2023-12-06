@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query'
+import { useQuery } from '@tanstack/react-query'
 import { getConfig } from '../api/endpoints'
 import { useState } from 'react'
 

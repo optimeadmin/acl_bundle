@@ -8,7 +8,7 @@ import { useManageResources, useSaveResources } from '../hooks/resources'
 import useCleaner from '../hooks/useCleaner'
 import useSuccessIcon from '../hooks/useSuccessIcon'
 import useTextFilter from '../hooks/useTextFilter'
-import { useIsMutating } from 'react-query'
+import { useIsMutating } from '@tanstack/react-query'
 
 const getItemContents = item => {
   return [item.name, item.initialName, item.description, item.initialDescription].join('')

@@ -1,16 +1,16 @@
-import { useEffect, useState } from "react"
-import { useMutation, useQuery, useQueryClient } from "react-query"
-import { v4 as uuid } from "uuid"
-import { getResources, saveResources as saveResourcesApi } from "../../api/endpoints"
+import { useEffect, useState } from 'react'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { v4 as uuid } from 'uuid'
+import { getResources, saveResources as saveResourcesApi } from '../../api/endpoints'
 
-function createItem(item) {
+function createItem (item) {
   return {
     id: item?.id ?? null,
     key: uuid(),
-    initialName: item?.name ?? "",
-    initialDescription: item?.description ?? "",
-    name: item?.name ?? "",
-    description: item?.description ?? "",
+    initialName: item?.name ?? '',
+    initialDescription: item?.description ?? '',
+    name: item?.name ?? '',
+    description: item?.description ?? '',
     references: item?.references ?? [],
     createdByUser: item?.createdByUser ?? true,
     selected: false,
@@ -20,10 +20,10 @@ function createItem(item) {
 
 const resourcesPlaceholder = []
 
-export function useResourcesQuery() {
+export function useResourcesQuery () {
   const { isLoading, isFetching, data: resources = resourcesPlaceholder } = useQuery({
-    queryKey: ["resources"],
-    async queryFn({ signal }) {
+    queryKey: ['resources'],
+    async queryFn ({ signal }) {
       const resources = await getResources(signal)
 
       return resources.map((item) => createItem(item))
@@ -40,7 +40,7 @@ export function useResourcesQuery() {
   }
 }
 
-export function useManageResources() {
+export function useManageResources () {
   const [resources, setResources] = useState([])
   const { isLoading, isFetching, resources: dbResources } = useResourcesQuery()
 
@@ -50,7 +50,7 @@ export function useManageResources() {
 
   const selectedCount = resources.filter((r) => r.selected).length
 
-  function updateResource(key, data) {
+  function updateResource (key, data) {
     setResources((resources) => {
       const newResources = [...resources]
 
@@ -73,7 +73,7 @@ export function useManageResources() {
     })
   }
 
-  function addResource() {
+  function addResource () {
     setResources((resources) => {
       return [createItem(), ...resources]
     })
@@ -89,21 +89,21 @@ export function useManageResources() {
   }
 }
 
-export function useSaveResources() {
+export function useSaveResources () {
   const queryClient = useQueryClient()
 
   const { isLoading: isSaving, mutateAsync } = useMutation({
     mutationFn: saveResourcesApi,
     mutationKey: ['resources'],
-    async onSuccess() {
+    async onSuccess () {
       await Promise.all([
-        queryClient.invalidateQueries(["resources"]),
-        queryClient.invalidateQueries(["config"]),
+        queryClient.invalidateQueries(['resources']),
+        queryClient.invalidateQueries(['config']),
       ])
     },
   })
 
-  async function saveResources(resources) {
+  async function saveResources (resources) {
     const selectedResources = resources.filter((resource) => resource.selected)
 
     if (selectedResources.length === 0) {

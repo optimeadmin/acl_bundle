@@ -9,7 +9,7 @@ import { FormControl } from 'react-bootstrap'
 import useTextFilter from '../hooks/useTextFilter'
 import LoadingIcon from '../components/LoadingIcon'
 import { useConfig, useConfigQuery, useSaveResourcesRoles } from '../hooks/resources/roles'
-import { useIsMutating } from 'react-query'
+import { useIsMutating } from '@tanstack/react-query'
 
 export default function ResourcesRoles () {
   const { isLoading, resources: dbResources, roles } = useConfigQuery()

@@ -2,7 +2,7 @@ import React from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App'
 import { BrowserRouter } from 'react-router-dom'
-import { QueryClient, QueryClientProvider } from 'react-query'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 const $container = document.getElementById('acl_root')
 const basename = $container.dataset.basename ?? '/'
@@ -23,7 +23,7 @@ root.render(
       <BrowserRouter basename={basename}>
         <App/>
       </BrowserRouter>
-      {/*<ReactQueryDevtools/>*/}
+      {/* <ReactQueryDevtools/> */}
     </QueryClientProvider>
   </React.StrictMode>
 )

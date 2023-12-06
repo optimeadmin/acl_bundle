@@ -4,12 +4,12 @@
   "description": "Bundle de ACL",
   "main": "index.js",
   "dependencies": {
+    "@tanstack/react-query": "^5.12.2",
     "animate.css": "^4.1.1",
     "axios": "^1.6.2",
     "react": "^18.2.0",
     "react-bootstrap": "^2.4.0",
     "react-dom": "^18.2.0",
-    "react-query": "^3.39.1",
     "react-router-dom": "^6.3.0"
   },
   "devDependencies": {

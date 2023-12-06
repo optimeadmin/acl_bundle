@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { useMutation, useQueryClient } from 'react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { saveResourcesRoles } from '../api/endpoints'
 
 const useResourcesRolesMutation = (resources) => {
